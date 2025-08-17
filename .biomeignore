@@ -1,0 +1,7 @@
+vendor/
+vendor/**
+tsconfig.json
+metro.config.js
+package.json
+# Ignorar todos los Contents.json bajo Images.xcassets en ios
+ios/**/Images.xcassets/**
