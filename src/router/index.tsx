@@ -1,0 +1,90 @@
+import Icon from "@react-native-vector-icons/lucide";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Book, List, Read, Setting } from "../screen";
+import { colors } from "../theme";
+
+const RootTabs = createBottomTabNavigator<_IRootTabs>({
+	initialRouteName: "list",
+	screens: {
+		list: {
+			screen: List,
+			options: {
+				tabBarLabel: "Biblioteca",
+				tabBarIcon: ({ color, size }) => (
+					<Icon name="book" color={color} size={size} />
+				),
+			},
+		},
+		settings: {
+			screen: Setting,
+			options: {
+				tabBarLabel: "Configuraciones",
+				tabBarIcon: ({ color, size }) => (
+					<Icon name="settings" color={color} size={size} />
+				),
+			},
+		},
+	},
+	screenOptions: {
+		headerShown: false,
+		sceneStyle: {
+			backgroundColor: "#fff",
+			paddingHorizontal: 20,
+		},
+
+		tabBarActiveTintColor: colors.primary,
+		tabBarLabelStyle: {
+			// fontSize: 12,
+			// fontWeight: "500",
+		},
+		tabBarItemStyle: {
+			height: 55,
+		},
+		tabBarActiveBackgroundColor: colors.secondary,
+		tabBarStyle: {
+			backgroundColor: "#FFFFFF",
+			borderWidth: 1,
+			borderColor: "#E5E5EA",
+			borderRadius: 16,
+			height: 55,
+			position: "absolute",
+			bottom: 40,
+			left: 10,
+			right: 10,
+			marginHorizontal: 10,
+
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 3,
+			},
+			shadowOpacity: 0.29,
+			shadowRadius: 4.65,
+
+			elevation: 7,
+		},
+	},
+});
+
+// const test = () => {
+// 	return <RootTabs.Navigator screenOptions={{
+// 		tabBarButton:
+// 	}}></RootTabs.Navigator>;
+// };
+
+export const RootStack = createNativeStackNavigator<_IRootStack>({
+	initialRouteName: "home",
+	screens: {
+		home: RootTabs,
+		book: {
+			screen: Book,
+		},
+		read: {
+			screen: Read,
+		},
+	},
+	screenOptions: {
+		headerShown: false,
+	},
+});
