@@ -15,6 +15,7 @@ const config = {
 			"@screens": path.resolve(__dirname, "src/screen"),
 			"@router": path.resolve(__dirname, "src/router"),
 			"@types": path.resolve(__dirname, "src/types"),
+			"@hooks": path.resolve(__dirname, "src/hooks"),
 			"@theme": path.resolve(__dirname, "src/theme"),
 		},
 	},

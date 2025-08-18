@@ -16,4 +16,8 @@ export default StyleSheet.create({
 		padding: 10,
 		borderRadius: 50,
 	},
+	size: {
+		fontSize: 12,
+		color: "#666",
+	},
 });

@@ -10,6 +10,7 @@ import styles from "./styles";
 
 type _IInputFile = TouchableOpacityProps & {
 	label: string;
+	size?: number;
 	textProps?: TextProps;
 	iconProps?: React.ComponentProps<typeof Icon>;
 	containerProps?: React.ComponentProps<typeof View>;
@@ -20,6 +21,7 @@ export const InputFile = ({
 	textProps,
 	iconProps,
 	containerProps,
+	size,
 	...props
 }: _IInputFile) => (
 	<TouchableOpacity activeOpacity={0.7} {...props}>
@@ -31,7 +33,10 @@ export const InputFile = ({
 				name={iconProps?.name || "file-up"}
 				style={[styles.icon, iconProps?.style]}
 			/>
-			<Text {...textProps}>{label}</Text>
+			<View>
+				<Text {...textProps}>{label}</Text>
+				{size && <Text style={styles.size}>{size} MB</Text>}
+			</View>
 		</View>
 	</TouchableOpacity>
 );
