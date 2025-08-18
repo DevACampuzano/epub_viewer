@@ -47,14 +47,8 @@ export const useForm = <T extends object, V extends object>(
 		});
 	};
 
-	const setForm = (form: T) => {
-		setState({
-			...form,
-		});
-	};
-
 	const resetForm = () => {
-		setForm(initState);
+		setState(initState);
 	};
 
 	const isValidRegExpObject = (obj: V): obj is V & Record<string, RegExp> => {
@@ -105,7 +99,7 @@ export const useForm = <T extends object, V extends object>(
 		form: state,
 		focuses,
 		onChange,
-		setForm,
+		setForm: setState,
 		resetForm,
 		getBase64,
 		validateFieldsText,

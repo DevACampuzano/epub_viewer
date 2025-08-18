@@ -22,3 +22,20 @@ type _IRootStack = {
         id: string;
     }
 }
+
+interface ISelectedFile {
+    uri: string;
+    name?: string | null;
+    size?: number | null;
+}
+
+interface _IFormNewBook {
+    file: ISelectedFile | null;
+    image: string;
+    title: string;
+    author: string;
+    description: string;
+    language: string;
+    publisher: string;
+    rights: string;
+}
