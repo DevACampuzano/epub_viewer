@@ -1,13 +1,7 @@
 import type { FC } from "react";
-import { Text as RNText, StyleSheet, type TextProps } from "react-native";
+import { Text as RNText, type TextProps } from "react-native";
+import styles from "./styles";
 
 export const Text: FC<TextProps> = (props) => (
-	<RNText style={[style.text, props.style]} {...props} />
+	<RNText {...props} style={[styles.text, props.style]} />
 );
-
-const style = StyleSheet.create({
-	text: {
-		color: "#3a3a3a",
-		fontFamily: "GeistSans",
-	},
-});

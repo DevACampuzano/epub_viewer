@@ -17,6 +17,7 @@ type _IRootStack = {
     book: {
         id:string
     };
+    newBook: undefined;
     read: {
         id: string;
     }

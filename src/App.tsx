@@ -1,10 +1,8 @@
 import { ReaderProvider } from "@epubjs-react-native/core";
-import { createStaticNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { RootStack } from "./router";
 import { colors } from "./theme";
-
-const Navigation = createStaticNavigation(RootStack);
 
 function App() {
 	return (
@@ -14,7 +12,9 @@ function App() {
 					style={{ flex: 1, backgroundColor: colors.secondary }}
 					edges={["top"]}
 				>
-					<Navigation />
+					<NavigationContainer>
+						<RootStack />
+					</NavigationContainer>
 				</SafeAreaView>
 			</ReaderProvider>
 		</SafeAreaProvider>

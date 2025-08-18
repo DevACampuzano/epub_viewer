@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: router*/
 import Icon from "@react-native-vector-icons/lucide";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Book, List, Read, Setting } from "@screens/";
+import { Book, List, NewBook, Read, Setting } from "@screens/";
 import { colors } from "@theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -47,7 +48,7 @@ const RootTabsNavigation = () => {
 		>
 			<RootTabs.Screen
 				name="list"
-				component={List}
+				component={List as any}
 				options={{
 					tabBarLabel: "Biblioteca",
 					tabBarIcon: ({ color, size }) => (
@@ -69,18 +70,32 @@ const RootTabsNavigation = () => {
 	);
 };
 
-export const RootStack = createNativeStackNavigator<_IRootStack>({
-	initialRouteName: "home",
-	screens: {
-		home: RootTabsNavigation,
-		book: {
-			screen: Book,
-		},
-		read: {
-			screen: Read,
-		},
-	},
-	screenOptions: {
-		headerShown: false,
-	},
-});
+const RootStackNav = createNativeStackNavigator<_IRootStack>();
+
+export const RootStack = () => {
+	return (
+		<RootStackNav.Navigator
+			initialRouteName="home"
+			screenOptions={{
+				headerShown: false,
+				contentStyle: {
+					backgroundColor: "#fff",
+					paddingHorizontal: 20,
+				},
+			}}
+		>
+			<RootStackNav.Screen
+				name="home"
+				component={RootTabsNavigation}
+				options={{
+					contentStyle: {
+						paddingVertical: 0,
+					},
+				}}
+			/>
+			<RootStackNav.Screen name="book" component={Book} />
+			<RootStackNav.Screen name="read" component={Read} />
+			<RootStackNav.Screen name="newBook" component={NewBook} />
+		</RootStackNav.Navigator>
+	);
+};

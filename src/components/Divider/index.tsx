@@ -1,14 +1,16 @@
 import type { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { View, type ViewProps } from "react-native";
+import styles from "./styles";
 
-type DividerProps = React.ComponentProps<typeof View> & {
+type _DividerProps = ViewProps & {
 	vertical?: boolean;
 };
-export const Divider: FC<DividerProps> = ({ vertical, ...props }) => (
+
+export const Divider: FC<_DividerProps> = ({ vertical, ...props }) => (
 	<View
 		{...props}
 		style={[
-			style.divider,
+			styles.divider,
 			props.style,
 			vertical
 				? { borderLeftWidth: 1, borderTopWidth: 0, height: "100%" }
@@ -20,9 +22,3 @@ export const Divider: FC<DividerProps> = ({ vertical, ...props }) => (
 		]}
 	/>
 );
-
-const style = StyleSheet.create({
-	divider: {
-		borderColor: "#E5E5EA",
-	},
-});
