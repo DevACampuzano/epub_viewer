@@ -1,5 +1,5 @@
+import { Divider, Text } from "@components/";
 import { View } from "react-native";
-import { Divider, Text } from "../../../components";
 export const List = () => {
 	return (
 		<View style={{ flex: 1, paddingVertical: 10, gap: 10 }}>

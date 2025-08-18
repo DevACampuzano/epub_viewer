@@ -1,9 +1,9 @@
 import Icon from "@react-native-vector-icons/lucide";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Book, List, Read, Setting } from "@screens/";
+import { colors } from "@theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Book, List, Read, Setting } from "../screen";
-import { colors } from "../theme";
 
 const RootTabs = createBottomTabNavigator<_IRootTabs>();
 
