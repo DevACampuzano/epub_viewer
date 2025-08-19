@@ -3,6 +3,7 @@ import { type Location, useReader } from "@epubjs-react-native/core";
 import { pick } from "@react-native-documents/picker";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
+import { Platform } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import uuid from "react-native-uuid";
 import { useForm } from "@/hooks";
@@ -41,6 +42,12 @@ export default (
 			type: ["org.idpf.epub-container", "application/epub+zip"],
 		});
 		if (result) {
+			if (Platform.OS === "android") {
+				const newPathFile = `${RNFS.DocumentDirectoryPath}/${id}.epub`;
+				await RNFS.copyFile(result.uri, newPathFile);
+				result.uri = newPathFile;
+			}
+
 			onChange(result, "file");
 			setLoadingRender(true);
 		}
@@ -54,7 +61,6 @@ export default (
 		progress: number,
 	) => {
 		const data: _IMeta = getMeta() as _IMeta;
-		console.log("Reader is ready", { data, totalLocations, progress });
 		setForm((form) => ({
 			...form,
 			author: data?.author,
@@ -89,64 +95,73 @@ export default (
 			if (form.file === null) {
 				throw new Error("File is required");
 			}
-
 			const newPathFile = `${RNFS.DocumentDirectoryPath}/${id}.epub`;
-			let decodedUri = decodeURIComponent(form.file.uri);
+			if (Platform.OS === "ios") {
+				let decodedUri = decodeURIComponent(form.file.uri);
 
-			let sourceExists = false;
-			if (decodedUri.startsWith("file://")) {
-				const pathWithoutProtocol = decodedUri.replace("file://", "");
-				console.log("Path without protocol:", pathWithoutProtocol);
+				let sourceExists = false;
+				if (decodedUri.startsWith("file://")) {
+					const pathWithoutProtocol = decodedUri.replace("file://", "");
+					console.log("Path without protocol:", pathWithoutProtocol);
 
-				sourceExists = await RNFS.exists(decodedUri);
+					sourceExists = await RNFS.exists(decodedUri);
+					if (!sourceExists) {
+						sourceExists = await RNFS.exists(pathWithoutProtocol);
+						if (sourceExists) {
+							decodedUri = pathWithoutProtocol;
+							console.log("Using path without protocol");
+						}
+					}
+				} else {
+					sourceExists = await RNFS.exists(decodedUri);
+				}
+
 				if (!sourceExists) {
-					sourceExists = await RNFS.exists(pathWithoutProtocol);
-					if (sourceExists) {
-						decodedUri = pathWithoutProtocol;
-						console.log("Using path without protocol");
+					throw new Error("Source file does not exist");
+				}
+
+				try {
+					await RNFS.copyFile(decodedUri, newPathFile);
+				} catch (copyError) {
+					console.log(
+						"Direct copy failed, trying alternative method:",
+						copyError,
+					);
+					try {
+						const fileContent = await RNFS.readFile(decodedUri, "base64");
+						await RNFS.writeFile(newPathFile, fileContent, "base64");
+						console.log("Alternative copy method successful");
+					} catch (alternativeError) {
+						const errorMessage =
+							alternativeError instanceof Error
+								? alternativeError.message
+								: String(alternativeError);
+						throw new Error(`File copy failed: ${errorMessage}`);
 					}
 				}
+				const newBook: _IBook = {
+					...form,
+					file: newPathFile,
+					qualification: 0,
+					createdAt: Date.now(),
+				};
+				addBook(newBook);
 			} else {
-				sourceExists = await RNFS.exists(decodedUri);
-			}
-
-			if (!sourceExists) {
-				throw new Error("Source file does not exist");
-			}
-
-			try {
-				await RNFS.copyFile(decodedUri, newPathFile);
-			} catch (copyError) {
-				console.log(
-					"Direct copy failed, trying alternative method:",
-					copyError,
-				);
-				try {
-					const fileContent = await RNFS.readFile(decodedUri, "base64");
-					await RNFS.writeFile(newPathFile, fileContent, "base64");
-					console.log("Alternative copy method successful");
-				} catch (alternativeError) {
-					const errorMessage =
-						alternativeError instanceof Error
-							? alternativeError.message
-							: String(alternativeError);
-					throw new Error(`File copy failed: ${errorMessage}`);
+				const exists = await RNFS.exists(newPathFile);
+				if (!exists || form.file.uri !== newPathFile) {
+					const newPathFile = `${RNFS.DocumentDirectoryPath}/${id}.epub`;
+					await RNFS.copyFile(form.file.uri, newPathFile);
 				}
+
+				const newBook: _IBook = {
+					...form,
+					file: newPathFile,
+					qualification: 0,
+					createdAt: Date.now(),
+				};
+				addBook(newBook);
 			}
 
-			const copyExists = await RNFS.exists(newPathFile);
-
-			if (!copyExists) {
-				throw new Error("File copy failed - destination file not found");
-			}
-
-			const newBook: _IBook = {
-				...form,
-				file: newPathFile,
-				qualification: 0,
-				createdAt: Date.now(),
-			};
-			addBook(newBook);
 			navigation.goBack();
 		} catch (error) {
 			console.log("Error adding book:", error);
