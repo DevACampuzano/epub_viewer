@@ -1,5 +1,5 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
-import { useReader } from "@epubjs-react-native/core";
+import { type Location, useReader } from "@epubjs-react-native/core";
 import { pick } from "@react-native-documents/picker";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default (
 		show: false,
 		icon: "info",
 	});
-	const { getMeta, theme, ...props } = useReader();
+	const { getMeta, theme } = useReader();
 	const addBook = useBookStore((state) => state.addBook);
 	theme.body.background = "#f5f5f5";
 
@@ -48,8 +48,13 @@ export default (
 	const bytesToMB = (bytes: number): number => {
 		return Math.round((bytes / (1024 * 1024)) * 100) / 100;
 	};
-	const onReady = () => {
+	const onReady = (
+		totalLocations: number,
+		_currentLocation: Location,
+		progress: number,
+	) => {
 		const data: _IMeta = getMeta() as _IMeta;
+		console.log("Reader is ready", { data, totalLocations, progress });
 		setForm((form) => ({
 			...form,
 			author: data?.author,
@@ -59,13 +64,12 @@ export default (
 			rights: data?.rights,
 			title: data?.title,
 			image: data?.cover,
-			totalPages: props.totalLocations || 0,
-			progress: props.progress || 0,
-			id: props.key || id,
+			totalPages: totalLocations,
+			progress: progress,
 		}));
-		console.log("Meta data:", { data, props });
 		setLoadingRender(false);
 	};
+
 	const onChangeImage = async () => {
 		const data = await launchImageLibrary({
 			mediaType: "photo",
