@@ -12,6 +12,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 }) => {
 	const { bottom } = useSafeAreaInsets();
 	const books = useBookStore((state) => state.books);
+	const booksRead = books.filter((book) => book.progress === 100);
 	return (
 		<View style={style.root}>
 			<View style={style.header}>
@@ -19,10 +20,13 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					<Text style={style.title}>Mi Bliblioteca</Text>
 					<Text>{books.length} Libro en tu colección</Text>
 				</View>
-				<Button
-					label="Agregar"
-					onPress={() => navigation.navigate("newBook")}
-				/>
+				<View style={{ gap: 10 }}>
+					<Text>{booksRead.length} Libro(s) leídos</Text>
+					<Button
+						label="Agregar"
+						onPress={() => navigation.navigate("newBook")}
+					/>
+				</View>
 			</View>
 
 			<Divider style={{ marginVertical: 10 }} />

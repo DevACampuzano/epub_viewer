@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Animated, Text, useAnimatedValue, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { colors } from "@/theme";
 import styles from "./styles";
 
 interface PropsToast {
@@ -73,13 +74,13 @@ export const Toast: FC<PropsToast> = ({
 					size={20}
 					color={
 						icon === "octagon-alert"
-							? "#FF6B35"
+							? colors.danger
 							: icon === "circle-check"
-								? "#4CAF50"
+								? colors.success
 								: icon === "info"
-									? "#2196F3"
+									? colors.info
 									: icon === "triangle-alert"
-										? "#ffe735ff"
+										? colors.warning
 										: "#000"
 					}
 				/>
