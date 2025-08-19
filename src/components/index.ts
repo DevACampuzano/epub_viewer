@@ -5,3 +5,4 @@ export * from "./InputFile/index";
 export * from "./ProgressBar/index";
 export * from "./Text/index";
 export * from "./TextInput/index";
+export * from "./Toast";

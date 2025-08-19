@@ -4,6 +4,7 @@ const style = StyleSheet.create({
 	root: {
 		paddingVertical: 10,
 		gap: 10,
+		position: "relative",
 	},
 	title: {
 		fontSize: 20,
@@ -45,6 +46,27 @@ const style = StyleSheet.create({
 		justifyContent: "center",
 		gap: 5,
 	},
+	container: {
+		left: 20,
+		right: 20,
+		position: "absolute",
+		padding: 10,
+		borderRadius: 5,
+		backgroundColor: "#F8F9FA",
+		shadowColor: "#000",
+		shadowOffset: { width: 4, height: 4 },
+		shadowOpacity: 0.1,
+		shadowRadius: 8,
+		elevation: 10,
+	},
+	textContainer: {
+		flexDirection: "row",
+		gap: 10,
+		alignItems: "center",
+		justifyContent: "center",
+		boxSizing: "border-box",
+		padding: 10,
+	},
 });
 
-export default style
+export default style;

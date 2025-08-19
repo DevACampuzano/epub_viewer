@@ -10,7 +10,14 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import { Button, ButtonBack, InputFile, Text, TextInput } from "@/components";
+import {
+	Button,
+	ButtonBack,
+	InputFile,
+	Text,
+	TextInput,
+	Toast,
+} from "@/components";
 import style from "./styles";
 import useNewBook from "./useNewBook";
 
@@ -33,118 +40,125 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 		theme,
 		onChange,
 		onChangeImage,
-	} = useNewBook();
+		onSubmit,
+		error,
+		onCloseToast,
+	} = useNewBook(navigation);
 
 	return (
-		<ScrollView
-			contentContainerStyle={[
-				style.root,
-				{ flex: loadingRender ? 1 : undefined },
-			]}
-			showsVerticalScrollIndicator={false}
-		>
-			<ButtonBack label="Regresar" onPress={() => navigation.goBack()} />
-			<Text style={style.title}>Agregar Libro</Text>
-			<Text style={style.subtitle}>
-				Sube un archivo EPUB a tu biblioteca personal
-			</Text>
-			<InputFile
-				label={file?.name || "Seleccionar archivo"}
-				size={file?.size ? bytesToMB(file.size) : undefined}
-				onPress={handleSelectFile}
-			/>
-			{file !== null && loadingRender && (
-				<View
-					style={{
-						flex: 1,
-						borderRadius: 12,
-						overflow: "hidden",
-						marginTop: 10,
-					}}
-				>
-					<Reader
-						src={file?.uri}
-						fileSystem={useFileSystem}
-						onReady={onReady}
-						renderLoadingFileComponent={() => (
-							<ActivityIndicator size="large" />
-						)}
-						defaultTheme={theme}
-						onDisplayError={(err) => console.log("Error:", err)}
-					/>
-				</View>
-			)}
+		<>
+			<Toast {...error} callbackEnd={onCloseToast} />
 
-			{file !== null && !loadingRender && (
-				<>
-					<View style={style.detailContainer}>
-						<Text style={[style.title, { marginBottom: 5 }]}>
-							Detalle del Libro
-						</Text>
-						<TouchableOpacity
-							style={style.btnImage}
-							activeOpacity={0.7}
-							onPress={onChangeImage}
-						>
-							{image ? (
-								<Image
-									source={{ uri: image }}
-									style={{ width: 200, height: 300 }}
-								/>
-							) : (
-								<View style={style.imageNotFound}>
-									<Icon name="image-off" size={50} color="#666" />
+			<ScrollView
+				contentContainerStyle={[
+					style.root,
+					{ flex: loadingRender ? 1 : undefined },
+				]}
+				showsVerticalScrollIndicator={false}
+			>
+				<ButtonBack label="Regresar" onPress={() => navigation.goBack()} />
+				<Text style={style.title}>Agregar Libro</Text>
+				<Text style={style.subtitle}>
+					Sube un archivo EPUB a tu biblioteca personal
+				</Text>
+				<InputFile
+					label={file?.name || "Seleccionar archivo"}
+					size={file?.size ? bytesToMB(file.size) : undefined}
+					onPress={handleSelectFile}
+				/>
+				{file !== null && loadingRender && (
+					<View
+						style={{
+							flex: 1,
+							borderRadius: 12,
+							overflow: "hidden",
+							marginTop: 10,
+						}}
+					>
+						<Reader
+							src={file?.uri}
+							fileSystem={useFileSystem}
+							onReady={onReady}
+							renderLoadingFileComponent={() => (
+								<ActivityIndicator size="large" />
+							)}
+							defaultTheme={theme}
+							onDisplayError={(err) => console.log("Error:", err)}
+						/>
+					</View>
+				)}
+
+				{file !== null && !loadingRender && (
+					<>
+						<View style={style.detailContainer}>
+							<Text style={[style.title, { marginBottom: 5 }]}>
+								Detalle del Libro
+							</Text>
+							<TouchableOpacity
+								style={style.btnImage}
+								activeOpacity={0.7}
+								onPress={onChangeImage}
+							>
+								{image ? (
+									<Image
+										source={{ uri: image }}
+										style={{ width: 200, height: 300 }}
+									/>
+								) : (
+									<View style={style.imageNotFound}>
+										<Icon name="image-off" size={50} color="#666" />
+									</View>
+								)}
+								<Text style={style.labelImage}>
+									Puede cambiar la imagen de portada precionando la imagen
+								</Text>
+							</TouchableOpacity>
+							<TextInput
+								label="Título"
+								value={title}
+								editable={!loadingRender}
+								onChangeText={(value) => onChange(value, "title")}
+							/>
+							<TextInput
+								label="Autor"
+								value={author}
+								editable={!loadingRender}
+								onChangeText={(value) => onChange(value, "author")}
+							/>
+							<TextInput
+								label="Descripción"
+								value={description}
+								multiline
+								numberOfLines={5}
+								style={{ height: 100 }}
+								editable={!loadingRender}
+								onChangeText={(value) => onChange(value, "description")}
+							/>
+							{language && (
+								<View style={style.characteristics}>
+									<Text style={{ fontWeight: "bold" }}>Idioma:</Text>
+									<Text>{language}</Text>
 								</View>
 							)}
-							<Text style={style.labelImage}>
-								Puede cambiar la imagen de portada precionando la imagen
-							</Text>
-						</TouchableOpacity>
-						<TextInput
-							label="Título"
-							value={title}
-							editable={!loadingRender}
-							onChangeText={(value) => onChange(value, "title")}
-						/>
-						<TextInput
-							label="Autor"
-							value={author}
-							editable={!loadingRender}
-							onChangeText={(value) => onChange(value, "author")}
-						/>
-						<TextInput
-							label="Descripción"
-							value={description}
-							multiline
-							numberOfLines={5}
-							style={{ height: 100 }}
-							editable={!loadingRender}
-							onChangeText={(value) => onChange(value, "description")}
-						/>
-						{language && (
-							<View style={style.characteristics}>
-								<Text style={{ fontWeight: "bold" }}>Idioma:</Text>
-								<Text>{language}</Text>
-							</View>
-						)}
-						{publisher && (
-							<View style={style.characteristics}>
-								<Text style={{ fontWeight: "bold" }}>Editorial:</Text>
-								<Text>{publisher}</Text>
-							</View>
-						)}
-						{rights && (
-							<View style={style.characteristics}>
-								<Text style={{ fontWeight: "bold" }}>Derechos de Autor:</Text>
-								<Text>{rights}</Text>
-							</View>
-						)}
-					</View>
-					<Button label="Agregar Libro" onPress={() => {}} />
-				</>
-			)}
+							{publisher && (
+								<View style={style.characteristics}>
+									<Text style={{ fontWeight: "bold" }}>Editorial:</Text>
+									<Text>{publisher}</Text>
+								</View>
+							)}
+							{rights && (
+								<View style={style.characteristics}>
+									<Text style={{ fontWeight: "bold" }}>Derechos de Autor:</Text>
+									<Text>{rights}</Text>
+								</View>
+							)}
+						</View>
+						<Button label="Agregar Libro" onPress={onSubmit} />
+					</>
+				)}
 
-			<View style={{ height: 30 }} />
-		</ScrollView>
+				<View style={{ height: 30 }} />
+			</ScrollView>
+		</>
 	);
 };
