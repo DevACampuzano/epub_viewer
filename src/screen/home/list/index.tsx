@@ -1,9 +1,11 @@
 import { Button, Divider, Text } from "@components/";
+import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBookStore } from "@/stores";
+import { colors } from "@/theme";
 import Card from "./components/card";
 import style from "./styles";
 
@@ -18,10 +20,22 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 			<View style={style.header}>
 				<View style={{ gap: 10 }}>
 					<Text style={style.title}>Mi Bliblioteca</Text>
-					<Text>{books.length} Libro en tu colección</Text>
+					<View style={{ gap: 5, flexDirection: "row" }}>
+						<View
+							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+						>
+							<Icon name="library" color={colors.primary} size={15} />
+							<Text>{books.length} Libro en colección</Text>
+						</View>
+						<View
+							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
+						>
+							<Icon name="book-check" color={colors.primary} size={15} />
+							<Text>{booksRead.length} Libro leído</Text>
+						</View>
+					</View>
 				</View>
 				<View style={{ gap: 10 }}>
-					<Text>{booksRead.length} Libro(s) leídos</Text>
 					<Button
 						label="Agregar"
 						onPress={() => navigation.navigate("newBook")}
