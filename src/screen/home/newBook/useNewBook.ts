@@ -11,7 +11,7 @@ import { useBookStore } from "@/stores";
 export default (
 	navigation: NativeStackNavigationProp<_IRootStack, "newBook", undefined>,
 ) => {
-	const { form, setForm, onChange } = useForm<_IFormNewBook, never>({
+	const { id, form, setForm, onChange } = useForm<_IFormNewBook, never>({
 		file: null,
 		image: "",
 		title: "",
@@ -20,6 +20,9 @@ export default (
 		language: "",
 		publisher: "",
 		rights: "",
+		totalPages: 0,
+		progress: 0,
+		id: uuid.v4(),
 	});
 	const [loadingRender, setLoadingRender] = useState<boolean>(false);
 	const [error, setError] = useState<Omit<_PropsToast, "callbackEnd">>({
@@ -27,7 +30,7 @@ export default (
 		show: false,
 		icon: "info",
 	});
-	const { getMeta, theme, totalLocations } = useReader();
+	const { getMeta, theme, ...props } = useReader();
 	const addBook = useBookStore((state) => state.addBook);
 	theme.body.background = "#f5f5f5";
 
@@ -47,7 +50,6 @@ export default (
 	};
 	const onReady = () => {
 		const data: _IMeta = getMeta() as _IMeta;
-
 		setForm((form) => ({
 			...form,
 			author: data?.author,
@@ -57,7 +59,11 @@ export default (
 			rights: data?.rights,
 			title: data?.title,
 			image: data?.cover,
+			totalPages: props.totalLocations || 0,
+			progress: props.progress || 0,
+			id: props.key || id,
 		}));
+		console.log("Meta data:", { data, props });
 		setLoadingRender(false);
 	};
 	const onChangeImage = async () => {
@@ -76,7 +82,6 @@ export default (
 
 	const onSubmit = async () => {
 		try {
-			const id = uuid.v4();
 			if (form.file === null) {
 				throw new Error("File is required");
 			}
@@ -133,10 +138,8 @@ export default (
 
 			const newBook: _IBook = {
 				...form,
-				id,
 				file: newPathFile,
 				qualification: 0,
-				totalPages: totalLocations,
 				createdAt: Date.now(),
 			};
 			addBook(newBook);

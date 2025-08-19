@@ -1,7 +1,7 @@
 import { Button, Divider, Text } from "@components/";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBookStore } from "@/stores";
 import Card from "./components/card";
@@ -12,7 +12,6 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 }) => {
 	const { bottom } = useSafeAreaInsets();
 	const books = useBookStore((state) => state.books);
-	const calculateProgress = useBookStore((state) => state.calculateProgress);
 	return (
 		<View style={style.root}>
 			<View style={style.header}>
@@ -30,19 +29,23 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 			<FlatList
 				data={books}
 				renderItem={({ item }) => (
-					<Card
-						image={item.image}
-						title={item.title}
-						author={item.author}
-						progress={calculateProgress(item.id)}
-						qualification={item.qualification || 0}
-					/>
+					<TouchableOpacity
+						activeOpacity={0.7}
+						onPress={() => navigation.navigate("book", item)}
+					>
+						<Card
+							image={item.image}
+							title={item.title}
+							author={item.author}
+							progress={item.progress || 0}
+							qualification={item.qualification || 0}
+						/>
+					</TouchableOpacity>
 				)}
 				key={2}
 				style={{ width: "100%", height: "100%" }}
 				contentContainerStyle={{
 					gap: 20,
-					flex: 1,
 				}}
 				columnWrapperStyle={{
 					justifyContent: "space-between",
@@ -55,7 +58,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						<Text style={style.textEmpty}>Aún no tienes libros</Text>
 					</View>
 				)}
-				ListFooterComponent={() => <View style={{ height: bottom + 55 }} />}
+				ListFooterComponent={() => <View style={{ height: bottom + 40 }} />}
 			/>
 		</View>
 	);

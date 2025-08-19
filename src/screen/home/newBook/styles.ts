@@ -4,7 +4,6 @@ const style = StyleSheet.create({
 	root: {
 		paddingVertical: 10,
 		gap: 10,
-		position: "relative",
 	},
 	title: {
 		fontSize: 20,

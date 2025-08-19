@@ -25,7 +25,7 @@ const Card: FC<ICardBook> = ({
 			<ImageBackground
 				src={image}
 				style={style.imageBackground}
-				resizeMode="cover"
+				resizeMode="stretch"
 				resizeMethod="scale"
 			>
 				<View style={style.progressContainer}>

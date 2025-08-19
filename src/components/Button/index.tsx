@@ -8,18 +8,38 @@ import { Text } from "../Text";
 import styles from "./styles";
 
 type _IButton = TouchableOpacityProps & {
-	label: string;
+	label: string | React.ReactNode;
 	labelProps?: TextProps;
+	variant?: "outline" | "filled";
 };
 
-export const Button: FC<_IButton> = (props) => (
+export const Button: FC<_IButton> = ({
+	style,
+	variant,
+	labelProps,
+	label,
+	...props
+}) => (
 	<TouchableOpacity
 		activeOpacity={0.7}
 		{...props}
-		style={[styles.button, props.style]}
+		style={[
+			variant === "outline" ? styles.buttonOutline : styles.button,
+			style,
+		]}
 	>
-		<Text {...props.labelProps} style={[styles.text, props.labelProps?.style]}>
-			{props.label}
-		</Text>
+		{typeof label === "string" ? (
+			<Text
+				{...labelProps}
+				style={[
+					variant === "outline" ? styles.textOutline : styles.text,
+					labelProps?.style,
+				]}
+			>
+				{label}
+			</Text>
+		) : (
+			label
+		)}
 	</TouchableOpacity>
 );

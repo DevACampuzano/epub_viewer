@@ -10,7 +10,7 @@ import { Text } from "../Text";
 import style from "./styles";
 
 type _ITextInputProps = TextInputProps & {
-	label: string;
+	label?: string;
 	containerProps?: ViewProps;
 	labelProps?: TextProps;
 };
@@ -23,9 +23,11 @@ export const TextInput: FC<_ITextInputProps> = ({
 }) => {
 	return (
 		<View {...containerProps} style={[style.container, containerProps?.style]}>
-			<Text {...labelProps} style={[style.label, labelProps?.style]}>
-				{label}
-			</Text>
+			{label && (
+				<Text {...labelProps} style={[style.label, labelProps?.style]}>
+					{label}
+				</Text>
+			)}
 			<RNTextInput {...props} style={[style.input, props.style]} />
 			{props.maxLength && (
 				<Text style={style.characterCount}>

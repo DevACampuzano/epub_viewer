@@ -94,7 +94,15 @@ export const RootStack = () => {
 				}}
 			/>
 			<RootStackNav.Screen name="book" component={Book} />
-			<RootStackNav.Screen name="read" component={Read} />
+			<RootStackNav.Screen
+				name="read"
+				component={Read}
+				options={{
+					contentStyle: {
+						paddingHorizontal: 0,
+					},
+				}}
+			/>
 			<RootStackNav.Screen name="newBook" component={NewBook} />
 		</RootStackNav.Navigator>
 	);
