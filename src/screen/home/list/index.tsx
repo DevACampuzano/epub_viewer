@@ -2,7 +2,12 @@ import { Button, Divider, ProgressBar, Text } from "@components/";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import {
+	FlatList,
+	TouchableOpacity,
+	useWindowDimensions,
+	View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBookStore } from "@/stores";
 import { colors } from "@/theme";
@@ -16,6 +21,10 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 	const books = useBookStore((state) => state.books);
 	const progress = useBookStore((state) => state.calculateOverallProgress());
 	const booksRead = books.filter((book) => book.progress === 100);
+	const { width, height } = useWindowDimensions();
+
+	const isPortrait = height > width;
+
 	return (
 		<View style={style.root}>
 			<View style={style.header}>
@@ -64,6 +73,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					<TouchableOpacity
 						activeOpacity={0.7}
 						onPress={() => navigation.navigate("book", item)}
+						style={{ width: isPortrait ? "49%" : "24%", height: "100%" }}
 					>
 						<Card
 							image={item.image}
@@ -74,16 +84,17 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						/>
 					</TouchableOpacity>
 				)}
-				key={2}
+				key={isPortrait ? 2 : 4}
 				style={{ width: "100%", height: "100%" }}
 				contentContainerStyle={{
 					gap: 20,
+					width: "100%",
 				}}
 				columnWrapperStyle={{
 					justifyContent: "space-between",
-					gap: 10,
+					gap: "1%",
 				}}
-				numColumns={2}
+				numColumns={isPortrait ? 2 : 4}
 				showsVerticalScrollIndicator={false}
 				keyExtractor={(item) => item.id.toString()}
 				ListEmptyComponent={() => (

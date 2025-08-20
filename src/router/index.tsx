@@ -4,12 +4,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Book, List, NewBook, Read, Setting } from "@screens/";
 import { colors } from "@theme";
+import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const RootTabs = createBottomTabNavigator<_IRootTabs>();
 
 const RootTabsNavigation = () => {
 	const { bottom } = useSafeAreaInsets();
+	const { width, height } = useWindowDimensions();
+	const isPortrait = height > width;
 	return (
 		<RootTabs.Navigator
 			initialRouteName="list"
@@ -23,6 +26,7 @@ const RootTabsNavigation = () => {
 				tabBarItemStyle: {
 					height: 55,
 					borderRadius: 16,
+					flex: 1,
 					backgroundColor:
 						route.name ===
 						navigation.getState().routeNames[navigation.getState().index]
@@ -37,9 +41,10 @@ const RootTabsNavigation = () => {
 					height: 55,
 					position: "absolute",
 					bottom: bottom || 20,
-					left: 20,
-					right: 20,
-					marginHorizontal: 20,
+					// width: width - 40,
+					margin: 7,
+					marginHorizontal: isPortrait ? width * 0.05 : width * 0.25,
+
 					shadowColor: "#000",
 					shadowOffset: {
 						width: 0,

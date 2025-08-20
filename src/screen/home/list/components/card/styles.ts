@@ -2,20 +2,18 @@ import { StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
 	card: {
-		height: 370,
-		width: 170,
 		backgroundColor: "#f5f5f5",
-		boxSizing: "border-box",
 		borderRadius: 12,
 		position: "relative",
+		flex: 1,
 	},
 	imageBackground: {
-		flex: 1,
 		justifyContent: "flex-end",
 		padding: 10,
 		gap: 5,
 		borderTopStartRadius: 12,
 		borderTopEndRadius: 12,
+		height: 270,
 		overflow: "hidden",
 	},
 	progressContainer: {
