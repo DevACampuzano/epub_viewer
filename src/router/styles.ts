@@ -4,8 +4,9 @@ const style = StyleSheet.create({
 	tabBarStyle: {
 		borderTopWidth: 0,
 		height: 55,
+		borderRadius: 16,
 		position: "absolute",
-		shadowColor: "none",
+		shadowColor: "transparent",
 	},
 	tabBarItemStyle: {
 		height: 55,
