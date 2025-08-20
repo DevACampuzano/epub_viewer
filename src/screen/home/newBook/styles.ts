@@ -43,7 +43,7 @@ const style = StyleSheet.create({
 	btnImage: {
 		alignItems: "center",
 		justifyContent: "center",
-		gap: 5,
+		gap: 10,
 		width: "100%",
 	},
 	container: {

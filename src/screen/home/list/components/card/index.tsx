@@ -1,7 +1,7 @@
 import Icon from "@react-native-vector-icons/lucide";
 import type { FC } from "react";
-import { ImageBackground, Text, View } from "react-native";
-import { ProgressBar } from "@/components";
+import { ImageBackground, View } from "react-native";
+import { ProgressBar, Text } from "@/components";
 import { colors } from "@/theme";
 import style from "./styles";
 
@@ -30,7 +30,7 @@ const Card: FC<ICardBook> = ({
 			>
 				<View style={style.progressContainer}>
 					<Text style={style.progressText}>Progreso</Text>
-					<Text style={style.progressPercentage}>{progress}%</Text>
+					<Text style={style.progressPercentage}>{Math.round(progress)}%</Text>
 				</View>
 				<ProgressBar progress={progress} />
 			</ImageBackground>

@@ -31,7 +31,7 @@ const RootTabsNavigation = () => {
 					borderRadius: 16,
 					height: 55,
 					position: "absolute",
-					bottom,
+					bottom: bottom || 20,
 					left: 20,
 					right: 20,
 					marginHorizontal: 20,

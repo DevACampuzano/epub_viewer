@@ -1,13 +1,9 @@
-import Icon from "@react-native-vector-icons/lucide";
-import React, {
-	type ComponentProps,
-	type FC,
-	useCallback,
-	useState,
-} from "react";
-import { Animated, Text, useAnimatedValue, View } from "react-native";
+import Icon, { type LucideIconName } from "@react-native-vector-icons/lucide";
+import React, { type FC, useCallback, useState } from "react";
+import { Animated, useAnimatedValue, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "@/theme";
+import { Text } from "../Text";
 import styles from "./styles";
 
 interface PropsToast {
@@ -70,7 +66,7 @@ export const Toast: FC<PropsToast> = ({
 		>
 			<View style={styles.textContainer}>
 				<Icon
-					name={icon as ComponentProps<typeof Icon>["name"]}
+					name={icon as LucideIconName}
 					size={20}
 					color={
 						icon === "octagon-alert"

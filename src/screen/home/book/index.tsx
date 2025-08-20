@@ -98,7 +98,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 							<Text style={style.progressText}>Progreso</Text>
 							<Text
 								style={style.progressPercentage}
-							>{`${progress || 0}%`}</Text>
+							>{`${Math.round(progress || 0)}%`}</Text>
 						</View>
 						<ProgressBar progress={progress || 0} />
 						<Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 10 }}>

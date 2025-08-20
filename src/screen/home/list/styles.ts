@@ -26,6 +26,15 @@ const style = StyleSheet.create({
 		color: "#888",
 		fontWeight: "bold",
 	},
+	progressContainer: {
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	progressText: {
+		fontWeight: "bold",
+	},
 });
 
 export default style;

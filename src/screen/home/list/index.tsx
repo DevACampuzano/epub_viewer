@@ -1,4 +1,4 @@
-import { Button, Divider, Text } from "@components/";
+import { Button, Divider, ProgressBar, Text } from "@components/";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
@@ -14,13 +14,14 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 }) => {
 	const { bottom } = useSafeAreaInsets();
 	const books = useBookStore((state) => state.books);
+	const progress = useBookStore((state) => state.calculateOverallProgress());
 	const booksRead = books.filter((book) => book.progress === 100);
 	return (
 		<View style={style.root}>
 			<View style={style.header}>
 				<View style={{ gap: 10 }}>
 					<Text style={style.title}>Mi Bliblioteca</Text>
-					<View style={{ gap: 5, flexDirection: "row" }}>
+					<View style={{ gap: 10, flexDirection: "row" }}>
 						<View
 							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
 						>
@@ -42,7 +43,20 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					/>
 				</View>
 			</View>
-
+			<View
+				style={{
+					gap: 10,
+					backgroundColor: "#f5f5f5",
+					padding: 10,
+					borderRadius: 10,
+				}}
+			>
+				<View style={style.progressContainer}>
+					<Text style={style.progressText}>Progreso</Text>
+					<Text>{Math.round(progress)}%</Text>
+				</View>
+				<ProgressBar progress={progress} />
+			</View>
 			<Divider style={{ marginVertical: 10 }} />
 			<FlatList
 				data={books}

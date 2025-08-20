@@ -3,16 +3,7 @@ import { create, type StateCreator } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-interface IBookStore {
-	books: _IBook[];
-	filterBooks: (query: string) => _IBook[];
-	addBook: (book: _IBook) => void;
-	markBookAsRead: (id: string) => void;
-	removeBook: (id: string) => void;
-	updateBook: (id: string, book: Partial<_IBook>) => void;
-}
-
-const storeAPI: StateCreator<IBookStore> = (set, get) => ({
+const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
 	books: [],
 	filterBooks: (query) =>
 		get().books.filter((book) =>
@@ -33,9 +24,19 @@ const storeAPI: StateCreator<IBookStore> = (set, get) => ({
 		set((state) => ({
 			books: state.books.map((b) => (b.id === id ? { ...b, ...book } : b)),
 		})),
+	calculateOverallProgress: () => {
+		const books = get().books;
+		if (books.length === 0) return 0;
+
+		const totalProgress = books.reduce(
+			(acc, book) => acc + (book.progress || 0),
+			0,
+		);
+		return totalProgress / books.length;
+	},
 });
 
-export const useBookStore = create<IBookStore>()(
+export const useBookStore = create<_IBookStore>()(
 	devtools(
 		persist(immer(storeAPI), {
 			skipHydration: true,

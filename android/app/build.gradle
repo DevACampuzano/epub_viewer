@@ -79,7 +79,7 @@ android {
 
     namespace "com.epub_viewer"
     defaultConfig {
-        applicationId "com.epub_viewer"
+        applicationId "co.litio"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
