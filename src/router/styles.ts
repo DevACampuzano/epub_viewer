@@ -2,13 +2,10 @@ import { StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
 	tabBarStyle: {
-		backgroundColor: "transparent",
-		borderColor: "red",
 		borderTopWidth: 0,
-		borderRadius: 16,
 		height: 55,
 		position: "absolute",
-		margin: 7,
+		shadowColor: "none",
 	},
 	tabBarItemStyle: {
 		height: 55,
