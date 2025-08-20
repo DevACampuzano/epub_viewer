@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
 	card: {
-		height: 375,
-		width: 175,
+		height: 370,
+		width: 170,
 		backgroundColor: "#f5f5f5",
 		boxSizing: "border-box",
 		borderRadius: 12,

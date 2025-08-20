@@ -81,6 +81,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 				}}
 				columnWrapperStyle={{
 					justifyContent: "space-between",
+					gap: 10,
 				}}
 				numColumns={2}
 				showsVerticalScrollIndicator={false}

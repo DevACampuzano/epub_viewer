@@ -13,7 +13,7 @@ const RootTabsNavigation = () => {
 	return (
 		<RootTabs.Navigator
 			initialRouteName="list"
-			screenOptions={{
+			screenOptions={({ navigation, route }) => ({
 				headerShown: false,
 				sceneStyle: {
 					backgroundColor: "#fff",
@@ -22,8 +22,13 @@ const RootTabsNavigation = () => {
 				tabBarActiveTintColor: colors.primary,
 				tabBarItemStyle: {
 					height: 55,
+					borderRadius: 16,
+					backgroundColor:
+						route.name ===
+						navigation.getState().routeNames[navigation.getState().index]
+							? colors.secondary
+							: "transparent",
 				},
-				tabBarActiveBackgroundColor: colors.secondary,
 				tabBarStyle: {
 					backgroundColor: "#FFFFFF",
 					borderWidth: 1,
@@ -44,7 +49,7 @@ const RootTabsNavigation = () => {
 					shadowRadius: 4.65,
 					elevation: 7,
 				},
-			}}
+			})}
 		>
 			<RootTabs.Screen
 				name="list"
