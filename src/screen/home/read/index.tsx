@@ -16,7 +16,15 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 	const { onClose, currentTheme } = useRead(id, navigation);
 
 	return (
-		<View style={[style.root, { paddingBottom: bottom || 30 }]}>
+		<View
+			style={[
+				style.root,
+				{
+					paddingBottom: bottom || 30,
+					backgroundColor: currentTheme.value.body.background,
+				},
+			]}
+		>
 			<TouchableOpacity style={style.backButton} onPress={onClose}>
 				<Icon
 					name="chevron-left"
