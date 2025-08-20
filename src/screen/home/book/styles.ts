@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
 	root: {
-		paddingVertical: 10,
+		paddingVertical: 20,
 		gap: 10,
 	},
 	progressContainer: {

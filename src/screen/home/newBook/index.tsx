@@ -4,7 +4,6 @@ import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
 import {
-	ActivityIndicator,
 	Image,
 	Keyboard,
 	KeyboardAvoidingView,
@@ -19,6 +18,7 @@ import {
 	Button,
 	ButtonBack,
 	InputFile,
+	Loading,
 	Text,
 	TextInput,
 	Toast,
@@ -92,7 +92,10 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 								fileSystem={useFileSystem}
 								onReady={onReady}
 								renderLoadingFileComponent={() => (
-									<ActivityIndicator size="large" />
+									<Loading label="Cargando..." />
+								)}
+								renderOpeningBookComponent={() => (
+									<Loading label="Abriendo..." />
 								)}
 								defaultTheme={theme}
 								onDisplayError={(err) => console.log("Error:", err)}

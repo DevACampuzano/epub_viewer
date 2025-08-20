@@ -4,6 +4,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
 import {
 	FlatList,
+	ScrollView,
 	TouchableOpacity,
 	useWindowDimensions,
 	View,
@@ -26,7 +27,10 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 	const isPortrait = height > width;
 
 	return (
-		<View style={style.root}>
+		<ScrollView
+			contentContainerStyle={style.root}
+			showsVerticalScrollIndicator={false}
+		>
 			<View style={style.header}>
 				<View style={{ gap: 10 }}>
 					<Text style={style.title}>Mi Bliblioteca</Text>
@@ -85,6 +89,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					</TouchableOpacity>
 				)}
 				key={isPortrait ? 2 : 4}
+				scrollEnabled={false}
 				style={{ width: "100%", height: "100%" }}
 				contentContainerStyle={{
 					gap: 20,
@@ -102,8 +107,10 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						<Text style={style.textEmpty}>Aún no tienes libros</Text>
 					</View>
 				)}
-				ListFooterComponent={() => <View style={{ height: bottom + 40 }} />}
+				ListFooterComponent={() => (
+					<View style={{ height: isPortrait ? bottom + 40 : bottom + 20 }} />
+				)}
 			/>
-		</View>
+		</ScrollView>
 	);
 };

@@ -13,6 +13,7 @@ const RootTabsNavigation = () => {
 	const { bottom } = useSafeAreaInsets();
 	const { width, height } = useWindowDimensions();
 	const isPortrait = height > width;
+
 	return (
 		<RootTabs.Navigator
 			initialRouteName="list"
@@ -25,26 +26,20 @@ const RootTabsNavigation = () => {
 				tabBarActiveTintColor: colors.primary,
 				tabBarItemStyle: {
 					height: 55,
-					borderRadius: 16,
-					flex: 1,
 					backgroundColor:
 						route.name ===
 						navigation.getState().routeNames[navigation.getState().index]
 							? colors.secondary
-							: "transparent",
-				},
-				tabBarStyle: {
-					backgroundColor: "#FFFFFF",
-					borderWidth: 1,
-					borderColor: "#E5E5EA",
-					borderRadius: 16,
-					height: 55,
-					position: "absolute",
-					bottom: bottom || 20,
-					// width: width - 40,
-					margin: 7,
-					marginHorizontal: isPortrait ? width * 0.05 : width * 0.25,
-
+							: "#fff",
+					borderStartStartRadius: route.name === "list" ? 16 : 0,
+					borderEndStartRadius: route.name === "list" ? 16 : 0,
+					borderEndEndRadius: route.name === "settings" ? 16 : 0,
+					borderStartEndRadius: route.name === "settings" ? 16 : 0,
+					zIndex:
+						route.name !==
+						navigation.getState().routeNames[navigation.getState().index]
+							? 1
+							: 0,
 					shadowColor: "#000",
 					shadowOffset: {
 						width: 0,
@@ -53,6 +48,19 @@ const RootTabsNavigation = () => {
 					shadowOpacity: 0.29,
 					shadowRadius: 4.65,
 					elevation: 7,
+					borderWidth: 1,
+					borderColor: "#E5E5EA",
+				},
+				tabBarStyle: {
+					backgroundColor: "transparent",
+					borderColor: "red",
+					borderTopWidth: 0,
+					borderRadius: 16,
+					height: 55,
+					position: "absolute",
+					bottom: bottom || 20,
+					margin: 7,
+					marginHorizontal: isPortrait ? width * 0.05 : width * 0.25,
 				},
 			})}
 		>

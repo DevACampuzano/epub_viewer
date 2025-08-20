@@ -3,8 +3,10 @@ import { useFileSystem } from "@epubjs-react-native/file-system";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Loading } from "@/components";
+import style from "./styles";
 import useRead from "./useRead";
 
 export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
@@ -39,6 +41,21 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				// fullsize
 				waitForLocationsReady={true}
 				keepScrollOffsetOnLocationChange={false}
+				renderLoadingFileComponent={() => (
+					<Loading
+						label="Cargando..."
+						color={currentTheme.value.p.color.split(" ")[0]}
+					/>
+				)}
+				renderOpeningBookComponent={() => (
+					<Loading
+						label="Abriendo..."
+						color={currentTheme.value.p.color.split(" ")[0]}
+						containerProps={{
+							style: { backgroundColor: currentTheme.value.body.background },
+						}}
+					/>
+				)}
 				onDisplayError={(error) => {
 					console.error("Reader display error:", error);
 				}}
@@ -50,13 +67,3 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		</View>
 	);
 };
-
-const style = StyleSheet.create({
-	root: { flex: 1 },
-	backButton: {
-		position: "absolute",
-		top: 10,
-		left: 10,
-		zIndex: 10,
-	},
-});
