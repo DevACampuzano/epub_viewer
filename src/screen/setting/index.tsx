@@ -1,4 +1,6 @@
 import Icon from "@react-native-vector-icons/lucide";
+import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import type { FC } from "react";
 import { ScrollView, View } from "react-native";
 import { Text } from "@/components";
 import { useSettingStore } from "@/stores";
@@ -6,7 +8,7 @@ import { colors } from "@/theme";
 import { OptionTheme } from "./components";
 import style from "./styles";
 
-export const Setting = () => {
+export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 	const themes = useSettingStore((state) => state.themes);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const setCurrentTheme = useSettingStore((state) => state.setCurrentTheme);

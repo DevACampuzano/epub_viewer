@@ -1,11 +1,11 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: router*/
 import Icon from "@react-native-vector-icons/lucide";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Book, List, NewBook, Read, Setting } from "@screens/";
 import { colors } from "@theme";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import style from "./styles";
 
 const RootTabs = createBottomTabNavigator<_IRootTabs>();
 
@@ -19,54 +19,51 @@ const RootTabsNavigation = () => {
 			initialRouteName="list"
 			screenOptions={({ navigation, route }) => ({
 				headerShown: false,
-				sceneStyle: {
-					backgroundColor: "#fff",
-					paddingHorizontal: 20,
-				},
+				sceneStyle: style.sceneStyle,
 				tabBarActiveTintColor: colors.primary,
-				tabBarItemStyle: {
-					height: 55,
-					backgroundColor:
-						route.name ===
-						navigation.getState().routeNames[navigation.getState().index]
-							? colors.secondary
-							: "#fff",
-					borderStartStartRadius: route.name === "list" ? 16 : 0,
-					borderEndStartRadius: route.name === "list" ? 16 : 0,
-					borderEndEndRadius: route.name === "settings" ? 16 : 0,
-					borderStartEndRadius: route.name === "settings" ? 16 : 0,
-					zIndex:
-						route.name !==
-						navigation.getState().routeNames[navigation.getState().index]
-							? 1
-							: 0,
-					shadowColor: "#000",
-					shadowOffset: {
-						width: 0,
-						height: 3,
+				tabBarItemStyle: [
+					style.tabBarItemStyle,
+					{
+						backgroundColor:
+							route.name ===
+							navigation.getState().routeNames[navigation.getState().index]
+								? colors.secondary
+								: "#fff",
+						zIndex:
+							route.name !==
+							navigation.getState().routeNames[navigation.getState().index]
+								? 1
+								: 0,
+						...(Platform.OS === "ios"
+							? {
+									borderStartStartRadius: route.name === "list" ? 16 : 0,
+									borderEndStartRadius: route.name === "list" ? 16 : 0,
+									borderEndEndRadius: route.name === "settings" ? 16 : 0,
+									borderStartEndRadius: route.name === "settings" ? 16 : 0,
+								}
+							: {
+									borderStartStartRadius: route.name === "list" ? 16 : 0,
+									borderEndStartRadius: route.name === "settings" ? 16 : 0,
+									borderEndEndRadius: route.name === "settings" ? 16 : 0,
+									borderStartEndRadius: route.name === "list" ? 16 : 0,
+								}),
 					},
-					shadowOpacity: 0.29,
-					shadowRadius: 4.65,
-					elevation: 7,
-					borderWidth: 1,
-					borderColor: "#E5E5EA",
-				},
-				tabBarStyle: {
-					backgroundColor: "transparent",
-					borderColor: "red",
-					borderTopWidth: 0,
-					borderRadius: 16,
-					height: 55,
-					position: "absolute",
-					bottom: bottom || 20,
-					margin: 7,
-					marginHorizontal: isPortrait ? width * 0.05 : width * 0.25,
-				},
+				],
+				tabBarStyle: [
+					style.tabBarStyle,
+					{
+						bottom: bottom || 20,
+						marginHorizontal: isPortrait ? width * 0.05 : width * 0.25,
+					},
+				],
 			})}
 		>
 			<RootTabs.Screen
 				name="list"
-				component={List as any}
+				component={
+					// biome-ignore lint/suspicious/noExplicitAny: It is a stack view type but it has to be rendered as an initial view in a button bar.
+					List as any
+				}
 				options={{
 					tabBarLabel: "Biblioteca",
 					tabBarIcon: ({ color, size }) => (
@@ -96,19 +93,14 @@ export const RootStack = () => {
 			initialRouteName="home"
 			screenOptions={{
 				headerShown: false,
-				contentStyle: {
-					backgroundColor: "#fff",
-					paddingHorizontal: 20,
-				},
+				contentStyle: style.sceneStyle,
 			}}
 		>
 			<RootStackNav.Screen
 				name="home"
 				component={RootTabsNavigation}
 				options={{
-					contentStyle: {
-						paddingVertical: 0,
-					},
+					contentStyle: style.customContentStyle,
 				}}
 			/>
 			<RootStackNav.Screen name="book" component={Book} />
@@ -116,9 +108,7 @@ export const RootStack = () => {
 				name="read"
 				component={Read}
 				options={{
-					contentStyle: {
-						paddingHorizontal: 0,
-					},
+					contentStyle: style.customContentStyle,
 				}}
 			/>
 			<RootStackNav.Screen name="newBook" component={NewBook} />
