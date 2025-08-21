@@ -5,6 +5,7 @@ const style = StyleSheet.create({
 		paddingVertical: 20,
 		gap: 10,
 	},
+	headerRow: { flexDirection: "row", alignItems: "center", gap: 10 },
 	icon: {
 		padding: 10,
 		backgroundColor: "#d0fae5",
@@ -19,28 +20,29 @@ const style = StyleSheet.create({
 		fontSize: 16,
 		color: "#666",
 	},
-	section: {
-		backgroundColor: "#f5f5f5",
-
-		padding: 20,
-		borderRadius: 25,
+	imageTheme: {
+		height: 270,
+		borderRadius: 10,
+		marginTop: 10,
+		alignSelf: "center",
+		justifyContent: "center",
+		alignItems: "center",
 		gap: 10,
-		margin: 8,
-		marginVertical: 10,
-
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 4,
-		},
-		shadowOpacity: 0.3,
-		shadowRadius: 4.65,
-
-		elevation: 8,
 	},
-	titleSection: {
+	titleExample: {
+		textAlign: "center",
 		fontWeight: "bold",
-		fontSize: 18,
+		fontSize: 20,
+	},
+	textExample: {
+		textAlign: "center",
+		fontWeight: "normal",
+		fontSize: 16,
+	},
+	textExampleHighlighted: {
+		width: "100%",
+		padding: 5,
+		borderRadius: 5,
 	},
 });
 

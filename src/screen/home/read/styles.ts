@@ -8,6 +8,12 @@ const style = StyleSheet.create({
 		left: 10,
 		zIndex: 10,
 	},
+	refreshButton: {
+		position: "absolute",
+		bottom: 20,
+		right: 20,
+		zIndex: 10,
+	},
 });
 
 export default style;

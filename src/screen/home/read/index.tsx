@@ -3,7 +3,7 @@ import { useFileSystem } from "@epubjs-react-native/file-system";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Linking, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Loading } from "@/components";
 import style from "./styles";
@@ -15,7 +15,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 }) => {
 	const { file, id, currentPage } = route.params;
 	const { bottom } = useSafeAreaInsets();
-	const { onClose, currentTheme } = useRead(id, navigation);
+	const { onClose, currentTheme, onReady, onRefresh } = useRead(id, navigation);
 
 	return (
 		<View
@@ -27,19 +27,10 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				},
 			]}
 		>
-			<TouchableOpacity style={style.backButton} onPress={onClose}>
-				<Icon
-					name="chevron-left"
-					size={30}
-					color={currentTheme.value.p.color.split(" ")[0]}
-				/>
-			</TouchableOpacity>
-
 			<Reader
 				src={file}
 				fileSystem={useFileSystem}
-				// fullsize
-				waitForLocationsReady={true}
+				waitForLocationsReady
 				keepScrollOffsetOnLocationChange={false}
 				renderLoadingFileComponent={() => (
 					<Loading
@@ -47,6 +38,8 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 						color={currentTheme.value.p.color.split(" ")[0]}
 					/>
 				)}
+				onReady={onReady}
+				enableSelection
 				renderOpeningBookComponent={() => (
 					<Loading
 						label="Abriendo..."
@@ -59,11 +52,34 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				onDisplayError={(error) => {
 					console.error("Reader display error:", error);
 				}}
+				onSelected={(selection, cfRange) => {
+					console.log("Selected text:", selection);
+					console.log("CF Range:", cfRange);
+				}}
 				initialLocation={currentPage}
 				// manager="continuous"
 				defaultTheme={currentTheme.value}
-				flow="scrolled"
+				flow="paginated"
+				onPressExternalLink={(url) => {
+					Linking.openURL(url);
+				}}
 			/>
+			<TouchableOpacity style={style.backButton} onPress={onClose}>
+				<Icon
+					name="chevron-left"
+					size={30}
+					color={currentTheme.value.p.color.split(" ")[0]}
+				/>
+			</TouchableOpacity>
+			{__DEV__ && (
+				<TouchableOpacity style={style.refreshButton} onPress={onRefresh}>
+					<Icon
+						name="refresh-ccw"
+						size={30}
+						color={currentTheme.value.p.color.split(" ")[0]}
+					/>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 };

@@ -1,5 +1,6 @@
 import { ReaderProvider } from "@epubjs-react-native/core";
 import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { RootStack } from "./router";
 import { useBookStore, useSettingStore } from "./stores";
@@ -26,6 +27,11 @@ const ContentApp = () => {
 			}}
 			edges={["top"]}
 		>
+			<StatusBar
+				barStyle={
+					currentTheme.label === "Oscuro" ? "light-content" : "dark-content"
+				}
+			/>
 			<NavigationContainer>
 				<RootStack />
 			</NavigationContainer>

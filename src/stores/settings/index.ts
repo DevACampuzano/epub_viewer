@@ -25,11 +25,18 @@ const themes: ITheme[] = [
 const inicialState: StateSettings = {
 	themes,
 	currentTheme: themes[0],
+	fontSize: 16,
+	textAlign: "left",
+	lineHeight: 1.3,
 };
 
 const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
 	...inicialState,
-	setCurrentTheme: (theme) => set({ currentTheme: theme }),
+	setCurrentTheme: (theme) =>
+		set((state) => ({ ...state, currentTheme: theme })),
+	setFontSize: (size) => set((state) => ({ ...state, fontSize: size })),
+	setTextAlign: (align) => set((state) => ({ ...state, textAlign: align })),
+	setLineHeight: (lineHeight) => set((state) => ({ ...state, lineHeight })),
 });
 
 export const useSettingStore = create<_ISettingsStore>()(

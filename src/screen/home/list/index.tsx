@@ -72,7 +72,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 			</View>
 			<Divider style={{ marginVertical: 10 }} />
 			<FlatList
-				data={books}
+				data={books.sort((a, b) => b.createdAt - a.createdAt)}
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						activeOpacity={0.7}
@@ -96,7 +96,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					width: "100%",
 				}}
 				columnWrapperStyle={{
-					justifyContent: "space-between",
+					justifyContent: isPortrait ? "space-between" : "flex-start",
 					gap: "1%",
 				}}
 				numColumns={isPortrait ? 2 : 4}
