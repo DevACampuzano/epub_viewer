@@ -1,8 +1,9 @@
 import Icon from "@react-native-vector-icons/lucide";
 import type { FC } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, View } from "react-native";
 import { ProgressBar, Text } from "@/components";
 import { colors } from "@/theme";
+import styles from "./styles";
 
 interface IItemList {
 	image: string;
@@ -54,47 +55,3 @@ export const ItemList: FC<IItemList> = ({
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	root: {
-		backgroundColor: "#f5f5f5",
-		borderRadius: 12,
-		position: "relative",
-		width: "100%",
-		overflow: "hidden",
-		flexDirection: "row",
-	},
-	containerInfo: {
-		flex: 1,
-		padding: 10,
-		gap: 10,
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	image: {
-		aspectRatio: 9 / 16,
-		maxWidth: "100%",
-		overflow: "hidden",
-	},
-	title: {
-		fontWeight: "bold",
-		fontSize: 18,
-		flexWrap: "wrap",
-	},
-	author: {
-		color: "#666",
-	},
-	progressContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
-	progressText: {
-		fontWeight: "bold",
-	},
-	ratingContainer: {
-		flexDirection: "row",
-		gap: 10,
-		marginTop: 10,
-	},
-});

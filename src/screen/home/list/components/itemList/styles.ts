@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
 
-const style = StyleSheet.create({
-	card: {
+const styles = StyleSheet.create({
+	root: {
 		backgroundColor: "#f5f5f5",
 		borderRadius: 12,
 		position: "relative",
-		flex: 1,
+		width: "100%",
+		overflow: "hidden",
+		flexDirection: "row",
 
 		shadowColor: "#000",
 		shadowOffset: {
@@ -17,37 +19,34 @@ const style = StyleSheet.create({
 
 		elevation: 5,
 	},
-	imageBackground: {
-		justifyContent: "flex-end",
+	containerInfo: {
+		flex: 1,
 		padding: 10,
-		gap: 5,
-		borderTopStartRadius: 12,
-		borderTopEndRadius: 12,
-		height: 270,
+		gap: 10,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	image: {
+		aspectRatio: 9 / 16,
+		maxWidth: "100%",
 		overflow: "hidden",
 	},
+	title: {
+		fontWeight: "bold",
+		fontSize: 18,
+		flexWrap: "wrap",
+	},
+	author: {
+		color: "#666",
+	},
 	progressContainer: {
-		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 	},
 	progressText: {
 		fontWeight: "bold",
-		color: "white",
-	},
-	progressPercentage: {
-		color: "white",
-	},
-	cardContent: {
-		padding: 10,
-	},
-	cardTitle: {
-		fontWeight: "bold",
-		fontSize: 18,
-	},
-	cardAuthor: {
-		color: "#666",
 	},
 	ratingContainer: {
 		flexDirection: "row",
@@ -55,5 +54,4 @@ const style = StyleSheet.create({
 		marginTop: 10,
 	},
 });
-
-export default style;
+export default styles;

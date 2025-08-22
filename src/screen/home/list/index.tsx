@@ -193,6 +193,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					contentContainerStyle={{
 						gap: 20,
 						width: "100%",
+						paddingHorizontal: 4,
 					}}
 					showsVerticalScrollIndicator={false}
 					keyExtractor={(item) => item.id.toString()}
@@ -234,6 +235,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					contentContainerStyle={{
 						gap: 20,
 						width: "100%",
+						paddingHorizontal: 4,
 					}}
 					columnWrapperStyle={{
 						justifyContent: isPortrait ? "space-between" : "flex-start",
