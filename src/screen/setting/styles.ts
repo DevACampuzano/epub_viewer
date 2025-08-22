@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { colors } from "@/theme";
 
 const style = StyleSheet.create({
 	root: {
@@ -8,7 +9,7 @@ const style = StyleSheet.create({
 	headerRow: { flexDirection: "row", alignItems: "center", gap: 10 },
 	icon: {
 		padding: 10,
-		backgroundColor: "#d0fae5",
+		backgroundColor: colors.secondary,
 		borderRadius: 5,
 	},
 	title: {

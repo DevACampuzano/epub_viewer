@@ -13,7 +13,7 @@ interface ICardBook {
 	qualification: number;
 }
 
-const Card: FC<ICardBook> = ({
+export const Card: FC<ICardBook> = ({
 	title,
 	author,
 	progress,
@@ -53,5 +53,3 @@ const Card: FC<ICardBook> = ({
 		</View>
 	);
 };
-
-export default Card;

@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBookStore } from "@/stores";
 import { colors } from "@/theme";
-import Card from "./components/card";
+import { Card, ItemList } from "./components";
 import style from "./styles";
 
 interface MenuOptionOrderBy {
@@ -168,49 +168,92 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					Ordenar por
 				</Menu.Item>
 			</Menu>
-			<FlatList
-				data={books}
-				renderItem={({ item }) => (
-					<TouchableOpacity
-						activeOpacity={0.7}
-						onPress={() => navigation.navigate("book", item)}
-						style={{ width: isPortrait ? "49%" : "24%", height: "100%" }}
-					>
-						<Card
-							image={item.image}
-							title={item.title}
-							author={item.author}
-							progress={item.progress || 0}
-							qualification={item.qualification || 0}
-						/>
-					</TouchableOpacity>
-				)}
-				key={isPortrait ? 2 : 4}
-				scrollEnabled={false}
-				style={{
-					width: "100%",
-					height: "100%",
-				}}
-				contentContainerStyle={{
-					gap: 20,
-					width: "100%",
-				}}
-				columnWrapperStyle={{
-					justifyContent: isPortrait ? "space-between" : "flex-start",
-					gap: "1%",
-				}}
-				numColumns={isPortrait ? 2 : 4}
-				showsVerticalScrollIndicator={false}
-				keyExtractor={(item) => item.id.toString()}
-				ListEmptyComponent={() => (
-					<View style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}>
-						<Text style={style.textEmpty}>Aún no tienes libros</Text>
-					</View>
-				)}
-				ListFooterComponent={() => (
-					<View style={{ height: isPortrait ? bottom + 40 : bottom + 20 }} />
-				)}
-			/>
+			{design === "list" ? (
+				<FlatList
+					data={books}
+					renderItem={({ item }) => (
+						<TouchableOpacity
+							activeOpacity={0.7}
+							onPress={() => navigation.navigate("book", item)}
+						>
+							<ItemList
+								image={item.image}
+								title={item.title}
+								author={item.author}
+								progress={item.progress || 0}
+								qualification={item.qualification || 0}
+							/>
+						</TouchableOpacity>
+					)}
+					scrollEnabled={false}
+					style={{
+						width: "100%",
+						height: "100%",
+					}}
+					contentContainerStyle={{
+						gap: 20,
+						width: "100%",
+					}}
+					showsVerticalScrollIndicator={false}
+					keyExtractor={(item) => item.id.toString()}
+					ListEmptyComponent={() => (
+						<View
+							style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}
+						>
+							<Text style={style.textEmpty}>Aún no tienes libros</Text>
+						</View>
+					)}
+					ListFooterComponent={() => (
+						<View style={{ height: isPortrait ? bottom + 40 : bottom + 20 }} />
+					)}
+				/>
+			) : (
+				<FlatList
+					data={books}
+					renderItem={({ item }) => (
+						<TouchableOpacity
+							activeOpacity={0.7}
+							onPress={() => navigation.navigate("book", item)}
+							style={{ width: isPortrait ? "49%" : "24%", height: "100%" }}
+						>
+							<Card
+								image={item.image}
+								title={item.title}
+								author={item.author}
+								progress={item.progress || 0}
+								qualification={item.qualification || 0}
+							/>
+						</TouchableOpacity>
+					)}
+					key={isPortrait ? 2 : 4}
+					scrollEnabled={false}
+					style={{
+						width: "100%",
+						height: "100%",
+					}}
+					contentContainerStyle={{
+						gap: 20,
+						width: "100%",
+					}}
+					columnWrapperStyle={{
+						justifyContent: isPortrait ? "space-between" : "flex-start",
+						gap: "1%",
+					}}
+					numColumns={isPortrait ? 2 : 4}
+					showsVerticalScrollIndicator={false}
+					keyExtractor={(item) => item.id.toString()}
+					ListEmptyComponent={() => (
+						<View
+							style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}
+						>
+							<Text style={style.textEmpty}>Aún no tienes libros</Text>
+						</View>
+					)}
+					ListFooterComponent={() => (
+						<View style={{ height: isPortrait ? bottom + 40 : bottom + 20 }} />
+					)}
+				/>
+			)}
 		</ScrollView>
 	);
 };
