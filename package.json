@@ -5,7 +5,9 @@
 	"scripts": {
 		"start": "react-native start",
 		"android": "react-native run-android",
+		"android:apk": "bun android -- --mode=\"release\"",
 		"ios": "react-native run-ios",
+
 		"test": "jest",
 		"lint": "biome lint .",
 		"format": "biome format --write .",

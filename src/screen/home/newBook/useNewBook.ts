@@ -144,6 +144,7 @@ export default (
 					file: newPathFile,
 					qualification: 0,
 					createdAt: Date.now(),
+					lastReading: Date.now(),
 				};
 				addBook(newBook);
 			} else {
@@ -158,6 +159,7 @@ export default (
 					file: newPathFile,
 					qualification: 0,
 					createdAt: Date.now(),
+					lastReading: Date.now(),
 				};
 				addBook(newBook);
 			}

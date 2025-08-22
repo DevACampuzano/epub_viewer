@@ -75,6 +75,10 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 					</Text>
 					<InputFile
 						label={file?.name || "Seleccionar archivo"}
+						textProps={{
+							numberOfLines: 1,
+							ellipsizeMode: "tail",
+						}}
 						size={file?.size ? bytesToMB(file.size) : undefined}
 						onPress={handleSelectFile}
 					/>

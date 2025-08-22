@@ -3,8 +3,41 @@ import { create, type StateCreator } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
+const initialState: _IBookState = {
 	books: [],
+	orderBy: "createdAt",
+	design: "grid",
+};
+
+const orderBooks = (orderBy: OrderBy, books: _IBook[]) => {
+	let list = [...books];
+	switch (orderBy) {
+		case "title":
+			list = list.sort((a, b) => b.title.localeCompare(a.title));
+			break;
+		case "author":
+			list = list.sort((a, b) => b.author.localeCompare(a.author));
+			break;
+		case "progress":
+			list = list.sort((a, b) => b.progress - a.progress);
+			break;
+		case "lastReading":
+			list = list.sort((a, b) => b.lastReading - a.lastReading);
+			break;
+		case "createdAt":
+			list = list.sort((a, b) => b.createdAt - a.createdAt);
+			break;
+		case "qualification":
+			list = list.sort(
+				(a, b) => (b?.qualification || 0) - (a?.qualification || 0),
+			);
+			break;
+	}
+	return list;
+};
+
+const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
+	...initialState,
 	filterBooks: (query) =>
 		get().books.filter((book) =>
 			book.title.toLowerCase().includes(query.toLowerCase()),
@@ -33,6 +66,15 @@ const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
 			0,
 		);
 		return totalProgress / books.length;
+	},
+	setOrderBy: (orderBy) => {
+		const books = get().books;
+		const orderedBooks = orderBooks(orderBy, books);
+
+		set(() => ({ orderBy, books: orderedBooks }));
+	},
+	setDesign: (design) => {
+		set(() => ({ design }));
 	},
 });
 

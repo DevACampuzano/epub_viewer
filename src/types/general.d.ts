@@ -59,5 +59,6 @@ interface _IBook {
 	totalPages: number;
 	progress: number;
 	createdAt: number;
+	lastReading: number;
 	finalDate?: number;
 }

@@ -54,8 +54,8 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 		qualification,
 		finalDate,
 		opinion,
-		currentPage,
-	} = useBook(id, navigation);
+		openBook,
+	} = useBook({ id, file }, navigation);
 	const { bottom } = useSafeAreaInsets();
 
 	return (
@@ -254,9 +254,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 							</View>
 						}
 						style={{ backgroundColor: colors.primary }}
-						onPress={() =>
-							navigation.navigate("read", { id, file, currentPage })
-						}
+						onPress={openBook}
 					/>
 					<Button
 						label={

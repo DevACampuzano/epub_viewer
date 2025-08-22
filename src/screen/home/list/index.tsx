@@ -1,4 +1,4 @@
-import { Button, Divider, ProgressBar, Text } from "@components/";
+import { Button, Divider, Menu, ProgressBar, Text } from "@components/";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
@@ -15,11 +15,64 @@ import { colors } from "@/theme";
 import Card from "./components/card";
 import style from "./styles";
 
+interface MenuOptionOrderBy {
+	label: string;
+	value: OrderBy;
+}
+
+interface MenuOptionDesign {
+	label: string;
+	value: Design;
+}
+
+const listMenuOptionOrderBy: MenuOptionOrderBy[] = [
+	{
+		value: "title",
+		label: "Título (A-Z)",
+	},
+	{
+		value: "author",
+		label: "Autor (A-Z)",
+	},
+	{
+		value: "createdAt",
+		label: "Fecha agregado",
+	},
+
+	{
+		value: "progress",
+		label: "Progreso",
+	},
+	{
+		value: "qualification",
+		label: "Calificación",
+	},
+	{
+		value: "lastReading",
+		label: "Última lectura",
+	},
+];
+
+const listMenuOptionDesign: MenuOptionDesign[] = [
+	{
+		value: "grid",
+		label: "Cuadrícula",
+	},
+	{
+		value: "list",
+		label: "Lista",
+	},
+];
+
 export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 	navigation,
 }) => {
 	const { bottom } = useSafeAreaInsets();
 	const books = useBookStore((state) => state.books);
+	const orderBy = useBookStore((state) => state.orderBy);
+	const design = useBookStore((state) => state.design);
+	const setOrderBy = useBookStore((state) => state.setOrderBy);
+	const setDesign = useBookStore((state) => state.setDesign);
 	const progress = useBookStore((state) => state.calculateOverallProgress());
 	const booksRead = books.filter((book) => book.progress === 100);
 	const { width, height } = useWindowDimensions();
@@ -53,6 +106,9 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					<Button
 						label="Agregar"
 						onPress={() => navigation.navigate("newBook")}
+						style={{
+							zIndex: 1,
+						}}
 					/>
 				</View>
 			</View>
@@ -71,8 +127,49 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 				<ProgressBar progress={progress} />
 			</View>
 			<Divider style={{ marginVertical: 10 }} />
+			<Menu
+				style={{ alignSelf: "flex-end", marginBottom: 15 }}
+				icon={
+					<Icon name="ellipsis-vertical" size={24} color={colors.primary} />
+				}
+			>
+				<Menu.Item
+					hasSubmenu
+					submenuItems={listMenuOptionDesign.map((op) => (
+						<Menu.Item
+							key={op.label}
+							onPress={() => setDesign(op.value)}
+							style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
+						>
+							<Text>{op.label}</Text>
+							{design === op.value && (
+								<Icon name="check" size={16} color={colors.primary} />
+							)}
+						</Menu.Item>
+					))}
+				>
+					Cambiar Diseño
+				</Menu.Item>
+				<Menu.Item
+					hasSubmenu
+					submenuItems={listMenuOptionOrderBy.map((op) => (
+						<Menu.Item
+							key={op.label}
+							onPress={() => setOrderBy(op.value)}
+							style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
+						>
+							<Text>{op.label}</Text>
+							{orderBy === op.value && (
+								<Icon name="check" size={16} color={colors.primary} />
+							)}
+						</Menu.Item>
+					))}
+				>
+					Ordenar por
+				</Menu.Item>
+			</Menu>
 			<FlatList
-				data={books.sort((a, b) => b.createdAt - a.createdAt)}
+				data={books}
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						activeOpacity={0.7}
@@ -90,7 +187,10 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 				)}
 				key={isPortrait ? 2 : 4}
 				scrollEnabled={false}
-				style={{ width: "100%", height: "100%" }}
+				style={{
+					width: "100%",
+					height: "100%",
+				}}
 				contentContainerStyle={{
 					gap: 20,
 					width: "100%",

@@ -3,13 +3,19 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useForm } from "@/hooks";
 import { useBookStore } from "@/stores";
 
+type Props = {
+	id: string;
+	file: string;
+};
 export default (
-	id: string,
+	{ id, file }: Props,
 	navigation: NativeStackNavigationProp<_IRootStack, "book", undefined>,
 ) => {
 	const book = useBookStore((state) =>
 		state.books.find((book) => book.id === id),
 	);
+	const orderBy = useBookStore((state) => state.orderBy);
+	const setOrderBy = useBookStore((state) => state.setOrderBy);
 	const { form, onChange, resetForm } = useForm({
 		activeEdit: false,
 		text: book?.opinion || "",
@@ -34,6 +40,15 @@ export default (
 			navigation.goBack();
 		}
 	};
+
+	const openBook = () => {
+		console.log;
+		updateBooks(id, {
+			lastReading: Date.now(),
+		});
+		setOrderBy(orderBy);
+		navigation.navigate("read", { id, file, currentPage: book?.currentPage });
+	};
 	return {
 		onDeleteBook,
 		updateBooks,
@@ -42,5 +57,6 @@ export default (
 		...form,
 		onChange,
 		resetForm,
+		openBook,
 	};
 };

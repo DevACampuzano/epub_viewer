@@ -15,6 +15,15 @@ export default StyleSheet.create({
 		backgroundColor: "#fff",
 		padding: 10,
 		borderRadius: 50,
+		flexShrink: 0,
+	},
+	textContainer: {
+		flex: 1,
+		flexShrink: 1,
+		minWidth: 0,
+	},
+	label: {
+		overflow: "hidden",
 	},
 	size: {
 		fontSize: 12,

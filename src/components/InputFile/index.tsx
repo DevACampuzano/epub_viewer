@@ -33,8 +33,10 @@ export const InputFile = ({
 				name={iconProps?.name || "file-up"}
 				style={[styles.icon, iconProps?.style]}
 			/>
-			<View>
-				<Text {...textProps}>{label}</Text>
+			<View style={styles.textContainer}>
+				<Text {...textProps} style={styles.label}>
+					{label}
+				</Text>
 				{size && <Text style={styles.size}>{size} MB</Text>}
 			</View>
 		</View>

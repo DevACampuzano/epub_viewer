@@ -3,6 +3,7 @@ export * from "./ButtonBack/index";
 export * from "./Divider/index";
 export * from "./InputFile/index";
 export * from "./Loading/index";
+export * from "./Menu";
 export * from "./ProgressBar/index";
 export * from "./Text/index";
 export * from "./TextInput/index";
