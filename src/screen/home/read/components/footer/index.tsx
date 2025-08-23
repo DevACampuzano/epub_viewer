@@ -9,11 +9,11 @@ import useFooter from "./useFooter";
 
 interface IFooterProps {
 	position: Animated.Value;
+	currentTheme: ITheme;
 }
 
-export const Footer: FC<IFooterProps> = ({ position }) => {
-	const { debounced, section, currentPage, totalLocations, theme } =
-		useFooter();
+export const Footer: FC<IFooterProps> = ({ position, currentTheme }) => {
+	const { debounced, section, currentPage, totalLocations } = useFooter();
 	return (
 		<Animated.View
 			style={[
@@ -25,21 +25,24 @@ export const Footer: FC<IFooterProps> = ({ position }) => {
 		>
 			<DropShadow style={styles.boxShadow}>
 				<View
-					style={[styles.container, { backgroundColor: theme.body.background }]}
+					style={[
+						styles.container,
+						{ backgroundColor: currentTheme.value.body.background },
+					]}
 				>
 					<View style={styles.row}>
 						<Text
 							style={[
 								styles.section,
 								{
-									color: theme.body.text,
+									color: currentTheme.value.body.text,
 								},
 							]}
 						>
 							{section?.label.trim() || "N/A"}
 						</Text>
 
-						<Text>
+						<Text style={{ color: currentTheme.value.body.text }}>
 							{currentPage + 1}/{totalLocations + 1}
 						</Text>
 					</View>

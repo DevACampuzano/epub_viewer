@@ -86,7 +86,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				}}
 			/>
 
-			<Footer position={position} />
+			<Footer position={position} currentTheme={currentTheme} />
 		</Layout>
 	);
 };

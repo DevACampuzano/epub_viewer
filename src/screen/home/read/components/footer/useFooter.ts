@@ -3,14 +3,8 @@ import { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 
 export default () => {
-	const {
-		theme,
-		totalLocations,
-		currentLocation,
-		locations,
-		goToLocation,
-		section,
-	} = useReader();
+	const { totalLocations, currentLocation, locations, goToLocation, section } =
+		useReader();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [locationsList, setLocationsList] = useState<string[]>([]);
 
@@ -33,6 +27,5 @@ export default () => {
 		section,
 		currentPage,
 		totalLocations,
-		theme,
 	};
 };

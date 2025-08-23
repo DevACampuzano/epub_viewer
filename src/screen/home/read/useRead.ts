@@ -14,6 +14,9 @@ export default (
 ) => {
 	const [exit, setExit] = useState(false);
 	const updateBook = useBookStore((state) => state.updateBook);
+	const currentProgress = useBookStore(
+		(state) => state.books.find((b) => b.id === id)?.progress,
+	);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
@@ -21,7 +24,6 @@ export default (
 	const currentFlow = useSettingStore((state) => state.currentFlow);
 	const {
 		currentLocation,
-		progress,
 		totalLocations,
 		changeFontSize,
 		changeTheme,
@@ -32,7 +34,7 @@ export default (
 
 	const { bottom } = useSafeAreaInsets();
 
-	const position = useAnimatedValue(80);
+	const position = useAnimatedValue(85);
 	const fadeAnim = useAnimatedValue(0);
 	const idsetTimeoutFooter = useRef<number | null>(null);
 	const idsetTimeoutHeader = useRef<number | null>(null);
@@ -104,16 +106,21 @@ export default (
 		});
 
 	const handleSaveProgress = () => {
-		if (currentLocation) {
+		if (currentLocation && currentProgress) {
 			updateBook(id, {
 				currentPage: currentLocation.start.cfi,
-				progress,
+				progress:
+					currentLocation.start.percentage > currentProgress
+						? currentLocation.start.percentage
+						: currentProgress,
 				totalPages: totalLocations,
-				finalDate: progress === 100 ? Date.now() : undefined,
+				finalDate:
+					currentLocation.start.percentage === 100 ? Date.now() : undefined,
 			});
 			setExit(true);
 		}
 	};
+
 	usePreventRemove(!exit, () => {
 		if (currentLocation) {
 			handleSaveProgress();
@@ -142,7 +149,7 @@ export default (
 
 	useEffect(() => {
 		changeFlow(currentFlow);
-	}, [currentFlow]);
+	}, [currentFlow, changeFlow]);
 
 	return {
 		currentTheme,

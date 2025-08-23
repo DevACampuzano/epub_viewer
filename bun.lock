@@ -4,6 +4,7 @@
     "": {
       "name": "epub_viewer",
       "dependencies": {
+        "@adrianso/react-native-device-brightness": "^1.2.7",
         "@dr.pogodin/react-native-fs": "^2.34.1",
         "@epubjs-react-native/core": "^1.4.7",
         "@epubjs-react-native/file-system": "^1.1.4",
@@ -45,6 +46,8 @@
     },
   },
   "packages": {
+    "@adrianso/react-native-device-brightness": ["@adrianso/react-native-device-brightness@1.2.7", "", {}, "sha512-q3OTFGohAh04R8cBka7/eNXaeSD8bAZocMsifLIR3oDF5N9cNH2UVEjzJaFXW8DHFEsODpljpT+eyGWIhKlkow=="],
+
     "@ampproject/remapping": ["@ampproject/remapping@2.3.0", "", { "dependencies": { "@jridgewell/gen-mapping": "^0.3.5", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw=="],
 
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],

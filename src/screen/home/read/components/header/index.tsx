@@ -1,10 +1,12 @@
+import DeviceBrightness from "@adrianso/react-native-device-brightness";
 import type { Flow } from "@epubjs-react-native/core";
 import Slider from "@react-native-community/slider";
 import Icon, { type LucideIconName } from "@react-native-vector-icons/lucide";
-import { type FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import {
 	Animated,
 	FlatList,
+	Platform,
 	StyleSheet,
 	TouchableOpacity,
 	View,
@@ -48,9 +50,21 @@ export const Header: FC<IHeaderProps> = ({
 	onClose,
 	opacity,
 }) => {
-	const [_openMenu, setOpenMenu] = useState(false);
+	const [openMenu, setOpenMenu] = useState(false);
+	const [brightness, setBrightness] = useState(0);
 	const flow = useSettingStore((state) => state.currentFlow);
 	const changeFlow = useSettingStore((state) => state.setFlow);
+
+	useEffect(() => {
+		const data = async () => {
+			const currentBrightness =
+				Platform.OS === "android"
+					? await DeviceBrightness.getSystemBrightnessLevel()
+					: await DeviceBrightness.getBrightnessLevel();
+			setBrightness(currentBrightness);
+		};
+		data();
+	}, []);
 
 	return (
 		<>
@@ -100,7 +114,7 @@ export const Header: FC<IHeaderProps> = ({
 					</View>
 				</DropShadow>
 			</Animated.View>
-			{_openMenu && (
+			{openMenu && (
 				<TouchableOpacity
 					style={style.menuContainer}
 					onPress={() => setOpenMenu(false)}
@@ -187,10 +201,19 @@ export const Header: FC<IHeaderProps> = ({
 							<Icon name="sun-dim" size={20} color={colors.primary} />
 							<Slider
 								style={{ flex: 1 }}
-								step={1}
+								step={0.01}
+								value={brightness}
 								thumbTintColor={colors.primary}
 								minimumTrackTintColor={colors.primary}
-								maximumTrackTintColor={colors.success}
+								maximumTrackTintColor={
+									Platform.OS === "android" ? colors.success : colors.secondary
+								}
+								onValueChange={async (value) => {
+									setBrightness(value);
+									await DeviceBrightness.setBrightnessLevel(value);
+								}}
+								minimumValue={0}
+								maximumValue={1}
 							/>
 							<Icon name="sun" size={20} color={colors.success} />
 						</View>
