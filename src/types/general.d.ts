@@ -19,6 +19,7 @@ type _IRootStack = {
 	read: {
 		id: string;
 		file: string;
+		title: string;
 		currentPage?: string;
 	};
 };

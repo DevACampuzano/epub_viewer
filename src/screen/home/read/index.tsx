@@ -3,9 +3,10 @@ import { useFileSystem } from "@epubjs-react-native/file-system";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { Linking, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Linking, Platform, TouchableOpacity } from "react-native";
 import { Loading } from "@/components";
+import { Header, Layout } from "./components";
+import { Footer } from "./components/footer/index";
 import style from "./styles";
 import useRead from "./useRead";
 
@@ -13,20 +14,36 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 	route,
 	navigation,
 }) => {
-	const { file, id, currentPage } = route.params;
-	const { bottom } = useSafeAreaInsets();
-	const { onClose, currentTheme, onReady, onRefresh } = useRead(id, navigation);
+	const { file, id, currentPage, title } = route.params;
+	const {
+		onClose,
+		currentTheme,
+		onReady,
+		onRefresh,
+		position,
+		singleTap,
+		onPress,
+		opacity,
+	} = useRead(id, navigation);
 
 	return (
-		<View
-			style={[
-				style.root,
-				{
-					paddingBottom: bottom || 30,
-					backgroundColor: currentTheme.value.body.background,
-				},
-			]}
-		>
+		<Layout singleTap={Platform.OS === "ios" ? onPress : singleTap}>
+			<Header
+				currentTheme={currentTheme}
+				onClose={onClose}
+				title={title}
+				opacity={opacity}
+			/>
+			{__DEV__ && (
+				<TouchableOpacity style={style.refreshButton} onPress={onRefresh}>
+					<Icon
+						name="refresh-ccw"
+						size={30}
+						color={currentTheme.value.p.color.split(" ")[0]}
+					/>
+				</TouchableOpacity>
+			)}
+
 			<Reader
 				src={file}
 				fileSystem={useFileSystem}
@@ -45,7 +62,9 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 						label="Abriendo..."
 						color={currentTheme.value.p.color.split(" ")[0]}
 						containerProps={{
-							style: { backgroundColor: currentTheme.value.body.background },
+							style: {
+								backgroundColor: currentTheme.value.body.background,
+							},
 						}}
 					/>
 				)}
@@ -55,6 +74,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				onSelected={(selection, cfRange) => {
 					console.log("Selected text:", selection);
 					console.log("CF Range:", cfRange);
+					// positionIn();
 				}}
 				initialLocation={currentPage}
 				// manager="continuous"
@@ -64,22 +84,8 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 					Linking.openURL(url);
 				}}
 			/>
-			<TouchableOpacity style={style.backButton} onPress={onClose}>
-				<Icon
-					name="chevron-left"
-					size={30}
-					color={currentTheme.value.p.color.split(" ")[0]}
-				/>
-			</TouchableOpacity>
-			{__DEV__ && (
-				<TouchableOpacity style={style.refreshButton} onPress={onRefresh}>
-					<Icon
-						name="refresh-ccw"
-						size={30}
-						color={currentTheme.value.p.color.split(" ")[0]}
-					/>
-				</TouchableOpacity>
-			)}
-		</View>
+
+			<Footer position={position} />
+		</Layout>
 	);
 };

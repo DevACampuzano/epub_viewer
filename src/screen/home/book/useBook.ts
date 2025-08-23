@@ -47,7 +47,12 @@ export default (
 			lastReading: Date.now(),
 		});
 		setOrderBy(orderBy);
-		navigation.navigate("read", { id, file, currentPage: book?.currentPage });
+		navigation.navigate("read", {
+			id,
+			file,
+			currentPage: book?.currentPage,
+			title: book?.title || "",
+		});
 	};
 	return {
 		onDeleteBook,
