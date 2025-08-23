@@ -1,7 +1,7 @@
 import { useReader } from "@epubjs-react-native/core";
 import { usePreventRemove } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Animated, useAnimatedValue } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,6 +18,7 @@ export default (
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
 	const lineHeight = useSettingStore((state) => state.lineHeight);
+	const currentFlow = useSettingStore((state) => state.currentFlow);
 	const {
 		currentLocation,
 		progress,
@@ -26,6 +27,7 @@ export default (
 		changeTheme,
 		toc,
 		section,
+		changeFlow,
 	} = useReader();
 
 	const { bottom } = useSafeAreaInsets();
@@ -98,7 +100,6 @@ export default (
 		// .runOnJS(true)
 		.maxDuration(250)
 		.onStart(() => {
-			console.log("Tap detected");
 			onPress();
 		});
 
@@ -139,6 +140,10 @@ export default (
 		console.log({ toc, section });
 	};
 
+	useEffect(() => {
+		changeFlow(currentFlow);
+	}, [currentFlow]);
+
 	return {
 		currentTheme,
 		onClose,
@@ -148,5 +153,6 @@ export default (
 		position,
 		onPress,
 		opacity: fadeAnim,
+		currentFlow,
 	};
 };

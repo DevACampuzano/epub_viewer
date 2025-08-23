@@ -147,6 +147,7 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 					upperLimit={50}
 					lowerLimit={16}
 					step={1}
+					thumbTintColor={colors.primary}
 					minimumTrackTintColor={colors.primary}
 					maximumTrackTintColor={colors.success}
 				/>
@@ -162,6 +163,7 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 					upperLimit={2}
 					lowerLimit={1.3}
 					step={0.1}
+					thumbTintColor={colors.primary}
 					minimumTrackTintColor={colors.primary}
 					maximumTrackTintColor={colors.success}
 				/>

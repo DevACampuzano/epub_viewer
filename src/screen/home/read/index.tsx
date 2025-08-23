@@ -24,6 +24,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		singleTap,
 		onPress,
 		opacity,
+		currentFlow,
 	} = useRead(id, navigation);
 
 	return (
@@ -79,7 +80,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				initialLocation={currentPage}
 				// manager="continuous"
 				defaultTheme={currentTheme.value}
-				flow="paginated"
+				flow={currentFlow}
 				onPressExternalLink={(url) => {
 					Linking.openURL(url);
 				}}

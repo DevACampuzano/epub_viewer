@@ -56,6 +56,6 @@ const style = StyleSheet.create({
 	root: { flex: 1, paddingVertical: 20 },
 	container: {
 		flex: 1,
-		position: "relative",
+		// position: "relative",
 	},
 });

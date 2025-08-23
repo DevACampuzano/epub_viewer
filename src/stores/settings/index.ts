@@ -28,6 +28,7 @@ const inicialState: StateSettings = {
 	fontSize: 16,
 	textAlign: "left",
 	lineHeight: 1.3,
+	currentFlow: "paginated",
 };
 
 const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
@@ -37,6 +38,7 @@ const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
 	setFontSize: (size) => set((state) => ({ ...state, fontSize: size })),
 	setTextAlign: (align) => set((state) => ({ ...state, textAlign: align })),
 	setLineHeight: (lineHeight) => set((state) => ({ ...state, lineHeight })),
+	setFlow: (flow) => set((state) => ({ ...state, currentFlow: flow })),
 });
 
 export const useSettingStore = create<_ISettingsStore>()(

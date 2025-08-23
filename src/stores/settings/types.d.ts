@@ -9,12 +9,21 @@ type ITheme = {
 };
 
 type TextAlign = "left" | "center" | "right" | "justify";
+
+type Flow =
+	| "auto"
+	| "paginated"
+	| "scrolled"
+	| "scrolled-doc"
+	| "scrolled-continuous";
+
 interface StateSettings {
 	themes: ITheme[];
 	currentTheme: ITheme;
 	fontSize: number;
 	textAlign: TextAlign;
 	lineHeight: number;
+	currentFlow: Flow;
 }
 
 interface ActionsSettings {
@@ -22,6 +31,7 @@ interface ActionsSettings {
 	setFontSize: (size: number) => void;
 	setTextAlign: (align: TextAlign) => void;
 	setLineHeight: (lineHeight: number) => void;
+	setFlow: (flow: Flow) => void;
 }
 
 type _ISettingsStore = StateSettings & ActionsSettings;
