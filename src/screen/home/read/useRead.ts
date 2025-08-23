@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useEffect, useRef, useState } from "react";
 import { Animated, useAnimatedValue } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
+import KeepAwake from "react-native-keep-awake";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBookStore, useSettingStore } from "@/stores";
 import { colors } from "@/theme";
@@ -15,7 +16,7 @@ export default (
 	const [exit, setExit] = useState(false);
 	const updateBook = useBookStore((state) => state.updateBook);
 	const currentProgress = useBookStore(
-		(state) => state.books.find((b) => b.id === id)?.progress,
+		(state) => state.books.find((b) => b.id === id)?.progress || 0,
 	);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
@@ -23,13 +24,13 @@ export default (
 	const lineHeight = useSettingStore((state) => state.lineHeight);
 	const currentFlow = useSettingStore((state) => state.currentFlow);
 	const {
-		currentLocation,
-		totalLocations,
 		changeFontSize,
 		changeTheme,
 		toc,
 		section,
 		changeFlow,
+		getLocations,
+		getCurrentLocation,
 	} = useReader();
 
 	const { bottom } = useSafeAreaInsets();
@@ -106,25 +107,31 @@ export default (
 		});
 
 	const handleSaveProgress = () => {
-		if (currentLocation && currentProgress) {
-			updateBook(id, {
-				currentPage: currentLocation.start.cfi,
-				progress:
-					currentLocation.start.percentage > currentProgress
-						? currentLocation.start.percentage
-						: currentProgress,
-				totalPages: totalLocations,
-				finalDate:
-					currentLocation.start.percentage === 100 ? Date.now() : undefined,
-			});
-			setExit(true);
+		const currentLocation = getCurrentLocation();
+
+		const locations = JSON.parse(getLocations().toString()) as string[];
+
+		if (!currentLocation) {
+			console.log("No current location found");
+			return;
 		}
+
+		const progressPercentage = currentLocation.start.percentage * 100;
+
+		updateBook(id, {
+			currentPage: currentLocation?.start.cfi,
+			progress:
+				progressPercentage > currentProgress
+					? progressPercentage
+					: currentProgress,
+			totalPages: locations.length,
+			finalDate: currentLocation.atEnd ? Date.now() : undefined,
+		});
+		setExit(true);
 	};
 
 	usePreventRemove(!exit, () => {
-		if (currentLocation) {
-			handleSaveProgress();
-		}
+		handleSaveProgress();
 	});
 
 	const onClose = () => {
@@ -150,6 +157,13 @@ export default (
 	useEffect(() => {
 		changeFlow(currentFlow);
 	}, [currentFlow, changeFlow]);
+
+	useEffect(() => {
+		KeepAwake.activate();
+		return () => {
+			KeepAwake.deactivate();
+		};
+	}, []);
 
 	return {
 		currentTheme,

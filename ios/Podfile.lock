@@ -1779,6 +1779,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-keep-awake (4.0.0):
+    - React
   - react-native-safe-area-context (5.6.0):
     - boost
     - DoubleConversion
@@ -2648,6 +2650,7 @@ DEPENDENCIES:
   - "react-native-document-picker (from `../node_modules/@react-native-documents/picker`)"
   - react-native-drop-shadow (from `../node_modules/react-native-drop-shadow`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - "react-native-vector-icons-lucide (from `../node_modules/@react-native-vector-icons/lucide`)"
@@ -2783,6 +2786,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-drop-shadow"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-keep-awake:
+    :path: "../node_modules/react-native-keep-awake"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -2907,6 +2912,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: f26f09a90cce65b5d682f21b511e8eb09a506fdc
   react-native-drop-shadow: aeb76e4b46c09924b4a8ee3d454dd00fdb5c62d9
   react-native-image-picker: 0314366753615115fa55c3cc937ac44cb7e75702
+  react-native-keep-awake: 21ff40767cde4bd81021ffee12480aee4b5b91bb
   react-native-safe-area-context: a72764e0eb5d6b79b7450e5d0ae919eb1a4567b4
   react-native-slider: 663776e5683e257de8df8091abc2d93ff6ec67db
   react-native-vector-icons-lucide: 6295108aa1778b577bd6a3391f5abb9e1df4fdc5
