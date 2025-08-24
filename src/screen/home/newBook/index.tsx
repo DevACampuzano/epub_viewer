@@ -48,6 +48,7 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 		onSubmit,
 		error,
 		onCloseToast,
+		goBack,
 	} = useNewBook(navigation);
 	const { bottom } = useSafeAreaInsets();
 
@@ -68,7 +69,7 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 					]}
 					showsVerticalScrollIndicator={false}
 				>
-					<ButtonBack label="Regresar" onPress={() => navigation.goBack()} />
+					<ButtonBack label="Regresar" onPress={goBack} />
 					<Text style={style.title}>Agregar Libro</Text>
 					<Text style={style.subtitle}>
 						Sube un archivo EPUB a tu biblioteca personal
@@ -120,7 +121,7 @@ export const NewBook: FC<NativeStackScreenProps<_IRootStack, "newBook">> = ({
 								>
 									{image ? (
 										<Image
-											source={{ uri: image }}
+											source={{ uri: `file://${image}` }}
 											style={{ width: 200, height: 300 }}
 										/>
 									) : (

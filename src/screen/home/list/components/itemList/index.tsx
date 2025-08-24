@@ -22,7 +22,7 @@ export const ItemList: FC<IItemList> = ({
 	return (
 		<View style={styles.root}>
 			<Image
-				source={{ uri: image }}
+				source={{ uri: `file://${image}` }}
 				style={styles.image}
 				resizeMode="stretch"
 				resizeMethod="scale"

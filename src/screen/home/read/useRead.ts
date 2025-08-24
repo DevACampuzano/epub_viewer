@@ -1,8 +1,13 @@
 import { useReader } from "@epubjs-react-native/core";
 import { usePreventRemove } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useEffect, useRef, useState } from "react";
-import { Animated, useAnimatedValue } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+	Animated,
+	AppState,
+	type AppStateStatus,
+	useAnimatedValue,
+} from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import KeepAwake from "react-native-keep-awake";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -106,7 +111,7 @@ export default (
 			onPress();
 		});
 
-	const handleSaveProgress = () => {
+	const handleSaveProgress = useCallback(() => {
 		const currentLocation = getCurrentLocation();
 
 		const locations = JSON.parse(getLocations().toString()) as string[];
@@ -128,7 +133,7 @@ export default (
 			finalDate: currentLocation.atEnd ? Date.now() : undefined,
 		});
 		setExit(true);
-	};
+	}, [getCurrentLocation, getLocations, updateBook, id, currentProgress]);
 
 	usePreventRemove(!exit, () => {
 		handleSaveProgress();
@@ -154,6 +159,19 @@ export default (
 		console.log({ toc, section });
 	};
 
+	const handleAppStateChange = useCallback(
+		async (nextAppState: AppStateStatus) => {
+			if (nextAppState === "background" || nextAppState === "inactive") {
+				try {
+					await handleSaveProgress();
+				} catch (error) {
+					console.error("Error guardando datos:", error);
+				}
+			}
+		},
+		[handleSaveProgress],
+	);
+
 	useEffect(() => {
 		changeFlow(currentFlow);
 	}, [currentFlow, changeFlow]);
@@ -164,6 +182,17 @@ export default (
 			KeepAwake.deactivate();
 		};
 	}, []);
+
+	useEffect(() => {
+		const subscription = AppState.addEventListener(
+			"change",
+			handleAppStateChange,
+		);
+
+		return () => {
+			subscription.remove();
+		};
+	}, [handleAppStateChange]);
 
 	return {
 		currentTheme,

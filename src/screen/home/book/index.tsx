@@ -79,7 +79,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 					<View style={style.section}>
 						{image ? (
 							<Image
-								source={{ uri: image }}
+								source={{ uri: `file://${image}` }}
 								height={400}
 								width={300}
 								style={{ alignSelf: "center", borderRadius: 5 }}

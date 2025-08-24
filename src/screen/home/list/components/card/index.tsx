@@ -23,7 +23,7 @@ export const Card: FC<ICardBook> = ({
 	return (
 		<View style={style.card}>
 			<ImageBackground
-				src={image}
+				src={`file://${image}`}
 				style={style.imageBackground}
 				resizeMode="stretch"
 				resizeMethod="scale"

@@ -3,7 +3,7 @@ import { type Location, useReader } from "@epubjs-react-native/core";
 import { pick } from "@react-native-documents/picker";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import uuid from "react-native-uuid";
 import { useForm } from "@/hooks";
@@ -55,25 +55,66 @@ export default (
 	const bytesToMB = (bytes: number): number => {
 		return Math.round((bytes / (1024 * 1024)) * 100) / 100;
 	};
-	const onReady = (
+
+	const detectHtmlContent = (text: string) => {
+		if (!text) return { hasHtml: false, plainText: text };
+
+		const htmlTagRegex = /<\/?[a-z][\s\S]*>/i;
+		const hasHtml = htmlTagRegex.test(text);
+
+		let plainText = text;
+		if (hasHtml) {
+			plainText = text.replace(/<[^>]*>/g, "").trim();
+			plainText = plainText
+				.replace(/&amp;/g, "&")
+				.replace(/&lt;/g, "<")
+				.replace(/&gt;/g, ">")
+				.replace(/&quot;/g, '"')
+				.replace(/&#39;/g, "'")
+				.replace(/&nbsp;/g, " ");
+		}
+
+		return { hasHtml, plainText, originalText: text };
+	};
+
+	const onReady = async (
 		totalLocations: number,
 		_currentLocation: Location,
 		progress: number,
 	) => {
-		const data: _IMeta = getMeta() as _IMeta;
-		setForm((form) => ({
-			...form,
-			author: data?.author,
-			description: data?.description,
-			language: data?.language,
-			publisher: data?.publisher,
-			rights: data?.rights,
-			title: data?.title,
-			image: data?.cover,
-			totalPages: totalLocations,
-			progress: progress,
-		}));
-		setLoadingRender(false);
+		try {
+			const data: _IMeta = getMeta() as _IMeta;
+
+			const description = detectHtmlContent(data?.description || "");
+
+			const imagesDir = `${RNFS.DocumentDirectoryPath}/images`;
+			if (!(await RNFS.exists(imagesDir))) {
+				await RNFS.mkdir(imagesDir);
+			}
+
+			const dataImage = data?.cover?.split(";");
+			const type = dataImage[0].split("/")[1];
+
+			const newPathFile = `${RNFS.DocumentDirectoryPath}/images/${id}.${type}`;
+
+			await RNFS.writeFile(newPathFile, dataImage[1].split(",")[1], "base64");
+			setForm((form) => ({
+				...form,
+				author: data?.author,
+				description: description.plainText,
+				language: data?.language,
+				publisher: data?.publisher,
+				rights: data?.rights,
+				title: data?.title,
+				image: newPathFile,
+				totalPages: totalLocations,
+				progress: progress,
+			}));
+			setLoadingRender(false);
+		} catch (error) {
+			console.log("Error getting metadata:", error);
+			Alert.alert("Error", "No se pudo leer el archivo.", [{ text: "OK" }]);
+		}
 	};
 
 	const onChangeImage = async () => {
@@ -84,9 +125,34 @@ export default (
 		});
 		if (data?.assets?.[0]?.base64) {
 			const newImageData = data?.assets[0];
-			const newBase64 = `data:${newImageData.type};base64,${newImageData.base64}`;
 
-			onChange(newBase64, "image");
+			try {
+				if (await RNFS.exists(form.image)) {
+					await RNFS.unlink(form.image);
+				}
+				if (newImageData.base64 === undefined) {
+					throw new Error("No image data");
+				}
+				const imagesDir = `${RNFS.DocumentDirectoryPath}/images`;
+				if (!(await RNFS.exists(imagesDir))) {
+					await RNFS.mkdir(imagesDir);
+				}
+				const fileExtension = newImageData.type?.split("/")[1];
+				const newPathFile = `${RNFS.DocumentDirectoryPath}/images/${id}.${fileExtension}`;
+
+				if (await RNFS.exists(newPathFile)) {
+					await RNFS.unlink(newPathFile);
+				}
+
+				await RNFS.writeFile(newPathFile, newImageData.base64, "base64");
+
+				onChange(newPathFile, "image");
+			} catch (error) {
+				console.log("Error writing image file:", error);
+				Alert.alert("Error", "Se produjo un error al cambiar la imagen..", [
+					{ text: "OK" },
+				]);
+			}
 		}
 	};
 
@@ -183,6 +249,17 @@ export default (
 		});
 	};
 
+	const goBack = async () => {
+		try {
+			if (form.image && (await RNFS.exists(form.image))) {
+				await RNFS.unlink(form.image);
+			}
+		} catch (error) {
+			console.log("Error deleting image:", error);
+		} finally {
+			navigation.goBack();
+		}
+	};
 	return {
 		...form,
 		onReady,
@@ -195,5 +272,6 @@ export default (
 		onSubmit,
 		onCloseToast,
 		error,
+		goBack,
 	};
 };

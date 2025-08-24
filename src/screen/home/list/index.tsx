@@ -87,20 +87,6 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 			<View style={style.header}>
 				<View style={{ gap: 10 }}>
 					<Text style={style.title}>Mi Bliblioteca</Text>
-					<View style={{ gap: 10, flexDirection: "row" }}>
-						<View
-							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
-						>
-							<Icon name="library" color={colors.primary} size={15} />
-							<Text>{books.length} Libro en colección</Text>
-						</View>
-						<View
-							style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
-						>
-							<Icon name="book-check" color={colors.primary} size={15} />
-							<Text>{booksRead.length} Libro leído</Text>
-						</View>
-					</View>
 				</View>
 				<View style={{ gap: 10 }}>
 					<Button
@@ -127,47 +113,67 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 				<ProgressBar progress={progress} />
 			</View>
 			<Divider style={{ marginVertical: 10 }} />
-			<Menu
-				style={{ alignSelf: "flex-end", marginBottom: 15 }}
-				icon={
-					<Icon name="ellipsis-vertical" size={24} color={colors.primary} />
-				}
+			<View
+				style={{
+					gap: 10,
+					flexDirection: "row",
+					justifyContent: "space-between",
+					paddingHorizontal: 5,
+				}}
 			>
-				<Menu.Item
-					hasSubmenu
-					submenuItems={listMenuOptionDesign.map((op) => (
-						<Menu.Item
-							key={op.label}
-							onPress={() => setDesign(op.value)}
-							style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
-						>
-							<Text>{op.label}</Text>
-							{design === op.value && (
-								<Icon name="check" size={16} color={colors.primary} />
-							)}
-						</Menu.Item>
-					))}
+				<View>
+					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+						<Icon name="library" color={colors.primary} size={15} />
+						<Text>{books.length} Libro en colección</Text>
+					</View>
+					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+						<Icon name="book-check" color={colors.primary} size={15} />
+						<Text>{booksRead.length} Libro leído</Text>
+					</View>
+				</View>
+				<Menu
+					style={{ marginBottom: 15 }}
+					icon={
+						<Icon name="ellipsis-vertical" size={24} color={colors.primary} />
+					}
 				>
-					Cambiar Diseño
-				</Menu.Item>
-				<Menu.Item
-					hasSubmenu
-					submenuItems={listMenuOptionOrderBy.map((op) => (
-						<Menu.Item
-							key={op.label}
-							onPress={() => setOrderBy(op.value)}
-							style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
-						>
-							<Text>{op.label}</Text>
-							{orderBy === op.value && (
-								<Icon name="check" size={16} color={colors.primary} />
-							)}
-						</Menu.Item>
-					))}
-				>
-					Ordenar por
-				</Menu.Item>
-			</Menu>
+					<Menu.Item
+						hasSubmenu
+						submenuItems={listMenuOptionDesign.map((op) => (
+							<Menu.Item
+								key={op.label}
+								onPress={() => setDesign(op.value)}
+								style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
+							>
+								<Text>{op.label}</Text>
+								{design === op.value && (
+									<Icon name="check" size={16} color={colors.primary} />
+								)}
+							</Menu.Item>
+						))}
+					>
+						Cambiar Diseño
+					</Menu.Item>
+					<Menu.Item
+						hasSubmenu
+						submenuItems={listMenuOptionOrderBy.map((op) => (
+							<Menu.Item
+								key={op.label}
+								onPress={() => setOrderBy(op.value)}
+								style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
+							>
+								<Text>{op.label}</Text>
+								{orderBy === op.value && (
+									<Icon name="check" size={16} color={colors.primary} />
+								)}
+							</Menu.Item>
+						))}
+					>
+						Ordenar por
+					</Menu.Item>
+				</Menu>
+			</View>
+
 			{design === "list" ? (
 				<FlatList
 					data={books}
