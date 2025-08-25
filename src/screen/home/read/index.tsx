@@ -1,13 +1,11 @@
 import { Reader } from "@epubjs-react-native/core";
 import { useFileSystem } from "@epubjs-react-native/file-system";
-import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
-import { Linking, Platform, TouchableOpacity } from "react-native";
+import { Linking, Platform } from "react-native";
 import { Loading } from "@/components";
 import { Header, Layout } from "./components";
 import { Footer } from "./components/footer/index";
-import style from "./styles";
 import useRead from "./useRead";
 
 export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
@@ -19,12 +17,12 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		onClose,
 		currentTheme,
 		onReady,
-		onRefresh,
 		position,
 		singleTap,
 		onPress,
 		opacity,
 		currentFlow,
+		toc,
 	} = useRead(id, navigation);
 
 	return (
@@ -34,16 +32,8 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				onClose={onClose}
 				title={title}
 				opacity={opacity}
+				toc={toc}
 			/>
-			{__DEV__ && (
-				<TouchableOpacity style={style.refreshButton} onPress={onRefresh}>
-					<Icon
-						name="refresh-ccw"
-						size={30}
-						color={currentTheme.value.p.color.split(" ")[0]}
-					/>
-				</TouchableOpacity>
-			)}
 
 			<Reader
 				src={file}

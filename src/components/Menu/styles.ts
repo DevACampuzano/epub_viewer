@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		gap: 20,
+		gap: 5,
 	},
 	subMenuContainer: {
-		backgroundColor: "#f9f9f9",
+		backgroundColor: "#ededed98",
 		marginLeft: 16,
 		borderLeftWidth: 2,
 		borderLeftColor: "#e0e0e0",

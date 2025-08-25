@@ -45,7 +45,7 @@ type _MenuProps = {
 type _MenuItemProps = Omit<TouchableOpacityProps, "onPress"> & {
 	textProps?: TextProps;
 	hasSubmenu?: boolean;
-	subMenuIconProps?: ComponentProps<typeof Icon>;
+	subMenuIconProps?: Partial<ComponentProps<typeof Icon>>;
 	submenuItems?: ReactNode;
 	onPress?: (() => void) | ((event: GestureResponderEvent) => void);
 };
@@ -200,13 +200,13 @@ Menu.Item = ({
 				{...props}
 				style={[
 					styles.optionSubMenu,
+					hasSubmenu && submenuOpen && { backgroundColor: "#ffffff43" },
 					props?.style,
-					hasSubmenu && submenuOpen && { backgroundColor: "#e0e0e0" },
 				]}
 				onPress={handlePress}
 			>
 				{typeof children === "string" ? (
-					<Text {...textProps}>{children}</Text>
+					<Text {...textProps}>{children} </Text>
 				) : (
 					children
 				)}

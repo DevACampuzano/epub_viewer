@@ -14,6 +14,7 @@ interface IFooterProps {
 
 export const Footer: FC<IFooterProps> = ({ position, currentTheme }) => {
 	const { debounced, section, currentPage, totalLocations } = useFooter();
+	const color = currentTheme.value.p.color.split(" ")[0];
 	return (
 		<Animated.View
 			style={[
@@ -35,14 +36,14 @@ export const Footer: FC<IFooterProps> = ({ position, currentTheme }) => {
 							style={[
 								styles.section,
 								{
-									color: currentTheme.value.body.text,
+									color,
 								},
 							]}
 						>
 							{section?.label.trim() || "N/A"}
 						</Text>
 
-						<Text style={{ color: currentTheme.value.body.text }}>
+						<Text style={{ color }}>
 							{currentPage + 1}/{totalLocations + 1}
 						</Text>
 					</View>

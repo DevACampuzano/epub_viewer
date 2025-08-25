@@ -28,6 +28,9 @@ export const Layout: FC<ILayoutProps> = ({ children, singleTap }) => {
 					},
 				]}
 				onPress={singleTap as () => void}
+				onPressIn={() => {}}
+				onLongPress={() => {}}
+				delayLongPress={400}
 			>
 				<View style={style.container}>{children}</View>
 			</TouchableNativeFeedback>

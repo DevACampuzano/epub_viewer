@@ -31,11 +31,10 @@ export default (
 	const {
 		changeFontSize,
 		changeTheme,
-		toc,
-		section,
 		changeFlow,
 		getLocations,
 		getCurrentLocation,
+		toc,
 	} = useReader();
 
 	const { bottom } = useSafeAreaInsets();
@@ -104,7 +103,7 @@ export default (
 	};
 
 	const singleTap = Gesture.Tap()
-		.numberOfTaps(1)
+		.numberOfTaps(2)
 		// .runOnJS(true)
 		.maxDuration(250)
 		.onStart(() => {
@@ -155,10 +154,6 @@ export default (
 		changeTheme(newTheme);
 	};
 
-	const onRefresh = () => {
-		console.log({ toc, section });
-	};
-
 	const handleAppStateChange = useCallback(
 		async (nextAppState: AppStateStatus) => {
 			if (nextAppState === "background" || nextAppState === "inactive") {
@@ -198,11 +193,11 @@ export default (
 		currentTheme,
 		onClose,
 		onReady,
-		onRefresh,
 		singleTap,
 		position,
 		onPress,
 		opacity: fadeAnim,
 		currentFlow,
+		toc,
 	};
 };

@@ -63,3 +63,12 @@ interface _IBook {
 	lastReading: number;
 	finalDate?: number;
 }
+
+type Section = {
+	id: string;
+	href: string;
+	label: string;
+	// parent?: any;
+	subitems: Array<Omit<Section, "subitems">>;
+};
+type _Toc = Section[];

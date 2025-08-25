@@ -1,70 +1,47 @@
 import DeviceBrightness from "@adrianso/react-native-device-brightness";
-import type { Flow } from "@epubjs-react-native/core";
 import Slider from "@react-native-community/slider";
-import Icon, { type LucideIconName } from "@react-native-vector-icons/lucide";
-import { type FC, useEffect, useState } from "react";
+import Icon from "@react-native-vector-icons/lucide";
+import type { FC } from "react";
 import {
 	Animated,
 	FlatList,
 	Platform,
-	StyleSheet,
+	Pressable,
+	ScrollView,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import DropShadow from "react-native-drop-shadow";
-import { Divider, Text } from "@/components";
-import { useSettingStore } from "@/stores";
+import { Divider, Menu, Text } from "@/components";
 import { colors } from "@/theme";
+import style from "./styles";
+import useHeader from "./useHeader";
 
-type IHeaderProps = {
-	currentTheme: ITheme;
-	title: string;
-	onClose: () => void;
-	opacity: Animated.Value;
-};
-
-type FlowOption = {
-	value: Flow;
-	label: string;
-	icon: LucideIconName;
-};
-
-const flowOptions: FlowOption[] = [
-	{ value: "paginated", label: "Paginado", icon: "book-open" },
-	{ value: "scrolled", label: "Desplazado", icon: "gallery-vertical" },
-	{
-		value: "scrolled-doc",
-		label: "Desplazado documento",
-		icon: "gallery-vertical",
-	},
-	{
-		value: "scrolled-continuous",
-		label: "Desplazado continuo",
-		icon: "gallery-vertical",
-	},
-];
-
-export const Header: FC<IHeaderProps> = ({
+export const Header: FC<_IHeaderProps> = ({
 	currentTheme,
 	title,
 	onClose,
 	opacity,
+	toc,
 }) => {
-	const [openMenu, setOpenMenu] = useState(false);
-	const [brightness, setBrightness] = useState(0);
-	const flow = useSettingStore((state) => state.currentFlow);
-	const changeFlow = useSettingStore((state) => state.setFlow);
-
-	useEffect(() => {
-		const data = async () => {
-			const currentBrightness =
-				Platform.OS === "android"
-					? await DeviceBrightness.getSystemBrightnessLevel()
-					: await DeviceBrightness.getBrightnessLevel();
-			setBrightness(currentBrightness);
-		};
-		data();
-	}, []);
+	const {
+		openMenu,
+		setOpenMenu,
+		brightness,
+		setBrightness,
+		flow,
+		changeFlow,
+		drawerOption,
+		drawerOptions,
+		flowOptions,
+		isOpenDrawer,
+		setDrawerOption,
+		setIsOpenDrawer,
+		goToLocation,
+		positionDrawerOut,
+		position,
+	} = useHeader();
+	const color = currentTheme.value.p.color.split(" ")[0];
 
 	return (
 		<>
@@ -83,15 +60,15 @@ export const Header: FC<IHeaderProps> = ({
 							{ backgroundColor: currentTheme.value.body.background },
 						]}
 					>
-						<TouchableOpacity style={style.backButton} onPress={onClose}>
-							<Icon
-								name="chevron-left"
-								size={30}
-								color={currentTheme.value.p.color.split(" ")[0]}
-							/>
+						<TouchableOpacity
+							style={style.backButton}
+							onPress={onClose}
+							activeOpacity={0.7}
+						>
+							<Icon name="chevron-left" size={30} color={color} />
 							<Text
 								style={{
-									color: currentTheme.value.p.color.split(" ")[0],
+									color: color,
 									fontSize: 18,
 									fontWeight: "bold",
 								}}
@@ -99,16 +76,24 @@ export const Header: FC<IHeaderProps> = ({
 								{title}
 							</Text>
 						</TouchableOpacity>
-						<View>
+						<View
+							style={{
+								flexDirection: "row",
+								alignItems: "center",
+								gap: 15,
+							}}
+						>
 							<TouchableOpacity
 								activeOpacity={0.7}
 								onPress={() => setOpenMenu(true)}
 							>
-								<Icon
-									name="columns-3-cog"
-									size={20}
-									color={currentTheme.value.p.color.split(" ")[0]}
-								/>
+								<Icon name="columns-3-cog" size={20} color={colors.primary} />
+							</TouchableOpacity>
+							<TouchableOpacity
+								onPress={() => setIsOpenDrawer(true)}
+								activeOpacity={0.7}
+							>
+								<Icon name={"menu"} size={20} color={colors.primary} />
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -128,14 +113,7 @@ export const Header: FC<IHeaderProps> = ({
 							},
 						]}
 					>
-						<Text
-							style={[
-								style.titleMenu,
-								{ color: currentTheme.value.p.color.split(" ")[0] },
-							]}
-						>
-							Flujo
-						</Text>
+						<Text style={[style.titleMenu, { color: color }]}>Flujo</Text>
 						<FlatList
 							data={flowOptions}
 							renderItem={({ item }) => (
@@ -158,11 +136,7 @@ export const Header: FC<IHeaderProps> = ({
 									<Icon
 										name={item.icon}
 										size={30}
-										color={
-											flow === item.value
-												? colors.primary
-												: currentTheme.value.p.color.split(" ")[0]
-										}
+										color={flow === item.value ? colors.primary : color}
 									/>
 									<Text
 										style={[
@@ -220,79 +194,133 @@ export const Header: FC<IHeaderProps> = ({
 					</View>
 				</TouchableOpacity>
 			)}
+			{isOpenDrawer && (
+				<View style={[style.drawer]}>
+					<Animated.View
+						style={[
+							style.drawerContainer,
+							{ backgroundColor: currentTheme.value.body.background },
+							{
+								transform: [{ translateX: position }],
+							},
+						]}
+					>
+						<View style={style.drawerHeader}>
+							<Text
+								style={{
+									fontSize: 25,
+									fontWeight: "bold",
+									color: color,
+								}}
+							>
+								Navegador
+							</Text>
+							<TouchableOpacity
+								onPress={() => positionDrawerOut()}
+								activeOpacity={0.7}
+							>
+								<Icon name="x" size={25} color={color} />
+							</TouchableOpacity>
+						</View>
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							style={{
+								maxHeight: 70,
+							}}
+							contentContainerStyle={{
+								gap: 15,
+								height: 70,
+								paddingVertical: 10,
+								alignItems: "center",
+							}}
+						>
+							{drawerOptions.map((option) => (
+								<TouchableOpacity
+									style={[
+										style.drawerOptionView,
+										option.value === drawerOption.value && {
+											backgroundColor: colors.secondary,
+										},
+									]}
+									key={option.value}
+									onPress={() => setDrawerOption(option)}
+									activeOpacity={0.7}
+								>
+									<Icon
+										name={option.icon}
+										size={20}
+										color={
+											option.value === drawerOption.value
+												? colors.primary
+												: color
+										}
+									/>
+									<Text
+										style={{
+											color:
+												option.value === drawerOption.value
+													? colors.primary
+													: color,
+										}}
+									>
+										{option.label}
+									</Text>
+								</TouchableOpacity>
+							))}
+						</ScrollView>
+						<Divider />
+						<View style={{ paddingVertical: 10 }}>
+							<Text style={[style.drawerOptionTitle, { color }]}>
+								{drawerOption.title}
+							</Text>
+							{drawerOption.value === "chapters" && (
+								<FlatList
+									data={toc}
+									style={{ paddingVertical: 10, height: "80%" }}
+									contentContainerStyle={{
+										gap: 10,
+									}}
+									renderItem={({ item }) => (
+										<Menu.Item
+											style={{
+												width: "100%",
+												paddingVertical: 10,
+												paddingHorizontal: 10,
+												borderRadius: 5,
+											}}
+											textProps={{
+												style: { color },
+											}}
+											subMenuIconProps={{
+												color,
+											}}
+											hasSubmenu={item.subitems.length > 0}
+											onPress={
+												item.subitems.length > 0
+													? undefined
+													: () => goToLocation(item.href)
+											}
+											submenuItems={item.subitems.map((subItem) => (
+												<TouchableOpacity
+													key={subItem.id}
+													onPress={() => goToLocation(subItem.href)}
+												>
+													<Text style={{ color }}>{subItem.label}</Text>
+												</TouchableOpacity>
+											))}
+										>
+											{item.label.trim()}
+										</Menu.Item>
+									)}
+									keyExtractor={(item) => item.id}
+								/>
+							)}
+						</View>
+					</Animated.View>
+					<Pressable style={{ flex: 1 }} onPress={() => positionDrawerOut()} />
+				</View>
+			)}
 		</>
 	);
 };
-
-const style = StyleSheet.create({
-	root: {
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		zIndex: 10,
-	},
-	boxShadow: {
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-	},
-	container: {
-		paddingHorizontal: 20,
-		height: 55,
-		borderBottomColor: "#ddddddff",
-		borderBottomWidth: 1,
-
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
-	backButton: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 10,
-	},
-	menuContainer: {
-		width: "100%",
-		height: "100%",
-		position: "absolute",
-		top: 0,
-		left: 0,
-		zIndex: 20,
-		backgroundColor: "#0000001c",
-	},
-	menu: {
-		minWidth: 150,
-		minHeight: 50,
-		borderBottomColor: "#ddddddff",
-		borderBottomWidth: 1,
-		padding: 10,
-		paddingHorizontal: 20,
-		position: "absolute",
-		top: 10,
-		right: 10,
-		zIndex: 21,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-
-		borderRadius: 10,
-
-		elevation: 5,
-		alignItems: "center",
-		justifyContent: "center",
-		gap: 10,
-	},
-	titleMenu: {
-		fontSize: 18,
-		fontWeight: "bold",
-	},
-});

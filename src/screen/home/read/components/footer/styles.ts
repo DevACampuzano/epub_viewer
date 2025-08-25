@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
 	containerAnimate: {
@@ -14,14 +14,14 @@ const styles = StyleSheet.create({
 			height: -5,
 		},
 		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+		shadowRadius: 2,
 	},
 	container: {
 		paddingHorizontal: 20,
 		paddingVertical: 10,
 		borderTopColor: "#ddddddff",
 		borderTopWidth: 1,
-		height: 55,
+		height: Platform.select({ ios: 75, android: 55 }),
 		justifyContent: "center",
 	},
 	row: {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "bold",
 	},
-	slider: { height: 20, width: "100%" },
+	slider: { height: Platform.select({ ios: 40, android: 20 }), width: "100%" },
 });
 
 export default styles;
