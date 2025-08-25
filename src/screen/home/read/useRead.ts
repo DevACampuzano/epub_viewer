@@ -20,9 +20,11 @@ export default (
 ) => {
 	const [exit, setExit] = useState(false);
 	const updateBook = useBookStore((state) => state.updateBook);
-	const currentProgress = useBookStore(
-		(state) => state.books.find((b) => b.id === id)?.progress || 0,
+	const currentBook = useBookStore((state) =>
+		state.books.find((b) => b.id === id),
 	);
+	const addBookmarks = useBookStore((state) => state.addBookmark);
+	const removeBookmarks = useBookStore((state) => state.removeBookmark);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
@@ -35,6 +37,7 @@ export default (
 		getLocations,
 		getCurrentLocation,
 		toc,
+		// removeBookmarks,
 	} = useReader();
 
 	const { bottom } = useSafeAreaInsets();
@@ -111,6 +114,10 @@ export default (
 		});
 
 	const handleSaveProgress = useCallback(() => {
+		if (!currentBook) {
+			console.log("No current book found");
+			return;
+		}
 		const currentLocation = getCurrentLocation();
 
 		const locations = JSON.parse(getLocations().toString()) as string[];
@@ -125,14 +132,22 @@ export default (
 		updateBook(id, {
 			currentPage: currentLocation?.start.cfi,
 			progress:
-				progressPercentage > currentProgress
+				progressPercentage > currentBook.progress
 					? progressPercentage
-					: currentProgress,
+					: currentBook.progress,
 			totalPages: locations.length,
 			finalDate: currentLocation.atEnd ? Date.now() : undefined,
 		});
+		// removeBookmarks();
 		setExit(true);
-	}, [getCurrentLocation, getLocations, updateBook, id, currentProgress]);
+	}, [
+		getCurrentLocation,
+		getLocations,
+		updateBook,
+		id,
+		currentBook,
+		// removeBookmarks,
+	]);
 
 	usePreventRemove(!exit, () => {
 		handleSaveProgress();
@@ -199,5 +214,8 @@ export default (
 		opacity: fadeAnim,
 		currentFlow,
 		toc,
+		currentBook,
+		addBookmarks,
+		removeBookmarks,
 	};
 };

@@ -44,6 +44,14 @@ interface _IFormNewBook {
 	progress: number;
 }
 
+type Bookmark<Data extends object> = {
+	id: number;
+	section: Section;
+	location: Location;
+	text: string;
+	data?: Data;
+};
+
 interface _IBook {
 	id: string;
 	file: string;
@@ -61,6 +69,7 @@ interface _IBook {
 	progress: number;
 	createdAt: number;
 	lastReading: number;
+	bookmarks: Bookmark[];
 	finalDate?: number;
 }
 

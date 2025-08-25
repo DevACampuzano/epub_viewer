@@ -3,7 +3,7 @@ import { useReader } from "@epubjs-react-native/core";
 import { useCallback, useEffect, useState } from "react";
 import { Animated, Platform, useAnimatedValue } from "react-native";
 import { useDebounce } from "@/hooks";
-import { useSettingStore } from "@/stores";
+import { useBookStore, useSettingStore } from "@/stores";
 
 const flowOptions: _IFlowOption[] = [
 	{ value: "paginated", label: "Paginado", icon: "book-open" },
@@ -37,16 +37,26 @@ const drawerOptions: _IDrawerOption[] = [
 	{ value: "notes", label: "Notas", icon: "file-text", title: "Notas" },
 ];
 
-export default () => {
+export default (id: string) => {
 	const [openMenu, setOpenMenu] = useState(false);
 	const [brightness, setBrightness] = useState(0);
 	const flow = useSettingStore((state) => state.currentFlow);
+	const books = useBookStore((state) => state.books);
 	const changeFlow = useSettingStore((state) => state.setFlow);
 	const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 	const [drawerOption, setDrawerOption] = useState<_IDrawerOption>(
 		drawerOptions[0],
 	);
-	const { goToLocation, search: searchText, searchResults } = useReader();
+	const [isBookmarked, setIsBookmarked] = useState(false);
+	// const addMark = useBookStore((state) => state.addBookmark);
+	const {
+		goToLocation,
+		search: searchText,
+		searchResults,
+		addBookmark,
+		removeBookmark,
+		getCurrentLocation,
+	} = useReader();
 	const position = useAnimatedValue(-300);
 	const [search, setSearch] = useState("");
 
@@ -82,6 +92,29 @@ export default () => {
 		});
 	};
 
+	const handleChangeBookmark = () => {
+		const location = getCurrentLocation();
+
+		if (!location) return;
+
+		const bookmarks = books.find((book) => book.id === id)?.bookmarks;
+		if (!bookmarks) {
+			console.log("No bookmarks found");
+			return;
+		}
+		const bookmark = bookmarks.find(
+			(item) =>
+				item.location.start.cfi === location?.start.cfi &&
+				item.location.end.cfi === location?.end.cfi,
+		);
+
+		if (bookmark) {
+			removeBookmark(bookmark);
+		} else {
+			addBookmark(location);
+		}
+	};
+
 	useEffect(() => {
 		const data = async () => {
 			const currentBrightness =
@@ -98,6 +131,21 @@ export default () => {
 			positionDrawerIn();
 		}
 	}, [isOpenDrawer, positionDrawerIn]);
+
+	useEffect(() => {
+		const location = getCurrentLocation();
+		if (!location) return;
+
+		setIsBookmarked(
+			books
+				.find((book) => book.id === id)
+				?.bookmarks.find(
+					(item) =>
+						item.location.start.cfi === location.start.cfi &&
+						item.location.end.cfi === location.end.cfi,
+				),
+		);
+	}, [books, id, getCurrentLocation]);
 
 	return {
 		openMenu,
@@ -118,5 +166,8 @@ export default () => {
 		search,
 		handleChangeSearchText,
 		searchResults: searchResults.results,
+		handleChangeBookmark,
+		bookmarks: books.find((book) => book.id === id)?.bookmarks || [],
+		isBookmarked,
 	};
 };

@@ -168,7 +168,7 @@ export default (
 				let sourceExists = false;
 				if (decodedUri.startsWith("file://")) {
 					const pathWithoutProtocol = decodedUri.replace("file://", "");
-					console.log("Path without protocol:", pathWithoutProtocol);
+					// console.log("Path without protocol:", pathWithoutProtocol);
 
 					sourceExists = await RNFS.exists(decodedUri);
 					if (!sourceExists) {
@@ -211,6 +211,7 @@ export default (
 					qualification: 0,
 					createdAt: Date.now(),
 					lastReading: Date.now(),
+					bookmarks: [],
 				};
 				addBook(newBook);
 			} else {
@@ -226,6 +227,7 @@ export default (
 					qualification: 0,
 					createdAt: Date.now(),
 					lastReading: Date.now(),
+					bookmarks: [],
 				};
 				addBook(newBook);
 			}

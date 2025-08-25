@@ -4,6 +4,7 @@ type _IHeaderProps = {
 	onClose: () => void;
 	opacity: Animated.Value;
 	toc: _Toc;
+	id: string;
 };
 
 type _IFlowOption = {

@@ -23,6 +23,7 @@ export const Header: FC<_IHeaderProps> = ({
 	onClose,
 	opacity,
 	toc,
+	id,
 }) => {
 	const {
 		openMenu,
@@ -43,7 +44,10 @@ export const Header: FC<_IHeaderProps> = ({
 		search,
 		handleChangeSearchText,
 		searchResults,
-	} = useHeader();
+		bookmarks,
+		isBookmarked,
+		handleChangeBookmark,
+	} = useHeader(id);
 	const color = currentTheme.value.p.color.split(" ")[0];
 
 	return (
@@ -86,6 +90,16 @@ export const Header: FC<_IHeaderProps> = ({
 								gap: 15,
 							}}
 						>
+							<TouchableOpacity
+								activeOpacity={0.7}
+								onPress={handleChangeBookmark}
+							>
+								<Icon
+									name={isBookmarked ? "bookmark-check" : "bookmark"}
+									size={20}
+									color={colors.primary}
+								/>
+							</TouchableOpacity>
 							<TouchableOpacity
 								activeOpacity={0.7}
 								onPress={() => setOpenMenu(true)}
@@ -364,6 +378,41 @@ export const Header: FC<_IHeaderProps> = ({
 										)}
 									/>
 								</View>
+							)}
+							{drawerOption.value === "bookmarks" && (
+								<FlatList
+									data={bookmarks}
+									style={{ paddingVertical: 10, height: "80%" }}
+									contentContainerStyle={{
+										gap: 10,
+									}}
+									renderItem={({ item }) => (
+										<TouchableOpacity
+											activeOpacity={0.7}
+											onPress={() => goToLocation(item.location.start.cfi)}
+											style={{ gap: 5 }}
+										>
+											<Text style={{ color, fontWeight: "bold", fontSize: 15 }}>
+												{/** biome-ignore lint/suspicious/noExplicitAny: library typing error */}
+												{(item as any).chapter.label.trim()}
+											</Text>
+											<Text style={{ color }}>
+												{item.text
+													.replace(/\s+/g, " ")
+													.trim()
+													.substring(0, 200)}
+												...
+											</Text>
+										</TouchableOpacity>
+									)}
+									showsVerticalScrollIndicator={false}
+									keyExtractor={(item) => item.id.toString()}
+									ListEmptyComponent={() => (
+										<Text style={{ color, textAlign: "center" }}>
+											No se encontraron marcadores
+										</Text>
+									)}
+								/>
 							)}
 						</View>
 					</Animated.View>

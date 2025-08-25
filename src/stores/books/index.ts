@@ -76,6 +76,37 @@ const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
 	setDesign: (design) => {
 		set(() => ({ design }));
 	},
+	addBookmark: (id, bookmark) => {
+		set((state) => {
+			const book = state.books.find((b) => b.id === id);
+			if (!book) return state;
+
+			return {
+				...state,
+				books: state.books.map((b) =>
+					b.id === id ? { ...b, bookmarks: [...b.bookmarks, bookmark] } : b,
+				),
+			};
+		});
+	},
+	removeBookmark: (id, bookmarkId) => {
+		set((state) => {
+			const book = state.books.find((b) => b.id === id);
+			if (!book) return state;
+
+			return {
+				...state,
+				books: state.books.map((b) =>
+					b.id === id
+						? {
+								...b,
+								bookmarks: b.bookmarks.filter((b) => b.id !== bookmarkId),
+							}
+						: b,
+				),
+			};
+		});
+	},
 });
 
 export const useBookStore = create<_IBookStore>()(

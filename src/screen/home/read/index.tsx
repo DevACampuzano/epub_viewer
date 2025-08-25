@@ -23,6 +23,8 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		opacity,
 		currentFlow,
 		toc,
+		addBookmarks,
+		removeBookmarks,
 	} = useRead(id, navigation);
 
 	return (
@@ -33,6 +35,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				title={title}
 				opacity={opacity}
 				toc={toc}
+				id={id}
 			/>
 
 			<Reader
@@ -48,6 +51,12 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 				)}
 				onReady={onReady}
 				enableSelection
+				onAddBookmark={(bookmark) => {
+					addBookmarks(id, bookmark);
+				}}
+				onRemoveBookmark={(bookmark) => {
+					removeBookmarks(id, bookmark.id);
+				}}
 				renderOpeningBookComponent={() => (
 					<Loading
 						label="Abriendo..."
@@ -59,6 +68,9 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 						}}
 					/>
 				)}
+				onWebViewMessage={(event) => {
+					console.log("WebView message received: ", event);
+				}}
 				onDisplayError={(error) => {
 					console.error("Reader display error:", error);
 				}}
