@@ -12,7 +12,7 @@ import {
 	View,
 } from "react-native";
 import DropShadow from "react-native-drop-shadow";
-import { Divider, Menu, Text } from "@/components";
+import { Divider, Menu, Text, TextInput } from "@/components";
 import { colors } from "@/theme";
 import style from "./styles";
 import useHeader from "./useHeader";
@@ -40,6 +40,9 @@ export const Header: FC<_IHeaderProps> = ({
 		goToLocation,
 		positionDrawerOut,
 		position,
+		search,
+		handleChangeSearchText,
+		searchResults,
 	} = useHeader();
 	const color = currentTheme.value.p.color.split(" ")[0];
 
@@ -225,13 +228,11 @@ export const Header: FC<_IHeaderProps> = ({
 						<ScrollView
 							horizontal
 							showsHorizontalScrollIndicator={false}
-							style={{
-								maxHeight: 70,
-							}}
+							style={{ marginVertical: 10, maxHeight: 70 }}
 							contentContainerStyle={{
 								gap: 15,
-								height: 70,
-								paddingVertical: 10,
+								// height: 70,
+
 								alignItems: "center",
 							}}
 						>
@@ -270,8 +271,10 @@ export const Header: FC<_IHeaderProps> = ({
 							))}
 						</ScrollView>
 						<Divider />
-						<View style={{ paddingVertical: 10 }}>
-							<Text style={[style.drawerOptionTitle, { color }]}>
+						<View style={{ paddingVertical: 10, flex: 1 }}>
+							<Text
+								style={[style.drawerOptionTitle, { color, marginBottom: 5 }]}
+							>
 								{drawerOption.title}
 							</Text>
 							{drawerOption.value === "chapters" && (
@@ -313,8 +316,54 @@ export const Header: FC<_IHeaderProps> = ({
 											{item.label.trim()}
 										</Menu.Item>
 									)}
+									showsVerticalScrollIndicator={false}
 									keyExtractor={(item) => item.id}
+									ListEmptyComponent={() => (
+										<Text style={{ color, textAlign: "center" }}>
+											No se encontraron datos del contenido
+										</Text>
+									)}
 								/>
+							)}
+							{drawerOption.value === "search" && (
+								<View>
+									<TextInput
+										value={search}
+										onChangeText={handleChangeSearchText}
+										placeholder="Buscar..."
+										placeholderTextColor={colors.secondary}
+										style={{
+											color,
+										}}
+									/>
+									<FlatList
+										data={searchResults}
+										style={{ paddingVertical: 20 }}
+										contentContainerStyle={{
+											gap: 20,
+										}}
+										renderItem={({ item }) => (
+											<TouchableOpacity
+												activeOpacity={0.7}
+												onPress={() => goToLocation(item.cfi)}
+											>
+												<Text style={{ color }}>
+													{item.section.label ? item.section.label.trim() : ""}
+												</Text>
+												<Text style={{ color, fontSize: 12, paddingLeft: 15 }}>
+													{item.excerpt ? item.excerpt.trim() : ""}
+												</Text>
+											</TouchableOpacity>
+										)}
+										keyExtractor={(item) => item.cfi}
+										showsVerticalScrollIndicator={false}
+										ListEmptyComponent={() => (
+											<Text style={{ color, textAlign: "center" }}>
+												No se encontraron resultados
+											</Text>
+										)}
+									/>
+								</View>
 							)}
 						</View>
 					</Animated.View>

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 		minWidth: 150,
 		overflow: "hidden",
 		minHeight: 50,
-		maxHeight: 300,
+		// maxHeight: 300,
 		backgroundColor: "#f5f5f5",
 		borderRadius: 12,
 		borderWidth: 1,

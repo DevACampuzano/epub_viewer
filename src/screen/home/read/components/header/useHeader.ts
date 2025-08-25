@@ -2,6 +2,7 @@ import DeviceBrightness from "@adrianso/react-native-device-brightness";
 import { useReader } from "@epubjs-react-native/core";
 import { useCallback, useEffect, useState } from "react";
 import { Animated, Platform, useAnimatedValue } from "react-native";
+import { useDebounce } from "@/hooks";
 import { useSettingStore } from "@/stores";
 
 const flowOptions: _IFlowOption[] = [
@@ -45,8 +46,9 @@ export default () => {
 	const [drawerOption, setDrawerOption] = useState<_IDrawerOption>(
 		drawerOptions[0],
 	);
-	const { goToLocation } = useReader();
+	const { goToLocation, search: searchText, searchResults } = useReader();
 	const position = useAnimatedValue(-300);
+	const [search, setSearch] = useState("");
 
 	const positionDrawerIn = useCallback(() => {
 		Animated.timing(position, {
@@ -55,6 +57,18 @@ export default () => {
 			useNativeDriver: true,
 		}).start();
 	}, [position]);
+
+	const debouncedRefetch = useDebounce(() => {
+		searchText(search, 1, 20);
+	}, 500);
+
+	const handleChangeSearchText = useCallback(
+		(text: string) => {
+			setSearch(text);
+			debouncedRefetch();
+		},
+		[debouncedRefetch],
+	);
 
 	const positionDrawerOut = () => {
 		Animated.timing(position, {
@@ -84,6 +98,7 @@ export default () => {
 			positionDrawerIn();
 		}
 	}, [isOpenDrawer, positionDrawerIn]);
+
 	return {
 		openMenu,
 		setOpenMenu,
@@ -100,5 +115,8 @@ export default () => {
 		goToLocation,
 		positionDrawerOut,
 		position,
+		search,
+		handleChangeSearchText,
+		searchResults: searchResults.results,
 	};
 };

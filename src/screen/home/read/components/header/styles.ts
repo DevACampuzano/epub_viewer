@@ -89,7 +89,7 @@ const style = StyleSheet.create({
 		left: 0,
 		width: "70%",
 		zIndex: 21,
-		padding: 20,
+		paddingHorizontal: 20,
 	},
 	drawerHeader: {
 		flexDirection: "row",
