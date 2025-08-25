@@ -149,7 +149,7 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 					step={1}
 					thumbTintColor={colors.primary}
 					minimumTrackTintColor={colors.primary}
-					maximumTrackTintColor={colors.success}
+					maximumTrackTintColor={colors.secondary}
 				/>
 				<Text style={{ fontWeight: "bold" }}>
 					Espaciado: {lineHeight.toFixed(1)}
@@ -165,7 +165,7 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 					step={0.1}
 					thumbTintColor={colors.primary}
 					minimumTrackTintColor={colors.primary}
-					maximumTrackTintColor={colors.success}
+					maximumTrackTintColor={colors.secondary}
 				/>
 
 				<Text

@@ -136,6 +136,11 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					icon={
 						<Icon name="ellipsis-vertical" size={24} color={colors.primary} />
 					}
+					menuProps={{
+						style: {
+							minWidth: 200,
+						},
+					}}
 				>
 					<Menu.Item
 						hasSubmenu
@@ -154,13 +159,14 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					>
 						Cambiar Diseño
 					</Menu.Item>
+					<Divider />
 					<Menu.Item
 						hasSubmenu
 						submenuItems={listMenuOptionOrderBy.map((op) => (
 							<Menu.Item
 								key={op.label}
 								onPress={() => setOrderBy(op.value)}
-								style={{ gap: 5, flexDirection: "row", alignItems: "center" }}
+								style={{ flexDirection: "row", alignItems: "center" }}
 							>
 								<Text>{op.label}</Text>
 								{orderBy === op.value && (
