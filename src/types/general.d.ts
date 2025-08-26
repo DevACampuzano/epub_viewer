@@ -52,6 +52,20 @@ type Bookmark<Data extends object> = {
 	data?: Data;
 };
 
+type Annotation<Data extends object> = {
+	type: "highlight" | "underline";
+	data: Data;
+	cfiRange: string;
+	sectionIndex: number;
+	cfiRangeText: string;
+	iconClass?: string;
+	styles?: {
+		color?: string;
+		opacity?: number;
+		thickness?: number;
+	};
+};
+
 interface _IBook {
 	id: string;
 	file: string;
@@ -70,6 +84,7 @@ interface _IBook {
 	createdAt: number;
 	lastReading: number;
 	bookmarks: Bookmark[];
+	annotations: Annotation[];
 	finalDate?: number;
 }
 

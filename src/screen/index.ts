@@ -1,3 +1,2 @@
-
-export * from './home/index';
-export * from './setting/index';
+export * from "./home/index";
+export * from "./setting/index";

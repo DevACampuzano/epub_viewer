@@ -5,6 +5,7 @@ type _IHeaderProps = {
 	opacity: Animated.Value;
 	toc: _Toc;
 	id: string;
+	annotations: Annotation[];
 };
 
 type _IFlowOption = {

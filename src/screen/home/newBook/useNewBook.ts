@@ -1,5 +1,5 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
-import { type Location, useReader } from "@epubjs-react-native/core";
+import { useReader } from "@epubjs-react-native/core";
 import { pick } from "@react-native-documents/picker";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export default (
 		show: false,
 		icon: "info",
 	});
-	const { getMeta, theme } = useReader();
+	const { getMeta, theme, getLocations } = useReader();
 	const addBook = useBookStore((state) => state.addBook);
 	theme.body.background = "#f5f5f5";
 
@@ -77,12 +77,10 @@ export default (
 		return { hasHtml, plainText, originalText: text };
 	};
 
-	const onReady = async (
-		totalLocations: number,
-		_currentLocation: Location,
-		progress: number,
-	) => {
+	const onReady = async (_totalLocations: number) => {
 		try {
+			const totalLocations =
+				JSON.parse(getLocations().toString()).length || _totalLocations;
 			const data: _IMeta = getMeta() as _IMeta;
 
 			const description = detectHtmlContent(data?.description || "");
@@ -108,7 +106,7 @@ export default (
 				title: data?.title,
 				image: newPathFile,
 				totalPages: totalLocations,
-				progress: progress,
+				progress: 0,
 			}));
 			setLoadingRender(false);
 		} catch (error) {
@@ -212,6 +210,7 @@ export default (
 					createdAt: Date.now(),
 					lastReading: Date.now(),
 					bookmarks: [],
+					annotations: [],
 				};
 				addBook(newBook);
 			} else {
@@ -228,6 +227,7 @@ export default (
 					createdAt: Date.now(),
 					lastReading: Date.now(),
 					bookmarks: [],
+					annotations: [],
 				};
 				addBook(newBook);
 			}

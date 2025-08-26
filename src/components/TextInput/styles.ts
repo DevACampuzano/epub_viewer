@@ -16,12 +16,12 @@ const style = StyleSheet.create({
 		padding: 10,
 		width: "100%",
 	},
-    characterCount: {
-        fontSize: 12,
-        color: "#999",
-        marginTop: 5,
-        alignSelf: "flex-end",
-    },
+	characterCount: {
+		fontSize: 12,
+		color: "#999",
+		marginTop: 5,
+		alignSelf: "flex-end",
+	},
 });
 
 export default style;

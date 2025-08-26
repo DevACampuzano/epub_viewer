@@ -24,6 +24,7 @@ export const Header: FC<_IHeaderProps> = ({
 	opacity,
 	toc,
 	id,
+	annotations,
 }) => {
 	const {
 		openMenu,
@@ -47,6 +48,7 @@ export const Header: FC<_IHeaderProps> = ({
 		bookmarks,
 		isBookmarked,
 		handleChangeBookmark,
+		removeAnnotationByCfi,
 	} = useHeader(id);
 	const color = currentTheme.value.p.color.split(" ")[0];
 
@@ -410,6 +412,59 @@ export const Header: FC<_IHeaderProps> = ({
 									ListEmptyComponent={() => (
 										<Text style={{ color, textAlign: "center" }}>
 											No se encontraron marcadores
+										</Text>
+									)}
+								/>
+							)}
+							{drawerOption.value === "notes" && (
+								<FlatList
+									data={annotations}
+									style={{ paddingVertical: 10, height: "80%" }}
+									contentContainerStyle={{
+										gap: 10,
+									}}
+									renderItem={({ item }) => (
+										<View
+											style={{
+												flexDirection: "row",
+												gap: 5,
+												justifyContent: "space-between",
+												alignItems: "flex-start",
+											}}
+										>
+											<TouchableOpacity
+												activeOpacity={0.7}
+												onPress={() => goToLocation(item.cfiRange)}
+												style={{ width: "90%" }}
+											>
+												<Text
+													style={[
+														{ color, textAlign: "justify" },
+														item.type === "highlight"
+															? { backgroundColor: item.styles?.color }
+															: {
+																	textDecorationLine: "underline",
+																	textDecorationColor: item.styles?.color,
+																	textDecorationStyle: "double",
+																},
+													]}
+												>
+													{item.cfiRangeText}
+												</Text>
+											</TouchableOpacity>
+											<TouchableOpacity
+												activeOpacity={0.7}
+												onPress={() => removeAnnotationByCfi(item.cfiRange)}
+											>
+												<Icon name="trash" size={16} color={colors.danger} />
+											</TouchableOpacity>
+										</View>
+									)}
+									showsVerticalScrollIndicator={false}
+									keyExtractor={(item) => item.cfiRange}
+									ListEmptyComponent={() => (
+										<Text style={{ color, textAlign: "center" }}>
+											No se encontraron notas
 										</Text>
 									)}
 								/>

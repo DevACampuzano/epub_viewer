@@ -25,11 +25,14 @@ export default (
 	);
 	const addBookmarks = useBookStore((state) => state.addBookmark);
 	const removeBookmarks = useBookStore((state) => state.removeBookmark);
+	const updateAnnotations = useBookStore((state) => state.updateAnnotations);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
 	const lineHeight = useSettingStore((state) => state.lineHeight);
 	const currentFlow = useSettingStore((state) => state.currentFlow);
+	const paddingHorizontal = useSettingStore((state) => state.paddingHorizontal);
+	const notes = useSettingStore((state) => state.notes);
 	const {
 		changeFontSize,
 		changeTheme,
@@ -37,6 +40,7 @@ export default (
 		getLocations,
 		getCurrentLocation,
 		toc,
+		addAnnotation,
 		// removeBookmarks,
 	} = useReader();
 
@@ -107,7 +111,7 @@ export default (
 
 	const singleTap = Gesture.Tap()
 		.numberOfTaps(2)
-		// .runOnJS(true)
+		.runOnJS(true)
 		.maxDuration(250)
 		.onStart(() => {
 			onPress();
@@ -217,5 +221,10 @@ export default (
 		currentBook,
 		addBookmarks,
 		removeBookmarks,
+		addAnnotation,
+		notes,
+		paddingHorizontal,
+		updateAnnotations,
+		updateBook,
 	};
 };

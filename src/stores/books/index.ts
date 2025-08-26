@@ -107,6 +107,19 @@ const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
 			};
 		});
 	},
+	updateAnnotations: (id, annotations) => {
+		set((state) => {
+			const book = state.books.find((b) => b.id === id);
+			if (!book) return state;
+
+			return {
+				...state,
+				books: state.books.map((b) =>
+					b.id === id ? { ...b, annotations } : b,
+				),
+			};
+		});
+	},
 });
 
 export const useBookStore = create<_IBookStore>()(

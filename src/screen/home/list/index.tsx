@@ -1,4 +1,3 @@
-import { Button, Divider, Menu, ProgressBar, Text } from "@components/";
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
@@ -10,6 +9,7 @@ import {
 	View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button, Divider, Menu, ProgressBar, Text } from "@/components";
 import { useBookStore } from "@/stores";
 import { colors } from "@/theme";
 import { Card, ItemList } from "./components";

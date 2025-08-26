@@ -87,7 +87,7 @@ const style = StyleSheet.create({
 		top: 0,
 		bottom: 0,
 		left: 0,
-		width: "70%",
+		width: "80%",
 		zIndex: 21,
 		paddingHorizontal: 20,
 	},

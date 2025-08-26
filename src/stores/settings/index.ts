@@ -29,6 +29,8 @@ const inicialState: StateSettings = {
 	textAlign: "left",
 	lineHeight: 1.3,
 	currentFlow: "paginated",
+	paddingHorizontal: 0,
+	notes: [],
 };
 
 const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
@@ -39,6 +41,9 @@ const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
 	setTextAlign: (align) => set((state) => ({ ...state, textAlign: align })),
 	setLineHeight: (lineHeight) => set((state) => ({ ...state, lineHeight })),
 	setFlow: (flow) => set((state) => ({ ...state, currentFlow: flow })),
+	setNotes: (notes) => set((state) => ({ ...state, notes })),
+	setPaddingHorizontal: (padding) =>
+		set((state) => ({ ...state, paddingHorizontal: padding })),
 });
 
 export const useSettingStore = create<_ISettingsStore>()(

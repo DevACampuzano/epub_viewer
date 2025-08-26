@@ -10,6 +10,13 @@ type ITheme = {
 
 type TextAlign = "left" | "center" | "right" | "justify";
 
+type Note = {
+	id: string;
+	label: string;
+	color: ColorValue;
+	style: "highlight" | "underline";
+};
+
 type Flow =
 	| "auto"
 	| "paginated"
@@ -24,6 +31,8 @@ interface StateSettings {
 	textAlign: TextAlign;
 	lineHeight: number;
 	currentFlow: Flow;
+	paddingHorizontal: number;
+	notes: Note[];
 }
 
 interface ActionsSettings {
@@ -32,6 +41,8 @@ interface ActionsSettings {
 	setTextAlign: (align: TextAlign) => void;
 	setLineHeight: (lineHeight: number) => void;
 	setFlow: (flow: Flow) => void;
+	setNotes: (notes: Note[]) => void;
+	setPaddingHorizontal: (padding: number) => void;
 }
 
 type _ISettingsStore = StateSettings & ActionsSettings;
