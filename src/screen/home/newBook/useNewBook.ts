@@ -80,7 +80,7 @@ export default (
 	const onReady = async (_totalLocations: number) => {
 		try {
 			const totalLocations =
-				JSON.parse(getLocations().toString()).length || _totalLocations;
+				JSON.parse(getLocations().toString() || "[]").length || _totalLocations;
 			const data: _IMeta = getMeta() as _IMeta;
 
 			const description = detectHtmlContent(data?.description || "");

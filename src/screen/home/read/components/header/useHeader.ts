@@ -57,6 +57,7 @@ export default (id: string) => {
 		removeBookmark,
 		getCurrentLocation,
 		removeAnnotationByCfi,
+		section,
 	} = useReader();
 	const position = useAnimatedValue(-300);
 	const [search, setSearch] = useState("");
@@ -171,5 +172,6 @@ export default (id: string) => {
 		bookmarks: books.find((book) => book.id === id)?.bookmarks || [],
 		isBookmarked,
 		removeAnnotationByCfi,
+		section,
 	};
 };

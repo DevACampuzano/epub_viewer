@@ -49,6 +49,7 @@ export const Header: FC<_IHeaderProps> = ({
 		isBookmarked,
 		handleChangeBookmark,
 		removeAnnotationByCfi,
+		section,
 	} = useHeader(id);
 	const color = currentTheme.value.p.color.split(" ")[0];
 
@@ -247,8 +248,6 @@ export const Header: FC<_IHeaderProps> = ({
 							style={{ marginVertical: 10, maxHeight: 70 }}
 							contentContainerStyle={{
 								gap: 15,
-								// height: 70,
-
 								alignItems: "center",
 							}}
 						>
@@ -307,6 +306,10 @@ export const Header: FC<_IHeaderProps> = ({
 												paddingVertical: 10,
 												paddingHorizontal: 10,
 												borderRadius: 5,
+												backgroundColor:
+													section?.id === item.id
+														? colors.secondary
+														: "transparent",
 											}}
 											textProps={{
 												style: { color },
@@ -324,6 +327,12 @@ export const Header: FC<_IHeaderProps> = ({
 												<TouchableOpacity
 													key={subItem.id}
 													onPress={() => goToLocation(subItem.href)}
+													style={{
+														backgroundColor:
+															section?.id === subItem.id
+																? colors.secondary
+																: "transparent",
+													}}
 												>
 													<Text style={{ color }}>{subItem.label}</Text>
 												</TouchableOpacity>

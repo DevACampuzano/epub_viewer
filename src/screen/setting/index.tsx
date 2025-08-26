@@ -5,6 +5,7 @@ import type { FC } from "react";
 import {
 	FlatList,
 	Modal,
+	Platform,
 	ScrollView,
 	TouchableOpacity,
 	useWindowDimensions,
@@ -273,7 +274,14 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 				<Button label="Añadir Nota" onPress={() => setShowModal(true)} />
 			</Section>
 			<Modal visible={showModal} animationType="slide">
-				<View style={{ padding: 20, paddingTop: top, flex: 1, gap: 10 }}>
+				<View
+					style={{
+						padding: 20,
+						paddingTop: Platform.OS === "ios" ? top : undefined,
+						flex: 1,
+						gap: 10,
+					}}
+				>
 					<View
 						style={{
 							alignItems: "center",
