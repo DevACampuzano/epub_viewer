@@ -25,7 +25,6 @@ type Flow =
 	| "scrolled-continuous";
 
 interface StateSettings {
-	themes: ITheme[];
 	currentTheme: ITheme;
 	fontSize: number;
 	textAlign: TextAlign;

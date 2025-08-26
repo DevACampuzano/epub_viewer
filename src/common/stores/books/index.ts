@@ -120,6 +120,9 @@ const storeAPI: StateCreator<_IBookStore> = (set, get) => ({
 			};
 		});
 	},
+	addBooks: (books) => {
+		set((state) => ({ ...state, books: [...state.books, ...books] }));
+	},
 });
 
 export const useBookStore = create<_IBookStore>()(

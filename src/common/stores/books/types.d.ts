@@ -26,6 +26,7 @@ interface _IBookActions {
 	addBookmark: (id: string, bookmark: Bookmark) => void;
 	removeBookmark: (id: string, bookmarkId: number) => void;
 	updateAnnotations: (id: string, annotations: Annotation[]) => void;
+	addBooks: (books: _IBook[]) => void;
 }
 
 type _IBookStore = _IBookState & _IBookActions;

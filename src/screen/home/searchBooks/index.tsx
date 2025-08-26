@@ -87,7 +87,7 @@ export const SearchBooks: FC<
 					paddingHorizontal: 4,
 				}}
 				showsVerticalScrollIndicator={false}
-				keyExtractor={(item) => item.id.toString()}
+				keyExtractor={(item, index) => `${item.id}-${index}`}
 				ListEmptyComponent={() => (
 					<View style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}>
 						<Text style={style.textEmpty}>Aún no tienes libros</Text>

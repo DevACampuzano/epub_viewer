@@ -171,7 +171,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						paddingHorizontal: 4,
 					}}
 					showsVerticalScrollIndicator={false}
-					keyExtractor={(item) => item.id.toString()}
+					keyExtractor={(item, index) => `${item.id}-${index}`}
 					ListEmptyComponent={() => (
 						<View
 							style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}
@@ -218,7 +218,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					}}
 					numColumns={isPortrait ? 2 : 4}
 					showsVerticalScrollIndicator={false}
-					keyExtractor={(item) => item.id.toString()}
+					keyExtractor={(item, index) => `${item.id}-${index}`}
 					ListEmptyComponent={() => (
 						<View
 							style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}

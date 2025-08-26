@@ -4,7 +4,7 @@ import { create, type StateCreator } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-const themes: ITheme[] = [
+export const themes: ITheme[] = [
 	{
 		label: "Claro",
 		description: "Fondo blanco con texto negro",
@@ -21,9 +21,7 @@ const themes: ITheme[] = [
 		value: Themes.SEPIA,
 	},
 ];
-
 const inicialState: StateSettings = {
-	themes,
 	currentTheme: themes[0],
 	fontSize: 16,
 	textAlign: "left",

@@ -3,6 +3,7 @@ import Icon from "@react-native-vector-icons/lucide";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { FC } from "react";
 import {
+	Alert,
 	FlatList,
 	Modal,
 	Platform,
@@ -50,10 +51,13 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 		notes,
 		paddingHorizontal,
 		setPaddingHorizontal,
+		handleSaveBackup,
+		handleImportBackup,
 	} = useSetting();
 	const { width, height } = useWindowDimensions();
 	const { bottom, top } = useSafeAreaInsets();
 	const isPortrait = height > width;
+
 	return (
 		<ScrollView
 			contentContainerStyle={style.root}
@@ -272,6 +276,55 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 				</View>
 
 				<Button label="Añadir Nota" onPress={() => setShowModal(true)} />
+			</Section>
+			<Section
+				title="Backups"
+				icon="archive"
+				description="Gestiona tus copias de seguridad"
+			>
+				<Button
+					label={
+						<>
+							<Icon name="archive" size={20} color="#fff" />
+							<Text style={{ color: "#fff" }}>Generar Copia de seguridad</Text>
+						</>
+					}
+					onPress={handleSaveBackup}
+				/>
+				<Button
+					label={
+						<>
+							<Icon name="archive-restore" size={20} color="#fff" />
+							<Text style={{ color: "#fff" }}>
+								Restaurar Copia de Seguridad
+							</Text>
+						</>
+					}
+					onPress={() =>
+						Alert.alert(
+							"Restaurar Copia de Seguridad",
+							"Que Opciones quieres restaurar",
+							[
+								{
+									text: "Libros",
+									onPress: () => handleImportBackup("books"),
+								},
+								{
+									text: "Configuración",
+									onPress: () => handleImportBackup("settings"),
+								},
+								{
+									text: "Todo",
+									onPress: () => handleImportBackup("all"),
+								},
+								{
+									text: "Cancelar",
+									style: "cancel",
+								},
+							],
+						)
+					}
+				/>
 			</Section>
 			<Modal visible={showModal} animationType="slide">
 				<View

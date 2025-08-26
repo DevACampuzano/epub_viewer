@@ -83,7 +83,7 @@ export const Header: FC<_IHeaderProps> = ({
 									fontWeight: "bold",
 								}}
 							>
-								{title}
+								{title.length > 25 ? `${title.slice(0, 25)}...` : title}
 							</Text>
 						</TouchableOpacity>
 						<View

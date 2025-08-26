@@ -191,15 +191,12 @@ bun check         # Verificar y formatear código
 - [x] Exportar notas
 - [x] Navegación por resultados
 - [x] Búsqueda de texto dentro del libro
-
+- [x] Generar e importar biblioteca y cofniguraciones
 ### 🔮 Versión 1.1 (Próxima)
-
 - [ ] **Búsqueda avanzada**
   - Historial de búsquedas
 - [ ] **Sincronización**
   - Backup en la nube
-  - Sincronización entre dispositivos
-  - Import/export de biblioteca
 
 ### 🚀 Versión 1.2 (Futuro)
 - [ ] **Funciones sociales**
