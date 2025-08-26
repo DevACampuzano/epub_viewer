@@ -85,7 +85,7 @@ export default (
 
 			const description = detectHtmlContent(data?.description || "");
 
-			const imagesDir = `${RNFS.DocumentDirectoryPath}/images`;
+			const imagesDir = `${RNFS.DocumentDirectoryPath}/books/images`;
 			if (!(await RNFS.exists(imagesDir))) {
 				await RNFS.mkdir(imagesDir);
 			}
@@ -93,7 +93,7 @@ export default (
 			const dataImage = data?.cover?.split(";");
 			const type = dataImage[0].split("/")[1];
 
-			const newPathFile = `${RNFS.DocumentDirectoryPath}/images/${id}.${type}`;
+			const newPathFile = `${RNFS.DocumentDirectoryPath}/books/images/${id}.${type}`;
 
 			await RNFS.writeFile(newPathFile, dataImage[1].split(",")[1], "base64");
 			setForm((form) => ({
@@ -131,12 +131,12 @@ export default (
 				if (newImageData.base64 === undefined) {
 					throw new Error("No image data");
 				}
-				const imagesDir = `${RNFS.DocumentDirectoryPath}/images`;
+				const imagesDir = `${RNFS.DocumentDirectoryPath}/books/images`;
 				if (!(await RNFS.exists(imagesDir))) {
 					await RNFS.mkdir(imagesDir);
 				}
 				const fileExtension = newImageData.type?.split("/")[1];
-				const newPathFile = `${RNFS.DocumentDirectoryPath}/images/${id}.${fileExtension}`;
+				const newPathFile = `${RNFS.DocumentDirectoryPath}/books/images/${id}.${fileExtension}`;
 
 				if (await RNFS.exists(newPathFile)) {
 					await RNFS.unlink(newPathFile);
@@ -159,7 +159,7 @@ export default (
 			if (form.file === null) {
 				throw new Error("File is required");
 			}
-			const newPathFile = `${RNFS.DocumentDirectoryPath}/${id}.epub`;
+			const newPathFile = `${RNFS.DocumentDirectoryPath}/books/${id}.epub`;
 			if (Platform.OS === "ios") {
 				let decodedUri = decodeURIComponent(form.file.uri);
 
@@ -216,7 +216,7 @@ export default (
 			} else {
 				const exists = await RNFS.exists(newPathFile);
 				if (!exists || form.file.uri !== newPathFile) {
-					const newPathFile = `${RNFS.DocumentDirectoryPath}/${id}.epub`;
+					const newPathFile = `${RNFS.DocumentDirectoryPath}/books/${id}.epub`;
 					await RNFS.copyFile(form.file.uri, newPathFile);
 				}
 
