@@ -1,8 +1,9 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
 import { pick } from "@react-native-documents/picker";
 import { useState } from "react";
-import { Alert, Platform, Share } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
+import Share from "react-native-share";
 import uuid from "react-native-uuid";
 import { unzip, zip } from "react-native-zip-archive";
 import type { ColorFormatsObject } from "reanimated-color-picker";
@@ -20,6 +21,7 @@ type IDataBackup = {
 	books: _IBook[];
 	setting: StateSettings;
 };
+
 export default () => {
 	const booksStore = useBookStore((state) => state.books);
 	const addBooks = useBookStore((state) => state.addBooks);
@@ -125,17 +127,45 @@ export default () => {
 		});
 		const zipResult = await zip(listFiles, zipPath);
 		console.log(`ZIP creado en: ${zipResult}`);
-		await Share.share({
-			url: `file://${zipResult}`,
-			title: "Copia de seguridad",
-			message: "Aquí tienes tu copia de seguridad.",
-		});
-		Alert.alert("Compartir", "Se ha compartido la copia de seguridad.", [
-			{
-				text: "Aceptar",
-				style: "default",
-			},
-		]);
+
+		// Para Android, copiamos el archivo a una ubicación externa y usamos URI de archivo
+		if (Platform.OS === "android") {
+			// Verificar que el archivo existe
+			const fileExists = await RNFS.exists(zipResult);
+			if (!fileExists) {
+				throw new Error("El archivo ZIP no existe");
+			}
+
+			// Copiar a Downloads directory que es más accesible
+			const downloadsPath = `${RNFS.DownloadDirectoryPath}/backup-${idBackup}.zip`;
+			await RNFS.copyFile(zipResult, downloadsPath);
+
+			Alert.alert(
+				"Compartir",
+				"Se ha guardado la copia de seguridad en la carpeta de descargas. \n" +
+					downloadsPath,
+				[
+					{
+						text: "Aceptar",
+						style: "default",
+					},
+				],
+			);
+		} else {
+			// Para iOS, usamos file URI
+			await Share.open({
+				url: `file://${zipResult}`,
+				filename: `backup-${idBackup}.zip`,
+				title: "Copia de seguridad",
+				message: "Aquí tienes tu copia de seguridad.",
+			}).catch((err) => console.log(err));
+			Alert.alert("Compartir", "Se ha compartido la copia de seguridad.", [
+				{
+					text: "Aceptar",
+					style: "default",
+				},
+			]);
+		}
 	};
 
 	const getFileName = (file: string) => file.split("/").pop();
