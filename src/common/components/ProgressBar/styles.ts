@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors } from "@/theme";
+import { colors } from "@/common/theme";
 
 const styles = StyleSheet.create({
 	progressBarContainer: {

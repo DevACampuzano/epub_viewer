@@ -5,7 +5,7 @@ import {
 	View,
 	type ViewProps,
 } from "react-native";
-import { Text } from "@/components";
+import { Text } from "@/common/components";
 import style from "./styles";
 
 interface LoadingProps {

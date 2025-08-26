@@ -8,7 +8,7 @@ import {
 	TouchableNativeFeedback,
 } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSettingStore } from "@/stores";
+import { useSettingStore } from "@/common/stores";
 
 type ILayoutProps = PropsWithChildren & {
 	singleTap: TapGesture | (() => void);

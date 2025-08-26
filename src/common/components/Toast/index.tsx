@@ -2,7 +2,7 @@ import Icon, { type LucideIconName } from "@react-native-vector-icons/lucide";
 import React, { type FC, useCallback, useState } from "react";
 import { Animated, useAnimatedValue, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "@/theme";
+import { colors } from "@/common/theme";
 import { Text } from "../Text";
 import styles from "./styles";
 

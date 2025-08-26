@@ -1,8 +1,8 @@
 import Icon from "@react-native-vector-icons/lucide";
 import type { FC } from "react";
 import { ImageBackground, View } from "react-native";
-import { ProgressBar, Text } from "@/components";
-import { colors } from "@/theme";
+import { ProgressBar, Text } from "@/common/components";
+import { colors } from "@/common/theme";
 import style from "./styles";
 
 interface ICardBook {

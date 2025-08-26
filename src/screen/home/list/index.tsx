@@ -9,73 +9,28 @@ import {
 	View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, Divider, Menu, ProgressBar, Text } from "@/components";
-import { useBookStore } from "@/stores";
-import { colors } from "@/theme";
+import { Button, Divider, Menu, ProgressBar, Text } from "@/common/components";
+import { colors } from "@/common/theme";
 import { Card, ItemList } from "./components";
 import style from "./styles";
-
-interface MenuOptionOrderBy {
-	label: string;
-	value: OrderBy;
-}
-
-interface MenuOptionDesign {
-	label: string;
-	value: Design;
-}
-
-const listMenuOptionOrderBy: MenuOptionOrderBy[] = [
-	{
-		value: "title",
-		label: "Título (A-Z)",
-	},
-	{
-		value: "author",
-		label: "Autor (A-Z)",
-	},
-	{
-		value: "createdAt",
-		label: "Fecha agregado",
-	},
-
-	{
-		value: "progress",
-		label: "Progreso",
-	},
-	{
-		value: "qualification",
-		label: "Calificación",
-	},
-	{
-		value: "lastReading",
-		label: "Última lectura",
-	},
-];
-
-const listMenuOptionDesign: MenuOptionDesign[] = [
-	{
-		value: "grid",
-		label: "Cuadrícula",
-	},
-	{
-		value: "list",
-		label: "Lista",
-	},
-];
+import useList from "./useList";
 
 export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 	navigation,
 }) => {
-	const { bottom } = useSafeAreaInsets();
-	const books = useBookStore((state) => state.books);
-	const orderBy = useBookStore((state) => state.orderBy);
-	const design = useBookStore((state) => state.design);
-	const setOrderBy = useBookStore((state) => state.setOrderBy);
-	const setDesign = useBookStore((state) => state.setDesign);
-	const progress = useBookStore((state) => state.calculateOverallProgress());
-	const booksRead = books.filter((book) => book.progress === 100);
+	const {
+		books,
+		orderBy,
+		design,
+		setOrderBy,
+		setDesign,
+		progress,
+		booksRead,
+		listMenuOptionDesign,
+		listMenuOptionOrderBy,
+	} = useList();
 	const { width, height } = useWindowDimensions();
+	const { bottom } = useSafeAreaInsets();
 
 	const isPortrait = height > width;
 
@@ -115,13 +70,14 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 			<Divider style={{ marginVertical: 10 }} />
 			<View
 				style={{
-					gap: 10,
+					gap: 20,
 					flexDirection: "row",
-					justifyContent: "space-between",
+					justifyContent: "flex-end",
+					alignItems: "center",
 					paddingHorizontal: 5,
 				}}
 			>
-				<View>
+				<View style={{ alignSelf: "flex-start", marginRight: "auto" }}>
 					<View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
 						<Icon name="library" color={colors.primary} size={15} />
 						<Text>{books.length} Libro en colección</Text>
@@ -131,8 +87,15 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						<Text>{booksRead.length} Libro leído</Text>
 					</View>
 				</View>
+
+				<TouchableOpacity
+					activeOpacity={0.7}
+					style={{ zIndex: 1 }}
+					onPress={() => navigation.navigate("searchBooks")}
+				>
+					<Icon name="search" size={20} color={colors.primary} />
+				</TouchableOpacity>
 				<Menu
-					style={{ marginBottom: 15 }}
 					icon={
 						<Icon name="ellipsis-vertical" size={24} color={colors.primary} />
 					}

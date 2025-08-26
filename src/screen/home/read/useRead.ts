@@ -11,8 +11,8 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import KeepAwake from "react-native-keep-awake";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBookStore, useSettingStore } from "@/stores";
-import { colors } from "@/theme";
+import { useBookStore, useSettingStore } from "@/common/stores";
+import { colors } from "@/common/theme";
 
 export default (
 	id: string,

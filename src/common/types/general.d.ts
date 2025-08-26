@@ -16,6 +16,7 @@ type _IRootStack = {
 	home: undefined;
 	book: _IBook;
 	newBook: undefined;
+	searchBooks: undefined;
 	read: {
 		id: string;
 		file: string;

@@ -3,9 +3,9 @@ import { Alert } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import uuid from "react-native-uuid";
 import type { ColorFormatsObject } from "reanimated-color-picker";
-import { useForm } from "@/hooks";
-import { useSettingStore } from "@/stores";
-import { colors } from "@/theme";
+import { useForm } from "@/common/hooks";
+import { useSettingStore } from "@/common/stores";
+import { colors } from "@/common/theme";
 
 interface IFormNotes {
 	label: string;

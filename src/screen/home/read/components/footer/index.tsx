@@ -2,8 +2,8 @@ import Slider from "@react-native-community/slider";
 import type { FC } from "react";
 import { Animated, View } from "react-native";
 import DropShadow from "react-native-drop-shadow";
-import { Text } from "@/components";
-import { colors } from "@/theme";
+import { Text } from "@/common/components";
+import { colors } from "@/common/theme";
 import styles from "./styles";
 import useFooter from "./useFooter";
 

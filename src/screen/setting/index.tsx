@@ -17,8 +17,8 @@ import ColorPicker, {
 	OpacitySlider,
 	Panel2,
 } from "reanimated-color-picker";
-import { Button, Divider, Text, TextInput } from "@/components";
-import { colors } from "@/theme";
+import { Button, Divider, Text, TextInput } from "@/common/components";
+import { colors } from "@/common/theme";
 import { OptionTheme, Section } from "./components";
 import style, { colorPickerStyle } from "./styles";
 import useSetting from "./useSetting";

@@ -19,8 +19,8 @@ import {
 	ProgressBar,
 	Text,
 	TextInput,
-} from "@/components";
-import { colors } from "@/theme";
+} from "@/common/components";
+import { colors } from "@/common/theme";
 import style from "./styles";
 import useBook from "./useBook";
 

@@ -2,8 +2,8 @@ import { ReaderProvider } from "@epubjs-react-native/core";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useBookStore, useSettingStore } from "./common/stores";
 import { RootStack } from "./router";
-import { useBookStore, useSettingStore } from "./stores";
 
 function App() {
 	useBookStore.persist.rehydrate();

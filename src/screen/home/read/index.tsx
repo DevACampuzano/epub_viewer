@@ -4,7 +4,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { FC } from "react";
 import { Linking, Platform, View } from "react-native";
-import { Loading } from "@/components";
+import { Loading } from "@/common/components";
 import { Header, Layout } from "./components";
 import { Footer } from "./components/footer/index";
 import useRead from "./useRead";

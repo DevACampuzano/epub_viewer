@@ -1,10 +1,10 @@
 import Icon from "@react-native-vector-icons/lucide";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Book, List, NewBook, Read, Setting } from "@screens/";
+import { Book, List, NewBook, Read, SearchBooks, Setting } from "@screens/";
 import { Platform, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "@/theme";
+import { colors } from "@/common/theme";
 import style from "./styles";
 
 const RootTabs = createBottomTabNavigator<_IRootTabs>();
@@ -112,6 +112,7 @@ export const RootStack = () => {
 				}}
 			/>
 			<RootStackNav.Screen name="newBook" component={NewBook} />
+			<RootStackNav.Screen name="searchBooks" component={SearchBooks} />
 		</RootStackNav.Navigator>
 	);
 };

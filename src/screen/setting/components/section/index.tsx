@@ -1,8 +1,8 @@
 import Icon, { type LucideIconName } from "@react-native-vector-icons/lucide";
 import type { ComponentProps, FC, PropsWithChildren } from "react";
 import { type TextProps, View, type ViewProps } from "react-native";
-import { Text } from "@/components";
-import { colors } from "@/theme";
+import { Text } from "@/common/components";
+import { colors } from "@/common/theme";
 import style from "./styles";
 
 interface SectionProps {

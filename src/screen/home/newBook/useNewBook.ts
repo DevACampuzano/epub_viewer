@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Alert, Platform } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import uuid from "react-native-uuid";
-import { useForm } from "@/hooks";
-import { useBookStore } from "@/stores";
+import { useForm } from "@/common/hooks";
+import { useBookStore } from "@/common/stores";
 
 export default (
 	navigation: NativeStackNavigationProp<_IRootStack, "newBook", undefined>,

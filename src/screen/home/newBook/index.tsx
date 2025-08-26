@@ -22,7 +22,7 @@ import {
 	Text,
 	TextInput,
 	Toast,
-} from "@/components";
+} from "@/common/components";
 import style from "./styles";
 import useNewBook from "./useNewBook";
 

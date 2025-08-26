@@ -1,7 +1,7 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useForm } from "@/hooks";
-import { useBookStore } from "@/stores";
+import { useForm } from "@/common/hooks";
+import { useBookStore } from "@/common/stores";
 
 type Props = {
 	id: string;

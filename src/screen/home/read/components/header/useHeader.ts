@@ -2,8 +2,8 @@ import DeviceBrightness from "@adrianso/react-native-device-brightness";
 import { useReader } from "@epubjs-react-native/core";
 import { useCallback, useEffect, useState } from "react";
 import { Animated, Platform, useAnimatedValue } from "react-native";
-import { useDebounce } from "@/hooks";
-import { useBookStore, useSettingStore } from "@/stores";
+import { useDebounce } from "@/common/hooks";
+import { useBookStore, useSettingStore } from "@/common/stores";
 
 const flowOptions: _IFlowOption[] = [
 	{ value: "paginated", label: "Paginado", icon: "book-open" },

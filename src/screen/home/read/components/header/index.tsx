@@ -12,8 +12,8 @@ import {
 	View,
 } from "react-native";
 import DropShadow from "react-native-drop-shadow";
-import { Divider, Menu, Text, TextInput } from "@/components";
-import { colors } from "@/theme";
+import { Divider, Menu, Text, TextInput } from "@/common/components";
+import { colors } from "@/common/theme";
 import style from "./styles";
 import useHeader from "./useHeader";
 
