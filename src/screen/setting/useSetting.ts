@@ -202,6 +202,11 @@ export default () => {
 				return;
 			}
 
+			const pathBooks = `${RNFS.DocumentDirectoryPath}/books/images`;
+			if (!(await RNFS.exists(pathBooks))) {
+				await RNFS.mkdir(pathBooks);
+			}
+
 			const dataContent = await RNFS.readFile(dataPath, "utf8");
 			const backupData: _IDataBackup = JSON.parse(dataContent);
 
@@ -210,8 +215,8 @@ export default () => {
 					backupData.books.map(async (book) => {
 						const urlImage = `${RNFS.DocumentDirectoryPath}/unzip-backups/${getFileName(book.image)}`;
 						const urlFile = `${RNFS.DocumentDirectoryPath}/unzip-backups/${getFileName(book.file)}`;
-						const urlImageOut = `${RNFS.DocumentDirectoryPath}${book.image}`;
-						const urlFileOut = `${RNFS.DocumentDirectoryPath}${book.file}`;
+						const urlImageOut = `${RNFS.DocumentDirectoryPath}/books/images/${getFileName(book.image)}`;
+						const urlFileOut = `${RNFS.DocumentDirectoryPath}/books/${getFileName(book.file)}`;
 						if (Platform.OS === "android") {
 							await RNFS.copyFile(urlImage, urlImageOut);
 							await RNFS.copyFile(urlFile, urlFileOut);
@@ -225,11 +230,28 @@ export default () => {
 						}
 
 						realm.write(() => {
+							if (!book._id) {
+								realm.create(Book, {
+									...book,
+									_id: book._id ? new Realm.BSON.ObjectId(book._id) : new Realm.BSON.ObjectId(),
+									image: urlImageOut,
+									file: urlFileOut,
+									opinion: book.opinion || "",
+									currentPage: book.currentPage || ""
+								});
+								return;
+							}
+							const bookRealm = realm.objectForPrimaryKey<Book>('Book', new Realm.BSON.ObjectId(book._id));
+							if (bookRealm) {
+								realm.delete(bookRealm);
+							}
 							realm.create(Book, {
 								...book,
 								_id: new Realm.BSON.ObjectId(book._id),
 								image: urlImageOut,
 								file: urlFileOut,
+								opinion: book.opinion || "",
+								currentPage: book.currentPage || ""
 							});
 						});
 					}),
