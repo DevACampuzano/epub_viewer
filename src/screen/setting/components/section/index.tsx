@@ -5,7 +5,7 @@ import { Text } from "@/common/components";
 import { colors } from "@/common/theme";
 import style from "./styles";
 
-interface SectionProps {
+type SectionProps = {
 	title: string;
 	description: string;
 	icon?: LucideIconName;
@@ -13,7 +13,7 @@ interface SectionProps {
 	descriptionProps?: TextProps;
 	titleProps?: TextProps;
 	iconProps?: ComponentProps<typeof Icon>;
-}
+};
 
 export const Section: FC<SectionProps & PropsWithChildren> = ({
 	title,
@@ -24,24 +24,22 @@ export const Section: FC<SectionProps & PropsWithChildren> = ({
 	descriptionProps,
 	iconProps,
 	titleProps,
-}) => {
-	return (
-		<View {...containerProps} style={[style.section, containerProps?.style]}>
-			<View style={style.headerRow}>
-				{icon && (
-					<Icon
-						{...iconProps}
-						name={icon}
-						size={iconProps?.size || 25}
-						color={iconProps?.color || colors.primary}
-					/>
-				)}
-				<Text {...titleProps} style={[style.titleSection, titleProps?.style]}>
-					{title}
-				</Text>
-			</View>
-			<Text {...descriptionProps}>{description}</Text>
-			{children}
+}) => (
+	<View {...containerProps} style={[style.section, containerProps?.style]}>
+		<View style={style.headerRow}>
+			{icon && (
+				<Icon
+					{...iconProps}
+					name={icon}
+					size={iconProps?.size || 25}
+					color={iconProps?.color || colors.primary}
+				/>
+			)}
+			<Text {...titleProps} style={[style.titleSection, titleProps?.style]}>
+				{title}
+			</Text>
 		</View>
-	);
-};
+		<Text {...descriptionProps}>{description}</Text>
+		{children}
+	</View>
+);

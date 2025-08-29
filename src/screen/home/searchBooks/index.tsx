@@ -1,5 +1,6 @@
 import Icon from "@react-native-vector-icons/lucide";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useQuery } from "@realm/react";
 import { type FC, useCallback, useState } from "react";
 import {
 	FlatList,
@@ -11,25 +12,27 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text, TextInput } from "@/common/components";
 import { useDebounce } from "@/common/hooks";
-import { useBookStore } from "@/common/stores";
+import { Book } from "@/common/schemas";
 import { colors } from "@/common/theme";
 import { ItemList } from "./components";
 
 export const SearchBooks: FC<
 	NativeStackScreenProps<_IRootStack, "searchBooks">
 > = ({ navigation }) => {
+	const [searchTerm, setSearchTerm] = useState("");
+	const [searchResults, setSearchResults] = useState<_IBook[]>([]);
+	const allBooks = useQuery(Book);
 	const { width, height } = useWindowDimensions();
 	const { bottom } = useSafeAreaInsets();
 	const isPortrait = height > width;
-	const [searchTerm, setSearchTerm] = useState("");
-	const [searchResults, setSearchResults] = useState<_IBook[]>([]);
-	const searchBooks = useBookStore((state) => state.filterBooks);
+
 	const debouncedRefetch = useDebounce(() => {
 		if (searchTerm.trim() === "") {
 			setSearchResults([]);
-			// return;
 		} else {
-			const list = searchBooks(searchTerm.trim());
+			const list = allBooks.filter((book) =>
+				book.title.toLowerCase().includes(searchTerm.trim().toLowerCase()),
+			);
 			setSearchResults(list);
 		}
 	}, 500);
@@ -41,6 +44,7 @@ export const SearchBooks: FC<
 		},
 		[debouncedRefetch],
 	);
+
 	return (
 		<View style={{ gap: 10 }}>
 			<View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -87,7 +91,7 @@ export const SearchBooks: FC<
 					paddingHorizontal: 4,
 				}}
 				showsVerticalScrollIndicator={false}
-				keyExtractor={(item, index) => `${item.id}-${index}`}
+				keyExtractor={(item, index) => `${item._id.toHexString()}-${index}`}
 				ListEmptyComponent={() => (
 					<View style={[style.containerEmpty, { paddingBottom: bottom + 55 }]}>
 						<Text style={style.textEmpty}>Aún no tienes libros</Text>

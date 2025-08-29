@@ -1,74 +1,29 @@
-interface _IMeta {
-	author: string;
-	cover: string;
-	description: string;
-	language: string;
-	publisher: string;
-	rights: string;
-	title: string;
-}
-
 type _IRootTabs = {
 	list: undefined;
 	settings: undefined;
 };
+
 type _IRootStack = {
 	home: undefined;
 	book: _IBook;
 	newBook: undefined;
 	searchBooks: undefined;
 	read: {
-		id: string;
+		id: Realm.BSON.ObjectId;
 		file: string;
 		title: string;
 		currentPage?: string;
 	};
 };
 
-interface ISelectedFile {
+type _ISelectedFile = {
 	uri: string;
 	name?: string | null;
 	size?: number | null;
 }
 
-interface _IFormNewBook {
-	id: string;
-	file: ISelectedFile | null;
-	image: string;
-	title: string;
-	author: string;
-	description: string;
-	language: string;
-	publisher: string;
-	rights: string;
-	totalPages: number;
-	progress: number;
-}
-
-type Bookmark<Data extends object> = {
-	id: number;
-	section: Section;
-	location: Location;
-	text: string;
-	data?: Data;
-};
-
-type Annotation<Data extends object> = {
-	type: "highlight" | "underline";
-	data: Data;
-	cfiRange: string;
-	sectionIndex: number;
-	cfiRangeText: string;
-	iconClass?: string;
-	styles?: {
-		color?: string;
-		opacity?: number;
-		thickness?: number;
-	};
-};
-
-interface _IBook {
-	id: string;
+type _IBook = {
+	_id: Realm.BSON.ObjectId;
 	file: string;
 	image: string;
 	title: string;
@@ -84,16 +39,9 @@ interface _IBook {
 	progress: number;
 	createdAt: number;
 	lastReading: number;
-	bookmarks: Bookmark[];
-	annotations: Annotation[];
+	bookmarks: import("@epubjs-react-native/core").Bookmark[];
+	annotations: import("@epubjs-react-native/core").Annotation[];
 	finalDate?: number;
 }
 
-type Section = {
-	id: string;
-	href: string;
-	label: string;
-	// parent?: any;
-	subitems: Array<Omit<Section, "subitems">>;
-};
-type _Toc = Section[];
+type _Toc = import("@epubjs-react-native/core").Section[];

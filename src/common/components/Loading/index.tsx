@@ -8,13 +8,13 @@ import {
 import { Text } from "@/common/components";
 import style from "./styles";
 
-interface LoadingProps {
+type LoadingProps = {
 	color?: ColorValue;
 	indicatorSize?: number | "large" | "small";
 	containerProps?: ViewProps;
 	label: string | React.ReactNode;
 	labelProps?: TextProps;
-}
+};
 
 export const Loading = ({
 	color = "#3a3a3a",

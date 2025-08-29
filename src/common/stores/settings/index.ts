@@ -21,6 +21,7 @@ export const themes: ITheme[] = [
 		value: Themes.SEPIA,
 	},
 ];
+
 const inicialState: StateSettings = {
 	currentTheme: themes[0],
 	fontSize: 16,
@@ -29,6 +30,8 @@ const inicialState: StateSettings = {
 	currentFlow: "paginated",
 	paddingHorizontal: 0,
 	notes: [],
+	orderBy: "createdAt",
+	design: "grid",
 };
 
 const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
@@ -42,6 +45,8 @@ const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
 	setNotes: (notes) => set((state) => ({ ...state, notes })),
 	setPaddingHorizontal: (padding) =>
 		set((state) => ({ ...state, paddingHorizontal: padding })),
+	setOrderBy: (orderBy) => set(() => ({ orderBy })),
+	setDesign: (design) => set(() => ({ design })),
 });
 
 export const useSettingStore = create<_ISettingsStore>()(

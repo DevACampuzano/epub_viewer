@@ -20,20 +20,18 @@ export const TextInput: FC<_ITextInputProps> = ({
 	labelProps,
 	containerProps,
 	...props
-}) => {
-	return (
-		<View {...containerProps} style={[style.container, containerProps?.style]}>
-			{label && (
-				<Text {...labelProps} style={[style.label, labelProps?.style]}>
-					{label}
-				</Text>
-			)}
-			<RNTextInput {...props} style={[style.input, props.style]} />
-			{props.maxLength && (
-				<Text style={style.characterCount}>
-					{props.value?.length || 0} / {props.maxLength}
-				</Text>
-			)}
-		</View>
-	);
-};
+}) => (
+	<View {...containerProps} style={[style.container, containerProps?.style]}>
+		{label && (
+			<Text {...labelProps} style={[style.label, labelProps?.style]}>
+				{label}
+			</Text>
+		)}
+		<RNTextInput {...props} style={[style.input, props.style]} />
+		{props.maxLength && (
+			<Text style={style.characterCount}>
+				{props.value?.length || 0} / {props.maxLength}
+			</Text>
+		)}
+	</View>
+);

@@ -7,14 +7,15 @@ import { colors } from "@/common/theme";
 import styles from "./styles";
 import useFooter from "./useFooter";
 
-interface IFooterProps {
+type IFooterProps = {
 	position: Animated.Value;
 	currentTheme: ITheme;
-}
+};
 
 export const Footer: FC<IFooterProps> = ({ position, currentTheme }) => {
 	const { debounced, section, currentPage, totalLocations } = useFooter();
 	const color = currentTheme.value.p.color.split(" ")[0];
+
 	return (
 		<Animated.View
 			style={[

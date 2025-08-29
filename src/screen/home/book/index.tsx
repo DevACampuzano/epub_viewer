@@ -30,7 +30,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 }) => {
 	const [showCompleteDescription, setShowCompleteDescription] = useState(false);
 	const {
-		id,
+		_id,
 		title,
 		image,
 		author,
@@ -55,7 +55,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 		finalDate,
 		opinion,
 		openBook,
-	} = useBook({ id, file }, navigation);
+	} = useBook({ id: _id, file }, navigation);
 	const { bottom } = useSafeAreaInsets();
 
 	return (
@@ -109,7 +109,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 								<TouchableOpacity
 									key={`star-${qualification}-position-${index + 1}`}
 									activeOpacity={0.7}
-									onPress={() => updateBooks(id, { qualification: index + 1 })}
+									onPress={() => updateBooks({ qualification: index + 1 })}
 								>
 									<Icon
 										name="star"
@@ -180,7 +180,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 										}
 										onPress={() => {
 											onChange(false, "activeEdit");
-											updateBooks(id, { opinion: text });
+											updateBooks({ opinion: text });
 										}}
 									/>
 									<Button
@@ -268,7 +268,7 @@ export const Book: FC<NativeStackScreenProps<_IRootStack, "book">> = ({
 							</View>
 						}
 						variant="outline"
-						onPress={() => markBookAsRead(id)}
+						onPress={markBookAsRead}
 					/>
 
 					<Button

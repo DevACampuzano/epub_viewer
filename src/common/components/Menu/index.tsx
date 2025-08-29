@@ -23,13 +23,13 @@ import {
 import { Text } from "../Text";
 import styles from "./styles";
 
-interface _MenuPosition {
+type _MenuPosition = {
 	x: {
 		left?: number;
 		right?: number;
 	};
 	y: number;
-}
+};
 
 const MenuContext = createContext<{
 	closeMenu: () => void;

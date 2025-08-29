@@ -24,7 +24,18 @@ type Flow =
 	| "scrolled-doc"
 	| "scrolled-continuous";
 
-interface StateSettings {
+type OrderBy =
+	| "title"
+	| "author"
+	| "progress"
+	| "lastReading"
+	| "createdAt"
+	| "qualification";
+
+type Design = "grid" | "list";
+
+
+type StateSettings = {
 	currentTheme: ITheme;
 	fontSize: number;
 	textAlign: TextAlign;
@@ -32,9 +43,11 @@ interface StateSettings {
 	currentFlow: Flow;
 	paddingHorizontal: number;
 	notes: Note[];
+	orderBy: OrderBy;
+	design: Design;
 }
 
-interface ActionsSettings {
+type ActionsSettings = {
 	setCurrentTheme: (theme: ITheme) => void;
 	setFontSize: (size: number) => void;
 	setTextAlign: (align: TextAlign) => void;
@@ -42,6 +55,8 @@ interface ActionsSettings {
 	setFlow: (flow: Flow) => void;
 	setNotes: (notes: Note[]) => void;
 	setPaddingHorizontal: (padding: number) => void;
+	setOrderBy: (orderBy: OrderBy) => void;
+	setDesign: (design: Design) => void;
 }
 
 type _ISettingsStore = StateSettings & ActionsSettings;

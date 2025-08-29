@@ -1,9 +1,11 @@
 import DeviceBrightness from "@adrianso/react-native-device-brightness";
 import { useReader } from "@epubjs-react-native/core";
+import { useQuery } from "@realm/react";
 import { useCallback, useEffect, useState } from "react";
 import { Animated, Platform, useAnimatedValue } from "react-native";
 import { useDebounce } from "@/common/hooks";
-import { useBookStore, useSettingStore } from "@/common/stores";
+import { Book } from "@/common/schemas";
+import { useSettingStore } from "@/common/stores";
 
 const flowOptions: _IFlowOption[] = [
 	{ value: "paginated", label: "Paginado", icon: "book-open" },
@@ -37,18 +39,16 @@ const drawerOptions: _IDrawerOption[] = [
 	{ value: "notes", label: "Notas", icon: "file-text", title: "Notas" },
 ];
 
-export default (id: string) => {
+export default (id: Realm.BSON.ObjectId) => {
 	const [openMenu, setOpenMenu] = useState(false);
 	const [brightness, setBrightness] = useState(0);
 	const flow = useSettingStore((state) => state.currentFlow);
-	const books = useBookStore((state) => state.books);
 	const changeFlow = useSettingStore((state) => state.setFlow);
 	const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 	const [drawerOption, setDrawerOption] = useState<_IDrawerOption>(
 		drawerOptions[0],
 	);
 	const [isBookmarked, setIsBookmarked] = useState(false);
-	// const addMark = useBookStore((state) => state.addBookmark);
 	const {
 		goToLocation,
 		search: searchText,
@@ -59,6 +59,7 @@ export default (id: string) => {
 		removeAnnotationByCfi,
 		section,
 	} = useReader();
+	const book = useQuery(Book).filtered(`_id == $0`, id)[0];
 	const position = useAnimatedValue(-300);
 	const [search, setSearch] = useState("");
 
@@ -99,17 +100,11 @@ export default (id: string) => {
 
 		if (!location) return;
 
-		const bookmarks = books.find((book) => book.id === id)?.bookmarks;
-		if (!bookmarks) {
-			console.log("No bookmarks found");
-			return;
-		}
-		const bookmark = bookmarks.find(
+		const bookmark = book.bookmarks.find(
 			(item) =>
 				item.location.start.cfi === location?.start.cfi &&
 				item.location.end.cfi === location?.end.cfi,
 		);
-
 		if (bookmark) {
 			removeBookmark(bookmark);
 		} else {
@@ -137,17 +132,13 @@ export default (id: string) => {
 	useEffect(() => {
 		const location = getCurrentLocation();
 		if (!location) return;
-
-		setIsBookmarked(
-			books
-				.find((book) => book.id === id)
-				?.bookmarks.find(
-					(item) =>
-						item.location.start.cfi === location.start.cfi &&
-						item.location.end.cfi === location.end.cfi,
-				),
+		const bookMarked = book.bookmarks.find(
+			(item) =>
+				item.location.start.cfi === location.start.cfi &&
+				item.location.end.cfi === location.end.cfi,
 		);
-	}, [books, id, getCurrentLocation]);
+		setIsBookmarked(Boolean(bookMarked));
+	}, [book, getCurrentLocation]);
 
 	return {
 		openMenu,
@@ -169,7 +160,7 @@ export default (id: string) => {
 		handleChangeSearchText,
 		searchResults: searchResults.results,
 		handleChangeBookmark,
-		bookmarks: books.find((book) => book.id === id)?.bookmarks || [],
+		bookmarks: book.bookmarks || [],
 		isBookmarked,
 		removeAnnotationByCfi,
 		section,

@@ -24,14 +24,13 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		opacity,
 		currentFlow,
 		toc,
-		addBookmarks,
-		removeBookmarks,
 		addAnnotation,
 		notes,
 		paddingHorizontal,
 		updateAnnotations,
-		updateBook,
+		onFinish,
 		currentBook,
+		updateBookmarks,
 	} = useRead(id, navigation);
 
 	return (
@@ -66,10 +65,10 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 					onReady={onReady}
 					enableSelection
 					onAddBookmark={(bookmark) => {
-						addBookmarks(id, bookmark);
+						updateBookmarks("add", bookmark);
 					}}
 					onRemoveBookmark={(bookmark) => {
-						removeBookmarks(id, bookmark.id);
+						updateBookmarks("remove", bookmark);
 					}}
 					renderOpeningBookComponent={() => (
 						<Loading
@@ -91,10 +90,10 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 					}}
 					allowPopups
 					onFinish={() => {
-						updateBook(id, { progress: 100, finalDate: Date.now() });
+						onFinish();
 					}}
 					onChangeAnnotations={(annotations) => {
-						updateAnnotations(id, annotations);
+						updateAnnotations(annotations);
 					}}
 					menuItems={[
 						{

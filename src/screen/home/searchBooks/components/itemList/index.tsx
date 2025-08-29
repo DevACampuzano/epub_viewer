@@ -5,13 +5,14 @@ import { ProgressBar, Text } from "@/common/components";
 import { colors } from "@/common/theme";
 import styles from "./styles";
 
-interface IItemList {
+type IItemList = {
 	image: string;
 	title: string;
 	author: string;
 	progress: number;
 	qualification: number;
-}
+};
+
 export const ItemList: FC<IItemList> = ({
 	image,
 	title,

@@ -1,5 +1,6 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
 import { pick } from "@react-native-documents/picker";
+import { Realm, useQuery, useRealm } from "@realm/react";
 import { useState } from "react";
 import { Alert, Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
@@ -8,23 +9,13 @@ import uuid from "react-native-uuid";
 import { unzip, zip } from "react-native-zip-archive";
 import type { ColorFormatsObject } from "reanimated-color-picker";
 import { useForm } from "@/common/hooks";
-import { themes, useBookStore, useSettingStore } from "@/common/stores";
+import { Book } from "@/common/schemas";
+import { themes, useSettingStore } from "@/common/stores";
 import { colors } from "@/common/theme";
 
-interface IFormNotes {
-	label: string;
-	color: string;
-	style: "highlight" | "underline";
-}
-
-type IDataBackup = {
-	books: _IBook[];
-	setting: StateSettings;
-};
-
 export default () => {
-	const booksStore = useBookStore((state) => state.books);
-	const addBooks = useBookStore((state) => state.addBooks);
+	const realm = useRealm();
+	const booksStore = useQuery(Book);
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
@@ -32,6 +23,8 @@ export default () => {
 	const paddingHorizontal = useSettingStore((state) => state.paddingHorizontal);
 	const notes = useSettingStore((state) => state.notes);
 	const currentFlow = useSettingStore((state) => state.currentFlow);
+	const design = useSettingStore((state) => state.design);
+	const orderBy = useSettingStore((state) => state.orderBy);
 
 	const setCurrentTheme = useSettingStore((state) => state.setCurrentTheme);
 	const setFontSize = useSettingStore((state) => state.setFontSize);
@@ -42,8 +35,10 @@ export default () => {
 	);
 	const setNotes = useSettingStore((state) => state.setNotes);
 	const setFlow = useSettingStore((state) => state.setFlow);
+	const setDesign = useSettingStore((state) => state.setDesign);
+	const setOrderBy = useSettingStore((state) => state.setOrderBy);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const { form, onChange, resetForm } = useForm<IFormNotes, never>({
+	const { form, onChange, resetForm } = useForm<_IFormNotes, never>({
 		label: "",
 		color: colors.primary,
 		style: "highlight",
@@ -84,6 +79,8 @@ export default () => {
 		onChange(color.hex, "color");
 	};
 
+	const getFileName = (file: string) => file.split("/").pop();
+
 	const handleSaveBackup = async () => {
 		const idBackup = uuid.v4();
 		const sourcePath = `${RNFS.DocumentDirectoryPath}/books/`;
@@ -96,11 +93,12 @@ export default () => {
 
 		const books = booksStore.map((book) => ({
 			...book,
+			_id: book._id.toHexString(),
 			image: book.image.replace(RNFS.DocumentDirectoryPath, ""),
 			file: book.file.replace(RNFS.DocumentDirectoryPath, ""),
 		}));
 
-		const data: IDataBackup = {
+		const data: _IDataBackup = {
 			setting: {
 				currentTheme,
 				fontSize,
@@ -109,6 +107,8 @@ export default () => {
 				paddingHorizontal,
 				notes,
 				currentFlow,
+				orderBy,
+				design,
 			},
 			books,
 		};
@@ -125,25 +125,20 @@ export default () => {
 			listFiles.push(item.file);
 			listFiles.push(item.image);
 		});
+		await handleClearBackup();
 		const zipResult = await zip(listFiles, zipPath);
-		console.log(`ZIP creado en: ${zipResult}`);
-
-		// Para Android, copiamos el archivo a una ubicación externa y usamos URI de archivo
 		if (Platform.OS === "android") {
-			// Verificar que el archivo existe
 			const fileExists = await RNFS.exists(zipResult);
 			if (!fileExists) {
 				throw new Error("El archivo ZIP no existe");
 			}
-
-			// Copiar a Downloads directory que es más accesible
 			const downloadsPath = `${RNFS.DownloadDirectoryPath}/backup-${idBackup}.zip`;
 			await RNFS.copyFile(zipResult, downloadsPath);
 
 			Alert.alert(
 				"Compartir",
 				"Se ha guardado la copia de seguridad en la carpeta de descargas. \n" +
-					downloadsPath,
+				downloadsPath,
 				[
 					{
 						text: "Aceptar",
@@ -152,7 +147,6 @@ export default () => {
 				],
 			);
 		} else {
-			// Para iOS, usamos file URI
 			await Share.open({
 				url: `file://${zipResult}`,
 				filename: `backup-${idBackup}.zip`,
@@ -167,8 +161,6 @@ export default () => {
 			]);
 		}
 	};
-
-	const getFileName = (file: string) => file.split("/").pop();
 
 	const handleImportBackup = async (type: "books" | "settings" | "all") => {
 		const [result] = await pick({
@@ -211,10 +203,10 @@ export default () => {
 			}
 
 			const dataContent = await RNFS.readFile(dataPath, "utf8");
-			const backupData: IDataBackup = JSON.parse(dataContent);
+			const backupData: _IDataBackup = JSON.parse(dataContent);
 
 			if (type === "books" || type === "all") {
-				const newBooks = await Promise.all(
+				await Promise.all(
 					backupData.books.map(async (book) => {
 						const urlImage = `${RNFS.DocumentDirectoryPath}/unzip-backups/${getFileName(book.image)}`;
 						const urlFile = `${RNFS.DocumentDirectoryPath}/unzip-backups/${getFileName(book.file)}`;
@@ -231,15 +223,17 @@ export default () => {
 							const fileContent = await RNFS.readFile(urlFile, "base64");
 							await RNFS.writeFile(urlFileOut, fileContent, "base64");
 						}
-						return {
-							...book,
-							image: urlImageOut,
-							file: urlFileOut,
-						};
+
+						realm.write(() => {
+							realm.create(Book, {
+								...book,
+								_id: new Realm.BSON.ObjectId(book._id),
+								image: urlImageOut,
+								file: urlFileOut,
+							});
+						});
 					}),
 				);
-
-				addBooks(newBooks);
 			}
 
 			if (type === "settings" || type === "all") {
@@ -250,6 +244,9 @@ export default () => {
 				setPaddingHorizontal(backupData.setting.paddingHorizontal);
 				setNotes(backupData.setting.notes);
 				setFlow(backupData.setting.currentFlow);
+				if (backupData.setting.design) setDesign(backupData.setting.design);
+
+				if (backupData.setting.orderBy) setOrderBy(backupData.setting.orderBy);
 			}
 
 			await RNFS.unlink(target);
@@ -257,6 +254,31 @@ export default () => {
 			Alert.alert("Éxito", "Se ha importado la copia de seguridad.");
 		} catch (error) {
 			console.error("Error importing backup:", error);
+			Alert.alert("Error", "No se pudo importar la copia de seguridad.");
+		}
+	};
+
+	const handleClearBackup = async () => {
+		try {
+			const path = `${RNFS.DocumentDirectoryPath}/`;
+			const files = await RNFS.readDir(path);
+
+			const zipFiles = files.filter(
+				(file) => file.isFile() && file.name.toLowerCase().endsWith(".zip"),
+			);
+			for (const file of zipFiles) {
+				try {
+					await RNFS.unlink(file.path);
+					console.log(`Eliminado: ${file.name}`);
+				} catch (error) {
+					console.log(`Error eliminando ${file.name}:`, error);
+				}
+			}
+			// Alert.alert("Éxito", "Se ha eliminado la copia de seguridad.");
+			return true;
+		} catch (error) {
+			console.error("Error deleting backup:", error);
+			return false;
 		}
 	};
 
@@ -282,6 +304,7 @@ export default () => {
 		paddingHorizontal,
 		handleSaveBackup,
 		handleImportBackup,
+		handleClearBackup,
 		...form,
 	};
 };

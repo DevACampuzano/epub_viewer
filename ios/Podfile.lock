@@ -2486,6 +2486,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - RealmJS (20.2.0):
+    - React
   - RNCAsyncStorage (2.2.0):
     - boost
     - DoubleConversion
@@ -2928,6 +2930,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeFs (from `../node_modules/@dr.pogodin/react-native-fs`)"
+  - RealmJS (from `../node_modules/realm`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -3106,6 +3109,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeFs:
     :path: "../node_modules/@dr.pogodin/react-native-fs"
+  RealmJS:
+    :path: "../node_modules/realm"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
@@ -3206,6 +3211,7 @@ SPEC CHECKSUMS:
   ReactCodegen: a55799cae416c387aeaae3aabc1bc0289ac19cee
   ReactCommon: 116d6ee71679243698620d8cd9a9042541e44aa6
   ReactNativeFs: 3fd800f8b7c2a785e88dc93fc08708d6375b480a
+  RealmJS: 1c37c6bdfe060f4caa0f9175aa0eedb962622ee1
   RNCAsyncStorage: 29f0230e1a25f36c20b05f65e2eb8958d6526e82
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNGestureHandler: 3a73f098d74712952870e948b3d9cf7b6cae9961

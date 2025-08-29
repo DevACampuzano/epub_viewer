@@ -13,9 +13,11 @@ import { useSettingStore } from "@/common/stores";
 type ILayoutProps = PropsWithChildren & {
 	singleTap: TapGesture | (() => void);
 };
+
 export const Layout: FC<ILayoutProps> = ({ children, singleTap }) => {
 	const { bottom } = useSafeAreaInsets();
 	const currentTheme = useSettingStore((state) => state.currentTheme);
+
 	if (Platform.OS === "ios") {
 		return (
 			<TouchableNativeFeedback
@@ -36,6 +38,7 @@ export const Layout: FC<ILayoutProps> = ({ children, singleTap }) => {
 			</TouchableNativeFeedback>
 		);
 	}
+
 	return (
 		<GestureHandlerRootView
 			style={[
@@ -59,6 +62,5 @@ const style = StyleSheet.create({
 	root: { flex: 1, paddingVertical: 20 },
 	container: {
 		flex: 1,
-		// position: "relative",
 	},
 });

@@ -1,6 +1,11 @@
-import { useReader } from "@epubjs-react-native/core";
+import {
+	type Annotation,
+	type Bookmark,
+	useReader,
+} from "@epubjs-react-native/core";
 import { usePreventRemove } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useQuery, useRealm } from "@realm/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	Animated,
@@ -11,21 +16,18 @@ import {
 import { Gesture } from "react-native-gesture-handler";
 import KeepAwake from "react-native-keep-awake";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBookStore, useSettingStore } from "@/common/stores";
+import { Book } from "@/common/schemas";
+import { useSettingStore } from "@/common/stores";
 import { colors } from "@/common/theme";
 
 export default (
-	id: string,
+	id: Realm.BSON.ObjectId,
 	navigation: NativeStackNavigationProp<_IRootStack, "read", undefined>,
 ) => {
 	const [exit, setExit] = useState(false);
-	const updateBook = useBookStore((state) => state.updateBook);
-	const currentBook = useBookStore((state) =>
-		state.books.find((b) => b.id === id),
-	);
-	const addBookmarks = useBookStore((state) => state.addBookmark);
-	const removeBookmarks = useBookStore((state) => state.removeBookmark);
-	const updateAnnotations = useBookStore((state) => state.updateAnnotations);
+	const currentBook = useQuery(Book).filtered(`_id == $0`, id)[0];
+	const realm = useRealm();
+
 	const currentTheme = useSettingStore((state) => state.currentTheme);
 	const fontSize = useSettingStore((state) => state.fontSize);
 	const textAlign = useSettingStore((state) => state.textAlign);
@@ -41,7 +43,6 @@ export default (
 		getCurrentLocation,
 		toc,
 		addAnnotation,
-		// removeBookmarks,
 	} = useReader();
 
 	const { bottom } = useSafeAreaInsets();
@@ -118,10 +119,6 @@ export default (
 		});
 
 	const handleSaveProgress = useCallback(() => {
-		if (!currentBook) {
-			console.log("No current book found");
-			return;
-		}
 		const currentLocation = getCurrentLocation();
 
 		const locations = JSON.parse(getLocations().toString()) as string[];
@@ -133,25 +130,27 @@ export default (
 
 		const progressPercentage = currentLocation.start.percentage * 100;
 
-		updateBook(id, {
-			currentPage: currentLocation?.start.cfi,
-			progress:
-				progressPercentage > currentBook.progress
-					? progressPercentage
-					: currentBook.progress,
-			totalPages: locations.length,
-			finalDate: currentLocation.atEnd ? Date.now() : undefined,
+		realm.write(() => {
+			try {
+				const book = realm.objectForPrimaryKey<Book>(Book, id);
+
+				if (book) {
+					book.currentPage = currentLocation?.start.cfi;
+					book.progress =
+						progressPercentage > book.progress
+							? progressPercentage
+							: book.progress;
+					book.totalPages = locations.length;
+					if (currentLocation.atEnd) {
+						book.finalDate = Date.now();
+					}
+				}
+			} catch (error) {
+				console.log("Error updating book progress:", error);
+			}
 		});
-		// removeBookmarks();
 		setExit(true);
-	}, [
-		getCurrentLocation,
-		getLocations,
-		updateBook,
-		id,
-		currentBook,
-		// removeBookmarks,
-	]);
+	}, [getCurrentLocation, getLocations, id, realm]);
 
 	usePreventRemove(!exit, () => {
 		handleSaveProgress();
@@ -186,6 +185,38 @@ export default (
 		[handleSaveProgress],
 	);
 
+	const updateBookmarks = (action: "add" | "remove", bookmark: Bookmark) => {
+		realm.write(() => {
+			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			if (book) {
+				if (action === "add") {
+					book.bookmarks.push(bookmark);
+				} else {
+					book.bookmarks = book.bookmarks.filter((b) => b.id !== bookmark.id);
+				}
+			}
+		});
+	};
+
+	const updateAnnotations = (annotations: Annotation[]) => {
+		realm.write(() => {
+			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			if (book) {
+				book.annotations = annotations;
+			}
+		});
+	};
+
+	const onFinish = () => {
+		realm.write(() => {
+			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			if (book) {
+				book.progress = 100;
+				book.finalDate = Date.now();
+			}
+		});
+	};
+
 	useEffect(() => {
 		changeFlow(currentFlow);
 	}, [currentFlow, changeFlow]);
@@ -219,12 +250,11 @@ export default (
 		currentFlow,
 		toc,
 		currentBook,
-		addBookmarks,
-		removeBookmarks,
+		updateBookmarks,
 		addAnnotation,
 		notes,
 		paddingHorizontal,
 		updateAnnotations,
-		updateBook,
+		onFinish
 	};
 };

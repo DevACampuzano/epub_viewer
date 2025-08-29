@@ -5,13 +5,13 @@ import { ProgressBar, Text } from "@/common/components";
 import { colors } from "@/common/theme";
 import style from "./styles";
 
-interface ICardBook {
+type ICardBook = {
 	image: string;
 	title: string;
 	author: string;
 	progress: number;
 	qualification: number;
-}
+};
 
 export const Card: FC<ICardBook> = ({
 	title,

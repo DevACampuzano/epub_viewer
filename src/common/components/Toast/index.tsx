@@ -6,12 +6,12 @@ import { colors } from "@/common/theme";
 import { Text } from "../Text";
 import styles from "./styles";
 
-interface PropsToast {
+type PropsToast = {
 	msg: string;
 	show: boolean;
 	icon?: "triangle-alert" | "octagon-alert" | "circle-check" | "info";
 	callbackEnd: () => void;
-}
+};
 
 export const Toast: FC<PropsToast> = ({
 	msg = "",

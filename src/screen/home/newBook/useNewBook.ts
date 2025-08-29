@@ -2,17 +2,21 @@ import * as RNFS from "@dr.pogodin/react-native-fs";
 import { useReader } from "@epubjs-react-native/core";
 import { pick } from "@react-native-documents/picker";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useRealm } from "@realm/react";
 import { useState } from "react";
 import { Alert, Platform } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import uuid from "react-native-uuid";
 import { useForm } from "@/common/hooks";
-import { useBookStore } from "@/common/stores";
+import { Book } from "@/common/schemas";
+
+const id = uuid.v4();
 
 export default (
 	navigation: NativeStackNavigationProp<_IRootStack, "newBook", undefined>,
 ) => {
-	const { id, form, setForm, onChange } = useForm<_IFormNewBook, never>({
+	const realm = useRealm();
+	const { form, setForm, onChange } = useForm<_IFormNewBook, never>({
 		file: null,
 		image: "",
 		title: "",
@@ -22,8 +26,6 @@ export default (
 		publisher: "",
 		rights: "",
 		totalPages: 0,
-		progress: 0,
-		id: uuid.v4(),
 	});
 	const [loadingRender, setLoadingRender] = useState<boolean>(false);
 	const [error, setError] = useState<Omit<_PropsToast, "callbackEnd">>({
@@ -31,8 +33,8 @@ export default (
 		show: false,
 		icon: "info",
 	});
-	const { getMeta, theme, getLocations } = useReader();
-	const addBook = useBookStore((state) => state.addBook);
+	const { getMeta, theme, getLocations, getCurrentLocation } = useReader();
+
 	theme.body.background = "#f5f5f5";
 
 	const handleSelectFile = async () => {
@@ -52,6 +54,7 @@ export default (
 			setLoadingRender(true);
 		}
 	};
+
 	const bytesToMB = (bytes: number): number => {
 		return Math.round((bytes / (1024 * 1024)) * 100) / 100;
 	};
@@ -82,7 +85,7 @@ export default (
 			const totalLocations =
 				JSON.parse(getLocations().toString() || "[]").length || _totalLocations;
 			const data: _IMeta = getMeta() as _IMeta;
-
+			const currentPage = getCurrentLocation()
 			const description = detectHtmlContent(data?.description || "");
 
 			const imagesDir = `${RNFS.DocumentDirectoryPath}/books/images`;
@@ -107,6 +110,7 @@ export default (
 				image: newPathFile,
 				totalPages: totalLocations,
 				progress: 0,
+				currentPage: currentPage === null ? undefined : currentPage.start.cfi
 			}));
 			setLoadingRender(false);
 		} catch (error) {
@@ -166,7 +170,6 @@ export default (
 				let sourceExists = false;
 				if (decodedUri.startsWith("file://")) {
 					const pathWithoutProtocol = decodedUri.replace("file://", "");
-					// console.log("Path without protocol:", pathWithoutProtocol);
 
 					sourceExists = await RNFS.exists(decodedUri);
 					if (!sourceExists) {
@@ -203,16 +206,13 @@ export default (
 						throw new Error(`File copy failed: ${errorMessage}`);
 					}
 				}
-				const newBook: _IBook = {
-					...form,
-					file: newPathFile,
-					qualification: 0,
-					createdAt: Date.now(),
-					lastReading: Date.now(),
-					bookmarks: [],
-					annotations: [],
-				};
-				addBook(newBook);
+				realm.write(() => {
+					const newBook = Book.generate({
+						...form,
+						file: newPathFile,
+					});
+					realm.create(Book, newBook);
+				});
 			} else {
 				const exists = await RNFS.exists(newPathFile);
 				if (!exists || form.file.uri !== newPathFile) {
@@ -220,16 +220,13 @@ export default (
 					await RNFS.copyFile(form.file.uri, newPathFile);
 				}
 
-				const newBook: _IBook = {
-					...form,
-					file: newPathFile,
-					qualification: 0,
-					createdAt: Date.now(),
-					lastReading: Date.now(),
-					bookmarks: [],
-					annotations: [],
-				};
-				addBook(newBook);
+				realm.write(() => {
+					const newBook = Book.generate({
+						...form,
+						file: newPathFile,
+					});
+					realm.create(Book, newBook);
+				});
 			}
 
 			navigation.goBack();
@@ -262,6 +259,7 @@ export default (
 			navigation.goBack();
 		}
 	};
+
 	return {
 		...form,
 		onReady,

@@ -1,16 +1,8 @@
-import { useBookStore } from "@/common/stores";
+import { useQuery } from "@realm/react";
+import { Book } from "@/common/schemas";
+import { useSettingStore } from "@/common/stores";
 
-interface MenuOptionOrderBy {
-	label: string;
-	value: OrderBy;
-}
-
-interface MenuOptionDesign {
-	label: string;
-	value: Design;
-}
-
-const listMenuOptionOrderBy: MenuOptionOrderBy[] = [
+const listMenuOptionOrderBy: _MenuOptionOrderBy[] = [
 	{
 		value: "title",
 		label: "Título (A-Z)",
@@ -38,7 +30,7 @@ const listMenuOptionOrderBy: MenuOptionOrderBy[] = [
 	},
 ];
 
-const listMenuOptionDesign: MenuOptionDesign[] = [
+const listMenuOptionDesign: _MenuOptionDesign[] = [
 	{
 		value: "grid",
 		label: "Cuadrícula",
@@ -48,22 +40,51 @@ const listMenuOptionDesign: MenuOptionDesign[] = [
 		label: "Lista",
 	},
 ];
+
 export default () => {
-	const books = useBookStore((state) => state.books);
-	const orderBy = useBookStore((state) => state.orderBy);
-	const design = useBookStore((state) => state.design);
-	const setOrderBy = useBookStore((state) => state.setOrderBy);
-	const setDesign = useBookStore((state) => state.setDesign);
-	const progress = useBookStore((state) => state.calculateOverallProgress());
+	const allBooks = useQuery(Book);
+	const orderBy = useSettingStore((state) => state.orderBy);
+	const design = useSettingStore((state) => state.design);
+	const setOrderBy = useSettingStore((state) => state.setOrderBy);
+	const setDesign = useSettingStore((state) => state.setDesign);
+
+	const orderBooks = (orderBy: OrderBy) => {
+		let list = [...allBooks];
+		switch (orderBy) {
+			case "title":
+				list = list.sort((a, b) => b.title.localeCompare(a.title));
+				break;
+			case "author":
+				list = list.sort((a, b) => b.author.localeCompare(a.author));
+				break;
+			case "progress":
+				list = list.sort((a, b) => b.progress - a.progress);
+				break;
+			case "lastReading":
+				list = list.sort((a, b) => b.lastReading - a.lastReading);
+				break;
+			case "createdAt":
+				list = list.sort((a, b) => b.createdAt - a.createdAt);
+				break;
+			case "qualification":
+				list = list.sort(
+					(a, b) => (b?.qualification || 0) - (a?.qualification || 0),
+				);
+				break;
+		}
+		return list
+	}
 
 	return {
-		books,
+		books: orderBooks(orderBy),
 		orderBy,
 		design,
 		setOrderBy,
 		setDesign,
-		progress,
-		booksRead: books.filter((book) => book.progress === 100),
+		progress:
+			allBooks.reduce((acc, book) => acc + (book.progress || 0), 0) /
+			(allBooks.length || 1),
+		booksRead: allBooks.filter((book) => book.progress === 100),
 		listMenuOptionDesign,
 		listMenuOptionOrderBy,
 	};

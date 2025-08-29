@@ -1,24 +1,33 @@
+import * as RNFS from "@dr.pogodin/react-native-fs";
 import { ReaderProvider } from "@epubjs-react-native/core";
 import { NavigationContainer } from "@react-navigation/native";
+import { RealmProvider } from "@realm/react";
 import { StatusBar } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useBookStore, useSettingStore } from "./common/stores";
+import { Book } from "./common/schemas";
+import { useSettingStore } from "./common/stores";
 import { RootStack } from "./router";
 
 function App() {
-	useBookStore.persist.rehydrate();
 	useSettingStore.persist.rehydrate();
 	return (
 		<SafeAreaProvider>
-			<ReaderProvider>
-				<ContentApp />
-			</ReaderProvider>
+			<RealmProvider
+				schema={[Book]}
+				path={`${RNFS.DocumentDirectoryPath}/realm/db.realm`}
+				schemaVersion={4}
+			>
+				<ReaderProvider>
+					<ContentApp />
+				</ReaderProvider>
+			</RealmProvider>
 		</SafeAreaProvider>
 	);
 }
 
 const ContentApp = () => {
 	const currentTheme = useSettingStore((state) => state.currentTheme);
+
 	return (
 		<SafeAreaView
 			style={{
