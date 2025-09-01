@@ -33,6 +33,7 @@ export class Book extends Realm.Object implements _IBook {
 	lastReading!: number;
 	bookmarks!: Bookmark[];
 	annotations!: Annotation[];
+	categories!: string[];
 	finalDate?: number;
 
 	static generate({
@@ -66,6 +67,7 @@ export class Book extends Realm.Object implements _IBook {
 			lastReading: Date.now(),
 			bookmarks: [],
 			annotations: [],
+			categories: [],
 		};
 	}
 
@@ -91,6 +93,7 @@ export class Book extends Realm.Object implements _IBook {
 			lastReading: "int",
 			bookmarks: "mixed[]",
 			annotations: "mixed[]",
+			categories: "string[]",
 		},
 	};
 }

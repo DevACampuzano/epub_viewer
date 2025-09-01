@@ -1,20 +1,20 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useQuery, useRealm } from "@realm/react";
+import { Realm, useQuery, useRealm } from "@realm/react";
 import { useForm } from "@/common/hooks";
 import { Book } from "@/common/schemas";
+import { useSettingStore } from "@/common/stores";
 
-type Props = {
-	id: Realm.BSON.ObjectId;
-	file: string;
-};
 export default (
-	{ id, file }: Props,
+	id: string,
 	navigation: NativeStackNavigationProp<_IRootStack, "book", undefined>,
 ) => {
 	const realm = useRealm();
-	const book = useQuery(Book).filtered(`_id == $0`, id)[0];
-
+	const book = useQuery(Book).filtered(
+		`_id == $0`,
+		new Realm.BSON.ObjectId(id),
+	)[0];
+	const categoryList = useSettingStore((state) => state.categories);
 	const { form, onChange, resetForm } = useForm({
 		activeEdit: false,
 		text: book?.opinion || "",
@@ -30,7 +30,7 @@ export default (
 			console.log("Error deleting file:", error);
 		} finally {
 			realm.write(() => {
-				const book = realm.objectForPrimaryKey<Book>('Book', id);
+				const book = realm.objectForPrimaryKey<Book>("Book", new Realm.BSON.ObjectId(id));
 				if (book) {
 					realm.delete(book);
 				}
@@ -44,7 +44,7 @@ export default (
 			return;
 		}
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			const now = Date.now();
 			if (book) {
 				book.progress = 100;
@@ -55,24 +55,23 @@ export default (
 	};
 
 	const openBook = () => {
-
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			if (book) {
 				book.lastReading = Date.now();
 			}
 		});
 		navigation.navigate("read", {
 			id,
-			file,
-			currentPage: book?.currentPage,
-			title: book?.title || "",
+			file: book.file,
+			currentPage: book.currentPage,
+			title: book.title || "",
 		});
 	};
 
 	const updateBooks = (updateBook: Partial<_IBook>) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			if (book) {
 				for (const key in updateBook) {
 					// @ts-expect-error
@@ -80,8 +79,22 @@ export default (
 				}
 			}
 		});
+	};
 
-	}
+	const handleCategoryPress = (category: string) => {
+		realm.write(() => {
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			if (!book) {
+				return
+			}
+
+			if (book.categories.includes(category)) {
+				book.categories = book.categories.filter((c) => c !== category);
+			} else {
+				book.categories.push(category);
+			}
+		});
+	};
 
 	return {
 		onDeleteBook,
@@ -92,5 +105,7 @@ export default (
 		onChange,
 		resetForm,
 		openBook,
+		categoryList,
+		handleCategoryPress
 	};
 };

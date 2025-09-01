@@ -1,7 +1,7 @@
 import * as RNFS from "@dr.pogodin/react-native-fs";
 import { pick } from "@react-native-documents/picker";
 import { Realm, useQuery, useRealm } from "@realm/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import Share from "react-native-share";
@@ -25,6 +25,7 @@ export default () => {
 	const currentFlow = useSettingStore((state) => state.currentFlow);
 	const design = useSettingStore((state) => state.design);
 	const orderBy = useSettingStore((state) => state.orderBy);
+	const categories = useSettingStore((state) => state.categories);
 
 	const setCurrentTheme = useSettingStore((state) => state.setCurrentTheme);
 	const setFontSize = useSettingStore((state) => state.setFontSize);
@@ -37,7 +38,13 @@ export default () => {
 	const setFlow = useSettingStore((state) => state.setFlow);
 	const setDesign = useSettingStore((state) => state.setDesign);
 	const setOrderBy = useSettingStore((state) => state.setOrderBy);
+	const setCategories = useSettingStore((state) => state.setCategories);
+
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showNewCategory, setShowNewCategory] = useState<boolean>(false);
+	const [newCategory, setNewCategory] = useState<string>("");
+
+
 	const { form, onChange, resetForm } = useForm<_IFormNotes, never>({
 		label: "",
 		color: colors.primary,
@@ -109,6 +116,7 @@ export default () => {
 				currentFlow,
 				orderBy,
 				design,
+				categories,
 			},
 			books,
 		};
@@ -174,14 +182,30 @@ export default () => {
 			return;
 		}
 		try {
-			const decodedUri = decodeURIComponent(result.uri);
-			const file = decodedUri.replaceAll("file://", "");
-			const nameFile = getFileName(file) || `import-${uuid.v4()}.zip`;
-			const newPathFile = `${RNFS.DocumentDirectoryPath}/${nameFile}`;
+			let newPathFile = "";
+			let nameFile = "";
 			if (Platform.OS === "android") {
-				await RNFS.copyFile(result.uri, newPathFile);
-				result.uri = newPathFile;
+				// Soportar content:// y file://
+				if (result.uri.startsWith("content://")) {
+					// Leer como base64 y escribir en destino
+					nameFile = getFileName(result.name ? result.name : `import-${uuid.v4()}.zip`) || `import-${uuid.v4()}.zip`;
+					newPathFile = `${RNFS.DocumentDirectoryPath}/${nameFile}`;
+					const fileContent = await RNFS.readFile(result.uri, "base64");
+					await RNFS.writeFile(newPathFile, fileContent, "base64");
+				} else {
+					// file://
+					const decodedUri = decodeURIComponent(result.uri);
+					const file = decodedUri.replaceAll("file://", "");
+					nameFile = getFileName(file) || `import-${uuid.v4()}.zip`;
+					newPathFile = `${RNFS.DocumentDirectoryPath}/${nameFile}`;
+					await RNFS.copyFile(result.uri, newPathFile);
+				}
 			} else {
+				// iOS
+				const decodedUri = decodeURIComponent(result.uri);
+				const file = decodedUri.replaceAll("file://", "");
+				nameFile = getFileName(file) || `import-${uuid.v4()}.zip`;
+				newPathFile = `${RNFS.DocumentDirectoryPath}/${nameFile}`;
 				const fileContent = await RNFS.readFile(decodedUri, "base64");
 				await RNFS.writeFile(newPathFile, fileContent, "base64");
 			}
@@ -269,6 +293,7 @@ export default () => {
 				if (backupData.setting.design) setDesign(backupData.setting.design);
 
 				if (backupData.setting.orderBy) setOrderBy(backupData.setting.orderBy);
+				if (backupData.setting.categories) setCategories(backupData.setting.categories);
 			}
 
 			await RNFS.unlink(target);
@@ -276,7 +301,7 @@ export default () => {
 			Alert.alert("Éxito", "Se ha importado la copia de seguridad.");
 		} catch (error) {
 			console.error("Error importing backup:", error);
-			Alert.alert("Error", "No se pudo importar la copia de seguridad.");
+			Alert.alert("Error", `No se pudo importar la copia de seguridad. ${error}`);
 		}
 	};
 
@@ -304,6 +329,24 @@ export default () => {
 		}
 	};
 
+	const handleAddCategory = () => {
+		const id = uuid.v4();
+		const newlist = [...categories, { id, label: newCategory }];
+		setCategories(newlist);
+		setShowNewCategory(false); 2
+	}
+
+	const handleRemoveCategory = (id: string) => {
+		const newlist = categories.filter((category) => category.id !== id);
+		setCategories(newlist);
+	};
+
+	useEffect(() => {
+		if (!showNewCategory) {
+			setNewCategory("");
+		}
+	}, [showNewCategory]);
+
 	return {
 		onChange,
 		onColorChange,
@@ -327,6 +370,13 @@ export default () => {
 		handleSaveBackup,
 		handleImportBackup,
 		handleClearBackup,
+		showNewCategory,
+		setShowNewCategory,
+		newCategory,
+		setNewCategory,
+		categories,
+		handleAddCategory,
+		handleRemoveCategory,
 		...form,
 	};
 };

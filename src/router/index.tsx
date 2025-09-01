@@ -65,6 +65,9 @@ const RootTabsNavigation = () => {
 					List as any
 				}
 				options={{
+					sceneStyle: {
+						paddingHorizontal: 0,
+					},
 					tabBarLabel: "Biblioteca",
 					tabBarIcon: ({ color, size }) => (
 						<Icon name="book" color={color} size={size} />
@@ -103,6 +106,7 @@ export const RootStack = () => {
 					contentStyle: style.customContentStyle,
 				}}
 			/>
+
 			<RootStackNav.Screen name="book" component={Book} />
 			<RootStackNav.Screen
 				name="read"

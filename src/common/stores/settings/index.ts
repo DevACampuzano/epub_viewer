@@ -32,6 +32,7 @@ const inicialState: StateSettings = {
 	notes: [],
 	orderBy: "createdAt",
 	design: "grid",
+	categories: [],
 };
 
 const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
@@ -47,6 +48,7 @@ const storeAPI: StateCreator<_ISettingsStore> = (set) => ({
 		set((state) => ({ ...state, paddingHorizontal: padding })),
 	setOrderBy: (orderBy) => set(() => ({ orderBy })),
 	setDesign: (design) => set(() => ({ design })),
+	setCategories: (categories) => set((state) => ({ ...state, categories })),
 });
 
 export const useSettingStore = create<_ISettingsStore>()(

@@ -4,7 +4,7 @@ type _IHeaderProps = {
 	onClose: () => void;
 	opacity: Animated.Value;
 	toc: _Toc;
-	id: Realm.BSON.ObjectId;
+	id: string;
 	annotations: Annotation[];
 };
 

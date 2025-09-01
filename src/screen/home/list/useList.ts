@@ -87,5 +87,6 @@ export default () => {
 		booksRead: allBooks.filter((book) => book.progress === 100),
 		listMenuOptionDesign,
 		listMenuOptionOrderBy,
+		orderBooks,
 	};
 };

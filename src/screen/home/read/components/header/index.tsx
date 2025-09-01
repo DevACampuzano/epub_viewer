@@ -82,8 +82,10 @@ export const Header: FC<_IHeaderProps> = ({
 									fontSize: 18,
 									fontWeight: "bold",
 								}}
+								numberOfLines={1}
+								ellipsizeMode="tail"
 							>
-								{title.length > 25 ? `${title.slice(0, 25)}...` : title}
+								{title}
 							</Text>
 						</TouchableOpacity>
 						<View

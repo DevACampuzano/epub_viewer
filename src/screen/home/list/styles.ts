@@ -3,17 +3,19 @@ import { StyleSheet } from "react-native";
 const style = StyleSheet.create({
 	root: {
 		paddingVertical: 10,
+		paddingHorizontal: 20,
 		gap: 10,
 	},
 	header: {
-		flexDirection: "row",
 		width: "100%",
-		justifyContent: "space-between",
-		alignItems: "center",
+		gap: 10,
+		paddingHorizontal: 20,
+		minHeight: 240
 	},
 	title: {
 		fontWeight: "bold",
 		fontSize: 25,
+		color: "white",
 	},
 	containerEmpty: {
 		height: "100%",

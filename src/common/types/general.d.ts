@@ -5,11 +5,13 @@ type _IRootTabs = {
 
 type _IRootStack = {
 	home: undefined;
-	book: _IBook;
+	book: {
+		id: string;
+	};
 	newBook: undefined;
 	searchBooks: undefined;
 	read: {
-		id: Realm.BSON.ObjectId;
+		id: string;
 		file: string;
 		title: string;
 		currentPage?: string;
@@ -42,6 +44,7 @@ type _IBook = {
 	bookmarks: import("@epubjs-react-native/core").Bookmark[];
 	annotations: import("@epubjs-react-native/core").Annotation[];
 	finalDate?: number;
+	categories: string[];
 }
 
 type _Toc = import("@epubjs-react-native/core").Section[];

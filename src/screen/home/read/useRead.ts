@@ -5,7 +5,7 @@ import {
 } from "@epubjs-react-native/core";
 import { usePreventRemove } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useQuery, useRealm } from "@realm/react";
+import { Realm, useQuery, useRealm } from "@realm/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	Animated,
@@ -21,11 +21,14 @@ import { useSettingStore } from "@/common/stores";
 import { colors } from "@/common/theme";
 
 export default (
-	id: Realm.BSON.ObjectId,
+	id: string,
 	navigation: NativeStackNavigationProp<_IRootStack, "read", undefined>,
 ) => {
 	const [exit, setExit] = useState(false);
-	const currentBook = useQuery(Book).filtered(`_id == $0`, id)[0];
+	const currentBook = useQuery(Book).filtered(
+		`_id == $0`,
+		new Realm.BSON.ObjectId(id),
+	)[0];
 	const realm = useRealm();
 
 	const currentTheme = useSettingStore((state) => state.currentTheme);
@@ -132,7 +135,7 @@ export default (
 
 		realm.write(() => {
 			try {
-				const book = realm.objectForPrimaryKey<Book>(Book, id);
+				const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 
 				if (book) {
 					book.currentPage = currentLocation?.start.cfi;
@@ -169,6 +172,8 @@ export default (
 		newTheme["::selection"].color = "#000";
 		newTheme.p["text-align"] = textAlign;
 		newTheme.p["line-height"] = lineHeight;
+		newTheme.a["text-decoration"] = "underline";
+		newTheme.span.color = `${colors.primary} !important`;
 		changeTheme(newTheme);
 	};
 
@@ -187,7 +192,7 @@ export default (
 
 	const updateBookmarks = (action: "add" | "remove", bookmark: Bookmark) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			if (book) {
 				if (action === "add") {
 					book.bookmarks.push(bookmark);
@@ -200,7 +205,7 @@ export default (
 
 	const updateAnnotations = (annotations: Annotation[]) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			if (book) {
 				book.annotations = annotations;
 			}
@@ -209,7 +214,7 @@ export default (
 
 	const onFinish = () => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, id);
+			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
 			if (book) {
 				book.progress = 100;
 				book.finalDate = Date.now();
@@ -255,6 +260,6 @@ export default (
 		notes,
 		paddingHorizontal,
 		updateAnnotations,
-		onFinish
+		onFinish,
 	};
 };

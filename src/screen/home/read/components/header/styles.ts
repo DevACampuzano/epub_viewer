@@ -22,6 +22,7 @@ const style = StyleSheet.create({
 		height: 55,
 		borderBottomColor: "#ddddddff",
 		borderBottomWidth: 1,
+		gap: 10,
 
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -32,6 +33,7 @@ const style = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		gap: 10,
+		width: "60%"
 	},
 	menuContainer: {
 		width: "100%",

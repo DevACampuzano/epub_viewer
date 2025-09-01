@@ -1,2 +1,2 @@
-export * from "./optionTheme/index";
+export * from "./optionTheme";
 export * from "./section";

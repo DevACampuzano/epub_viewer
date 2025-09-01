@@ -39,7 +39,12 @@ export const Section: FC<SectionProps & PropsWithChildren> = ({
 				{title}
 			</Text>
 		</View>
-		<Text {...descriptionProps}>{description}</Text>
+		<Text
+			{...descriptionProps}
+			style={[{ textAlign: "justify" }, descriptionProps?.style]}
+		>
+			{description}
+		</Text>
 		{children}
 	</View>
 );

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const style = StyleSheet.create({
 	section: {
 		backgroundColor: "#f5f5f5",
-
+		position: "static",
 		padding: 20,
 		borderRadius: 25,
 		gap: 10,

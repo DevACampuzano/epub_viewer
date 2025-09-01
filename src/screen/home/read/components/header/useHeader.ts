@@ -1,6 +1,6 @@
 import DeviceBrightness from "@adrianso/react-native-device-brightness";
 import { useReader } from "@epubjs-react-native/core";
-import { useQuery } from "@realm/react";
+import { Realm, useQuery } from "@realm/react";
 import { useCallback, useEffect, useState } from "react";
 import { Animated, Platform, useAnimatedValue } from "react-native";
 import { useDebounce } from "@/common/hooks";
@@ -39,7 +39,7 @@ const drawerOptions: _IDrawerOption[] = [
 	{ value: "notes", label: "Notas", icon: "file-text", title: "Notas" },
 ];
 
-export default (id: Realm.BSON.ObjectId) => {
+export default (id: string) => {
 	const [openMenu, setOpenMenu] = useState(false);
 	const [brightness, setBrightness] = useState(0);
 	const flow = useSettingStore((state) => state.currentFlow);
@@ -59,7 +59,10 @@ export default (id: Realm.BSON.ObjectId) => {
 		removeAnnotationByCfi,
 		section,
 	} = useReader();
-	const book = useQuery(Book).filtered(`_id == $0`, id)[0];
+	const book = useQuery(Book).filtered(
+		`_id == $0`,
+		new Realm.BSON.ObjectId(id),
+	)[0];
 	const position = useAnimatedValue(-300);
 	const [search, setSearch] = useState("");
 
