@@ -31,6 +31,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 		onFinish,
 		currentBook,
 		updateBookmarks,
+		loading,
 	} = useRead(id, navigation);
 
 	return (
@@ -44,6 +45,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 					toc={toc}
 					id={id}
 					annotations={currentBook?.annotations || []}
+					loading={loading}
 				/>
 				<View
 					style={{

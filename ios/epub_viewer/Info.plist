@@ -54,6 +54,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Lucide.ttf</string>
+		<string>Octicons.ttf</string>
 	</array>
 </dict>
 </plist>

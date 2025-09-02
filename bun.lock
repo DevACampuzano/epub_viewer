@@ -13,6 +13,7 @@
         "@react-native-community/slider": "^5.0.1",
         "@react-native-documents/picker": "^10.1.5",
         "@react-native-vector-icons/lucide": "^12.3.0",
+        "@react-native-vector-icons/octicons": "^20.3.0",
         "@react-navigation/bottom-tabs": "^7.4.6",
         "@react-navigation/native": "^7.1.17",
         "@react-navigation/native-stack": "^7.3.25",
@@ -411,6 +412,8 @@
     "@react-native-vector-icons/common": ["@react-native-vector-icons/common@12.3.0", "", { "dependencies": { "find-up": "^7.0.0", "picocolors": "^1.1.1", "plist": "^3.1.0" }, "peerDependencies": { "@react-native-vector-icons/get-image": "^12.2.0", "react": "*", "react-native": "*" }, "optionalPeers": ["@react-native-vector-icons/get-image"], "bin": { "rnvi-update-plist": "lib/commonjs/scripts/updatePlist.js" } }, "sha512-5GMBcLBkA0MuciweYcrSyvi9fYGanfVnE2J+pwHx1QiaVgTaoCm4rylJgSS77MVI5qUiGh7aJpqq5afSz2U4bw=="],
 
     "@react-native-vector-icons/lucide": ["@react-native-vector-icons/lucide@12.3.0", "", { "dependencies": { "@react-native-vector-icons/common": "^12.3.0" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-TdTYNOyXQdUhjkOZkvJAOobCsOYdwe3NisZ0rVxyaPymAV0bc35TLBbOe3Q/HyVSCKE2edWb0/lYN2V27eeEWA=="],
+
+    "@react-native-vector-icons/octicons": ["@react-native-vector-icons/octicons@20.3.0", "", { "dependencies": { "@react-native-vector-icons/common": "^12.3.0" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-MTGbM7R/KjpVFuKfODPuIVmyCfNs7tRPJpKaIRQHo4RO6cflqCxZAfSZhtLE+AQ02bk0dN5r131hn6SnYRZyEw=="],
 
     "@react-native-windows/cli": ["@react-native-windows/cli@0.80.0-preview.2", "", { "dependencies": { "@react-native-windows/codegen": "0.80.0-preview.1", "@react-native-windows/fs": "0.80.0-preview.1", "@react-native-windows/package-utils": "0.80.0-preview.1", "@react-native-windows/telemetry": "0.80.0-preview.1", "@xmldom/xmldom": "^0.7.7", "chalk": "^4.1.0", "cli-spinners": "^2.2.0", "envinfo": "^7.5.0", "execa": "^5.0.0", "find-up": "^4.1.0", "glob": "^7.1.1", "lodash": "^4.17.15", "mustache": "^4.0.1", "ora": "^3.4.0", "prompts": "^2.4.1", "semver": "^7.3.2", "shelljs": "^0.8.4", "username": "^5.1.0", "xml-formatter": "^2.4.0", "xml-parser": "^1.2.1", "xpath": "^0.0.27" }, "peerDependencies": { "react-native": "*" } }, "sha512-EJeatK3hnx/GRpE+Nmm0uMkIyGdILP5tIpL2Azgt/KKc96B/koAWuWQIDgsseuO4gROXkoNBrt3kWShftmkxDQ=="],
 

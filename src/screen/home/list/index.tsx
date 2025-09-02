@@ -8,13 +8,20 @@ import {
 	useWindowDimensions,
 	View,
 } from "react-native";
+import Animated, {
+	useAnimatedScrollHandler,
+	useSharedValue,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Divider, Menu, ProgressBar, Text } from "@/common/components";
 import { ItemList } from "@/common/components/itemList";
+import type { Book } from "@/common/schemas";
 import { colors } from "@/common/theme";
-import { Card } from "./components";
+import { Card, Highlights } from "./components";
 import style from "./styles";
 import useList from "./useList";
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList<Book>);
 
 export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 	navigation,
@@ -36,20 +43,18 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 
 	const isPortrait = height > width;
 
+	const scrollX = useSharedValue(0);
+
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			scrollX.value = event.contentOffset.x;
+		},
+	});
+
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={[style.header, { paddingTop: paddingTop + 10 }]}>
-				<View
-					style={{
-						height: 500,
-						backgroundColor: colors.primary,
-						left: 0,
-						right: 0,
-						position: "absolute",
-						borderEndEndRadius: 50,
-						borderEndStartRadius: 50,
-					}}
-				/>
+				<View style={style.figure} pointerEvents="none" />
 				<View
 					style={{
 						flexDirection: "row",
@@ -72,10 +77,10 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						}}
 					/>
 				</View>
-				<FlatList
+				<AnimatedFlatList
 					data={orderBooks("lastReading")
 						.filter((item) => item.progress < 100)
-						.slice(0, 5)}
+						.slice(0, 3)}
 					renderItem={({ item, index }) => (
 						<TouchableOpacity
 							activeOpacity={0.7}
@@ -85,28 +90,48 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 								})
 							}
 						>
-							<Card
-								image={item.image}
-								title={item.title}
-								author={item.author}
+							<Highlights
 								progress={item.progress || 0}
-								qualification={item.qualification || 0}
+								title={item.title}
+								image={item.image}
+								last={item.lastReading}
+								notes={item.annotations.length}
+								currentPage={item.currentPageIndex}
+								totalPage={item.totalPages || 1}
+								bookmark={item.bookmarks.length}
 								index={index}
-								stylesContainer={{ maxWidth: 200 }}
+								scrollX={scrollX}
 							/>
 						</TouchableOpacity>
 					)}
 					keyExtractor={(item, index) => `${item._id.toHexString()}-${index}`}
 					horizontal
+					onScroll={scrollHandler}
 					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{ gap: 10, paddingVertical: 10 }}
+					scrollEventThrottle={16}
+					snapToInterval={320 + 25}
+					decelerationRate="fast"
+					contentContainerStyle={{
+						gap: 25,
+						paddingVertical: 10,
+						paddingHorizontal: 20,
+						height: 240,
+					}}
+					style={{
+						zIndex: 20,
+						width: "100%",
+						// backgroundColor: "red",
+					}}
 					ListEmptyComponent={() => (
-						<View style={style.containerEmpty}>
-							<Text style={style.textEmpty}>No hay lecturas recientes</Text>
+						<View style={[style.containerEmpty, { minHeight: 240 }]}>
+							<Text style={[style.textEmpty, { color: "white" }]}>
+								No hay lecturas recientes
+							</Text>
 						</View>
 					)}
 				/>
 			</View>
+
 			<View style={style.root}>
 				<View
 					style={{

@@ -25,6 +25,7 @@ export const Header: FC<_IHeaderProps> = ({
 	toc,
 	id,
 	annotations,
+	loading,
 }) => {
 	const {
 		openMenu,
@@ -74,6 +75,7 @@ export const Header: FC<_IHeaderProps> = ({
 							style={style.backButton}
 							onPress={onClose}
 							activeOpacity={0.7}
+							disabled={loading}
 						>
 							<Icon name="chevron-left" size={30} color={color} />
 							<Text

@@ -25,6 +25,7 @@ export default (
 	navigation: NativeStackNavigationProp<_IRootStack, "read", undefined>,
 ) => {
 	const [exit, setExit] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const currentBook = useQuery(Book).filtered(
 		`_id == $0`,
 		new Realm.BSON.ObjectId(id),
@@ -139,6 +140,7 @@ export default (
 
 				if (book) {
 					book.currentPage = currentLocation?.start.cfi;
+					book.currentPageIndex = currentLocation?.start?.location ?? 0;
 					book.progress =
 						progressPercentage > book.progress
 							? progressPercentage
@@ -175,6 +177,7 @@ export default (
 		newTheme.a["text-decoration"] = "underline";
 		newTheme.span.color = `${colors.primary} !important`;
 		changeTheme(newTheme);
+		setLoading(false);
 	};
 
 	const handleAppStateChange = useCallback(
@@ -261,5 +264,6 @@ export default (
 		paddingHorizontal,
 		updateAnnotations,
 		onFinish,
+		loading
 	};
 };

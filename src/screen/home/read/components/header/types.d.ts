@@ -6,6 +6,7 @@ type _IHeaderProps = {
 	toc: _Toc;
 	id: string;
 	annotations: Annotation[];
+	loading: boolean;
 };
 
 type _IFlowOption = {

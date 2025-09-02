@@ -1926,6 +1926,7 @@ PODS:
     - SocketRocket
     - Yoga
   - react-native-vector-icons-lucide (12.3.0)
+  - react-native-vector-icons-octicons (20.3.0)
   - react-native-webview (13.15.0):
     - boost
     - DoubleConversion
@@ -2898,6 +2899,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - "react-native-vector-icons-lucide (from `../node_modules/@react-native-vector-icons/lucide`)"
+  - "react-native-vector-icons-octicons (from `../node_modules/@react-native-vector-icons/octicons`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
@@ -3045,6 +3047,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-vector-icons-lucide:
     :path: "../node_modules/@react-native-vector-icons/lucide"
+  react-native-vector-icons-octicons:
+    :path: "../node_modules/@react-native-vector-icons/octicons"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-NativeModulesApple:
@@ -3179,6 +3183,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: a72764e0eb5d6b79b7450e5d0ae919eb1a4567b4
   react-native-slider: 663776e5683e257de8df8091abc2d93ff6ec67db
   react-native-vector-icons-lucide: 6295108aa1778b577bd6a3391f5abb9e1df4fdc5
+  react-native-vector-icons-octicons: cc1b6b6586a0c734a49b7929ca8027ff72b372cb
   react-native-webview: 4cbb7f05f2c50671a7dcff4012d3e85faad271e4
   React-NativeModulesApple: b3766e1f87b08064ebc459b9e1538da2447ca874
   React-oscompat: 34f3d3c06cadcbc470bc4509c717fb9b919eaa8b

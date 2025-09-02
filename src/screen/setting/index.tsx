@@ -435,6 +435,7 @@ export const Setting: FC<BottomTabScreenProps<_IRootTabs, "settings">> = () => {
 								<Text style={{ color: "#fff" }}>Hacer una Donación</Text>
 							</>
 						}
+						disabled
 						onPress={() => {
 							Linking.openURL(
 								"https://donate.stripe.com/test_5kQ28k3zH96G0CjfcP9bO00",

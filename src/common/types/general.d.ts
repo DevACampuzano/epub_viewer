@@ -37,6 +37,7 @@ type _IBook = {
 	qualification?: number;
 	opinion?: string;
 	currentPage?: string;
+	currentPageIndex: number;
 	totalPages: number;
 	progress: number;
 	createdAt: number;

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { colors } from "@/common/theme";
 
 const style = StyleSheet.create({
 	root: {
@@ -10,7 +11,7 @@ const style = StyleSheet.create({
 		width: "100%",
 		gap: 10,
 		paddingHorizontal: 20,
-		minHeight: 240
+		marginBottom: 10,
 	},
 	title: {
 		fontWeight: "bold",
@@ -35,6 +36,26 @@ const style = StyleSheet.create({
 	},
 	progressText: {
 		fontWeight: "bold",
+	},
+	figure: {
+		height: 330,
+		backgroundColor: colors.tertiary,
+		left: 0,
+		right: 0,
+		zIndex: -1,
+		position: "absolute",
+		borderEndEndRadius: 50,
+		borderEndStartRadius: 50,
+		borderBottomLeftRadius: 50,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 1,
+		},
+		shadowOpacity: 0.22,
+		shadowRadius: 2.22,
+
+		elevation: 3,
 	},
 });
 

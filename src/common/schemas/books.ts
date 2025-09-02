@@ -27,6 +27,7 @@ export class Book extends Realm.Object implements _IBook {
 	qualification?: number;
 	opinion?: string;
 	currentPage?: string;
+	currentPageIndex!: number;
 	totalPages!: number;
 	progress!: number;
 	createdAt!: number;
@@ -35,6 +36,7 @@ export class Book extends Realm.Object implements _IBook {
 	annotations!: Annotation[];
 	categories!: string[];
 	finalDate?: number;
+
 
 	static generate({
 		author,
@@ -60,6 +62,7 @@ export class Book extends Realm.Object implements _IBook {
 			rights,
 			totalPages,
 			currentPage: currentPage ? currentPage : "",
+			currentPageIndex: 1,
 			opinion: "",
 			qualification: 0,
 			progress: 0,
@@ -87,6 +90,7 @@ export class Book extends Realm.Object implements _IBook {
 			qualification: "int",
 			opinion: "string",
 			currentPage: "string",
+			currentPageIndex: "int",
 			totalPages: "int",
 			progress: "double",
 			createdAt: "int",

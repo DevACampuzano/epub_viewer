@@ -11,6 +11,9 @@ export default StyleSheet.create({
 		flexDirection: "row",
 		gap: 10,
 	},
+	buttonDisabled: {
+		opacity: 0.5,
+	},
 	buttonOutline: {
 		padding: 10,
 		borderColor: colors.success,

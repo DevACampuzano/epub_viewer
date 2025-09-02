@@ -14,7 +14,7 @@ function App() {
 			<RealmProvider
 				schema={[Book]}
 				path={`${RNFS.DocumentDirectoryPath}/realm/db.realm`}
-				schemaVersion={5}
+				schemaVersion={6}
 			>
 				<ReaderProvider>
 					<NavigationContainer>

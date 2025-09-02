@@ -25,6 +25,7 @@ export const Button: FC<_IButton> = ({
 		{...props}
 		style={[
 			variant === "outline" ? styles.buttonOutline : styles.button,
+			props.disabled && styles.buttonDisabled,
 			style,
 		]}
 	>
