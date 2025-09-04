@@ -45,7 +45,7 @@ const style = StyleSheet.create({
 		zIndex: -1,
 		position: "absolute",
 		borderEndEndRadius: 50,
-		borderEndStartRadius: 50,
+		// borderEndStartRadius: 50,
 		borderBottomLeftRadius: 50,
 		shadowColor: "#000",
 		shadowOffset: {

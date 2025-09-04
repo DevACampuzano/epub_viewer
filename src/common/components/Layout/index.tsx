@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSettingStore } from "@/common/stores";
 
@@ -18,7 +18,9 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
 					currentTheme.label === "Oscuro" ? "light-content" : "dark-content"
 				}
 			/>
-			{children}
+			<View style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 20 }}>
+				{children}
+			</View>
 		</SafeAreaView>
 	);
 };

@@ -73,7 +73,6 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						labelProps={{ style: { color: "#3a3a3a", fontWeight: "bold" } }}
 						style={{
 							backgroundColor: colors.secondary,
-							height: 40,
 						}}
 					/>
 				</View>
@@ -83,7 +82,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 						.slice(0, 3)}
 					renderItem={({ item, index }) => (
 						<TouchableOpacity
-							activeOpacity={0.7}
+							activeOpacity={1}
 							onPress={() =>
 								navigation.navigate("book", {
 									id: item._id.toHexString(),
@@ -109,7 +108,7 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					onScroll={scrollHandler}
 					showsHorizontalScrollIndicator={false}
 					scrollEventThrottle={16}
-					snapToInterval={320 + 25}
+					snapToInterval={320}
 					decelerationRate="fast"
 					contentContainerStyle={{
 						gap: 25,

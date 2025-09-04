@@ -23,7 +23,7 @@ const style = StyleSheet.create({
 	},
 	sceneStyle: {
 		backgroundColor: "#fff",
-		paddingHorizontal: 20,
+		// paddingHorizontal: 20,
 	},
 	customContentStyle: {
 		paddingVertical: 0,
