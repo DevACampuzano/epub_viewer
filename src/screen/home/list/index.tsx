@@ -108,18 +108,19 @@ export const List: FC<NativeStackScreenProps<_IRootStack, "home">> = ({
 					onScroll={scrollHandler}
 					showsHorizontalScrollIndicator={false}
 					scrollEventThrottle={16}
-					snapToInterval={320}
+					snapToInterval={isPortrait ? 320 : undefined}
+					snapToAlignment="center"
 					decelerationRate="fast"
 					contentContainerStyle={{
-						gap: 25,
 						paddingVertical: 10,
-						paddingHorizontal: 20,
+						paddingHorizontal: isPortrait ? 20 : 340,
 						height: 240,
+						justifyContent: "center",
+						alignItems: "flex-start",
 					}}
 					style={{
 						zIndex: 20,
 						width: "100%",
-						// backgroundColor: "red",
 					}}
 					ListEmptyComponent={() => (
 						<View style={[style.containerEmpty, { minHeight: 240 }]}>

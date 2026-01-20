@@ -136,7 +136,10 @@ export default (
 
 		realm.write(() => {
 			try {
-				const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+				const book = realm.objectForPrimaryKey<Book>(
+					Book,
+					new Realm.BSON.ObjectId(id),
+				);
 
 				if (book) {
 					book.currentPage = currentLocation?.start.cfi;
@@ -182,8 +185,10 @@ export default (
 
 	const handleAppStateChange = useCallback(
 		async (nextAppState: AppStateStatus) => {
+			console.log("nextAppState", nextAppState);
 			if (nextAppState === "background" || nextAppState === "inactive") {
 				try {
+					console.log("Guardando datos...");
 					await handleSaveProgress();
 				} catch (error) {
 					console.error("Error guardando datos:", error);
@@ -195,7 +200,10 @@ export default (
 
 	const updateBookmarks = (action: "add" | "remove", bookmark: Bookmark) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (book) {
 				if (action === "add") {
 					book.bookmarks.push(bookmark);
@@ -208,7 +216,10 @@ export default (
 
 	const updateAnnotations = (annotations: Annotation[]) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (book) {
 				book.annotations = annotations;
 			}
@@ -217,7 +228,10 @@ export default (
 
 	const onFinish = () => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (book) {
 				book.progress = 100;
 				book.finalDate = Date.now();
@@ -241,7 +255,6 @@ export default (
 			"change",
 			handleAppStateChange,
 		);
-
 		return () => {
 			subscription.remove();
 		};
@@ -264,6 +277,6 @@ export default (
 		paddingHorizontal,
 		updateAnnotations,
 		onFinish,
-		loading
+		loading,
 	};
 };

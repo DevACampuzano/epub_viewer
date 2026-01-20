@@ -10,11 +10,10 @@ import uuid from "react-native-uuid";
 import { useForm } from "@/common/hooks";
 import { Book } from "@/common/schemas";
 
-const id = uuid.v4();
-
 export default (
 	navigation: NativeStackNavigationProp<_IRootStack, "newBook", undefined>,
 ) => {
+	const id = uuid.v4();
 	const realm = useRealm();
 	const { form, setForm, onChange } = useForm<_IFormNewBook, never>({
 		file: null,
@@ -85,7 +84,7 @@ export default (
 			const totalLocations =
 				JSON.parse(getLocations().toString() || "[]").length || _totalLocations;
 			const data: _IMeta = getMeta() as _IMeta;
-			const currentPage = getCurrentLocation()
+			const currentPage = getCurrentLocation();
 			const description = detectHtmlContent(data?.description || "");
 
 			const imagesDir = `${RNFS.DocumentDirectoryPath}/books/images`;
@@ -110,7 +109,7 @@ export default (
 				image: newPathFile,
 				totalPages: totalLocations,
 				progress: 0,
-				currentPage: currentPage === null ? undefined : currentPage.start.cfi
+				currentPage: currentPage === null ? undefined : currentPage.start.cfi,
 			}));
 			setLoadingRender(false);
 		} catch (error) {
@@ -147,7 +146,6 @@ export default (
 				}
 
 				await RNFS.writeFile(newPathFile, newImageData.base64, "base64");
-
 				onChange(newPathFile, "image");
 			} catch (error) {
 				console.log("Error writing image file:", error);
