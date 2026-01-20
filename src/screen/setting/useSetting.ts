@@ -44,7 +44,6 @@ export default () => {
 	const [showNewCategory, setShowNewCategory] = useState<boolean>(false);
 	const [newCategory, setNewCategory] = useState<string>("");
 
-
 	const { form, onChange, resetForm } = useForm<_IFormNotes, never>({
 		label: "",
 		color: colors.primary,
@@ -146,7 +145,7 @@ export default () => {
 			Alert.alert(
 				"Compartir",
 				"Se ha guardado la copia de seguridad en la carpeta de descargas. \n" +
-				downloadsPath,
+					downloadsPath,
 				[
 					{
 						text: "Aceptar",
@@ -188,7 +187,10 @@ export default () => {
 				// Soportar content:// y file://
 				if (result.uri.startsWith("content://")) {
 					// Leer como base64 y escribir en destino
-					nameFile = getFileName(result.name ? result.name : `import-${uuid.v4()}.zip`) || `import-${uuid.v4()}.zip`;
+					nameFile =
+						getFileName(
+							result.name ? result.name : `import-${uuid.v4()}.zip`,
+						) || `import-${uuid.v4()}.zip`;
 					newPathFile = `${RNFS.DocumentDirectoryPath}/${nameFile}`;
 					const fileContent = await RNFS.readFile(result.uri, "base64");
 					await RNFS.writeFile(newPathFile, fileContent, "base64");
@@ -257,15 +259,20 @@ export default () => {
 							if (!book._id) {
 								realm.create(Book, {
 									...book,
-									_id: book._id ? new Realm.BSON.ObjectId(book._id) : new Realm.BSON.ObjectId(),
+									_id: book._id
+										? new Realm.BSON.ObjectId(book._id)
+										: new Realm.BSON.ObjectId(),
 									image: urlImageOut,
 									file: urlFileOut,
 									opinion: book.opinion || "",
-									currentPage: book.currentPage || ""
+									currentPage: book.currentPage || "",
 								});
 								return;
 							}
-							const bookRealm = realm.objectForPrimaryKey<Book>('Book', new Realm.BSON.ObjectId(book._id));
+							const bookRealm = realm.objectForPrimaryKey<Book>(
+								"Book",
+								new Realm.BSON.ObjectId(book._id),
+							);
 							if (bookRealm) {
 								realm.delete(bookRealm);
 							}
@@ -275,7 +282,7 @@ export default () => {
 								image: urlImageOut,
 								file: urlFileOut,
 								opinion: book.opinion || "",
-								currentPage: book.currentPage || ""
+								currentPage: book.currentPage || "",
 							});
 						});
 					}),
@@ -293,7 +300,8 @@ export default () => {
 				if (backupData.setting.design) setDesign(backupData.setting.design);
 
 				if (backupData.setting.orderBy) setOrderBy(backupData.setting.orderBy);
-				if (backupData.setting.categories) setCategories(backupData.setting.categories);
+				if (backupData.setting.categories)
+					setCategories(backupData.setting.categories);
 			}
 
 			await RNFS.unlink(target);
@@ -301,7 +309,10 @@ export default () => {
 			Alert.alert("Éxito", "Se ha importado la copia de seguridad.");
 		} catch (error) {
 			console.error("Error importing backup:", error);
-			Alert.alert("Error", `No se pudo importar la copia de seguridad. ${error}`);
+			Alert.alert(
+				"Error",
+				`No se pudo importar la copia de seguridad. ${error}`,
+			);
 		}
 	};
 
@@ -333,8 +344,9 @@ export default () => {
 		const id = uuid.v4();
 		const newlist = [...categories, { id, label: newCategory }];
 		setCategories(newlist);
-		setShowNewCategory(false); 2
-	}
+		setShowNewCategory(false);
+		2;
+	};
 
 	const handleRemoveCategory = (id: string) => {
 		const newlist = categories.filter((category) => category.id !== id);

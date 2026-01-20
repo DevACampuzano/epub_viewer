@@ -33,7 +33,7 @@ const style = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		gap: 10,
-		width: "60%"
+		width: "60%",
 	},
 	menuContainer: {
 		width: "100%",

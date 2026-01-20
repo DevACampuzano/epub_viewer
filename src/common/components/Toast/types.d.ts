@@ -3,4 +3,4 @@ type _PropsToast = {
 	show: boolean;
 	icon?: "triangle-alert" | "octagon-alert" | "circle-check" | "info";
 	callbackEnd: () => void;
-}
+};

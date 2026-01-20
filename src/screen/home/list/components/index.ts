@@ -1,2 +1,2 @@
 export * from "./card/index";
-export * from "./highlights"
+export * from "./highlights";

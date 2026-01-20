@@ -72,8 +72,8 @@ export default () => {
 				);
 				break;
 		}
-		return list
-	}
+		return list;
+	};
 
 	return {
 		books: orderBooks(orderBy),

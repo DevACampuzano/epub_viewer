@@ -30,7 +30,10 @@ export default (
 			console.log("Error deleting file:", error);
 		} finally {
 			realm.write(() => {
-				const book = realm.objectForPrimaryKey<Book>("Book", new Realm.BSON.ObjectId(id));
+				const book = realm.objectForPrimaryKey<Book>(
+					"Book",
+					new Realm.BSON.ObjectId(id),
+				);
 				if (book) {
 					realm.delete(book);
 				}
@@ -44,7 +47,10 @@ export default (
 			return;
 		}
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			const now = Date.now();
 			if (book) {
 				book.progress = 100;
@@ -56,7 +62,10 @@ export default (
 
 	const openBook = () => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (book) {
 				book.lastReading = Date.now();
 			}
@@ -71,7 +80,10 @@ export default (
 
 	const updateBooks = (updateBook: Partial<_IBook>) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (book) {
 				for (const key in updateBook) {
 					// @ts-expect-error
@@ -83,9 +95,12 @@ export default (
 
 	const handleCategoryPress = (category: string) => {
 		realm.write(() => {
-			const book = realm.objectForPrimaryKey<Book>(Book, new Realm.BSON.ObjectId(id));
+			const book = realm.objectForPrimaryKey<Book>(
+				Book,
+				new Realm.BSON.ObjectId(id),
+			);
 			if (!book) {
-				return
+				return;
 			}
 
 			if (book.categories.includes(category)) {
@@ -106,6 +121,6 @@ export default (
 		resetForm,
 		openBook,
 		categoryList,
-		handleCategoryPress
+		handleCategoryPress,
 	};
 };

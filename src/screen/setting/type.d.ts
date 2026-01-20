@@ -1,14 +1,14 @@
 type _IFormNotes = {
-    label: string;
-    color: string;
-    style: "highlight" | "underline";
-}
+	label: string;
+	color: string;
+	style: "highlight" | "underline";
+};
 
 interface Books extends Omit<_IBook, "_id"> {
-    _id: string;
+	_id: string;
 }
 
 type _IDataBackup = {
-    books: Books[];
-    setting: StateSettings;
+	books: Books[];
+	setting: StateSettings;
 };

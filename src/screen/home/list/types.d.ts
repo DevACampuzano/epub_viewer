@@ -1,9 +1,9 @@
 type _MenuOptionOrderBy = {
-    label: string;
-    value: OrderBy;
-}
+	label: string;
+	value: OrderBy;
+};
 
 type _MenuOptionDesign = {
-    label: string;
-    value: Design;
-}
+	label: string;
+	value: Design;
+};

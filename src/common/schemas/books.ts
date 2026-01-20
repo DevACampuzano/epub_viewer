@@ -37,7 +37,6 @@ export class Book extends Realm.Object implements _IBook {
 	categories!: string[];
 	finalDate?: number;
 
-
 	static generate({
 		author,
 		description,

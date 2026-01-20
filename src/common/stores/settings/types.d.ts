@@ -34,7 +34,6 @@ type OrderBy =
 
 type Design = "grid" | "list";
 
-
 type Category = {
 	id: string;
 	label: string;
@@ -51,7 +50,7 @@ type StateSettings = {
 	orderBy: OrderBy;
 	design: Design;
 	categories: Category[];
-}
+};
 
 type ActionsSettings = {
 	setCurrentTheme: (theme: ITheme) => void;
@@ -64,6 +63,6 @@ type ActionsSettings = {
 	setOrderBy: (orderBy: OrderBy) => void;
 	setDesign: (design: Design) => void;
 	setCategories: (categories: Category[]) => void;
-}
+};
 
 type _ISettingsStore = StateSettings & ActionsSettings;

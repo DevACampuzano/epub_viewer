@@ -27,6 +27,7 @@ const style = StyleSheet.create({
 	},
 	customContentStyle: {
 		paddingVertical: 0,
+		backgroundColor: "red",
 	},
 });
 

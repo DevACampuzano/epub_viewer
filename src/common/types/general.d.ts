@@ -22,7 +22,7 @@ type _ISelectedFile = {
 	uri: string;
 	name?: string | null;
 	size?: number | null;
-}
+};
 
 type _IBook = {
 	_id: Realm.BSON.ObjectId;
@@ -46,6 +46,6 @@ type _IBook = {
 	annotations: import("@epubjs-react-native/core").Annotation[];
 	finalDate?: number;
 	categories: string[];
-}
+};
 
 type _Toc = import("@epubjs-react-native/core").Section[];

@@ -35,7 +35,7 @@ export const Read: FC<NativeStackScreenProps<_IRootStack, "read">> = ({
 	} = useRead(id, navigation);
 
 	return (
-		<Root>
+		<Root style={{ backgroundColor: currentTheme.value.body.background }}>
 			<Layout singleTap={Platform.OS === "ios" ? onPress : singleTap}>
 				<Header
 					currentTheme={currentTheme}
